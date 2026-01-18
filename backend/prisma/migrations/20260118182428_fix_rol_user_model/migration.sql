@@ -1,0 +1,5 @@
+-- AlterTable
+ALTER TABLE "Rol" ALTER COLUMN "nombre" DROP DEFAULT;
+
+-- AlterTable
+ALTER TABLE "Usuario" ALTER COLUMN "rolId" SET DEFAULT 2;

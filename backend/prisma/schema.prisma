@@ -14,7 +14,7 @@ datasource db {
 
 model Rol {
   id       Int           @id @default(autoincrement())
-  nombre   RolNombreEnum @unique @default(USUARIO)
+  nombre   RolNombreEnum @unique
   usuarios Usuario[]
 }
 
@@ -24,19 +24,19 @@ enum RolNombreEnum {
   ADMINISTRADOR
 }
 
-model Usuario {
-  id        Int               @id @default(autoincrement())
-  nombre    String
-  username  String            @unique
-  email     String            @unique
-  password  String
-  biografia String?
-  rolId     Int
-  rol       Rol               @relation(fields: [rolId], references: [id])
-  estado    UsuarioEstadoEnum @default(ACTIVO)
-  createdAt DateTime          @default(now())
-  avatarURL String?
-}
+  model Usuario {
+    id        Int               @id @default(autoincrement())
+    nombre    String
+    username  String            @unique
+    email     String            @unique
+    password  String
+    biografia String?
+    rolId     Int               @default(2)
+    rol       Rol               @relation(fields: [rolId], references: [id])
+    estado    UsuarioEstadoEnum @default(ACTIVO)
+    createdAt DateTime          @default(now())
+    avatarURL String?
+  }
 
 enum UsuarioEstadoEnum {
   ACTIVO
