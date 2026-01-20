@@ -35,7 +35,6 @@ export class CreateUserDto {
   @IsString()
   @MaxLength(255)
   @IsOptional()
-  @MinLength(0)
   @MaxLength(160)
   biografia?: string;
 
