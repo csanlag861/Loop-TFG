@@ -13,6 +13,11 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
+  /**
+   * Valida un usuario con la información proporcionada.
+   * @param user Datos de inicio de sesión del usuario.
+   * @returns Información del usuario si las credenciales son válidas; y si no, undefined.
+   */
   async validateUser(user: LoginDto) {
     try {
       const userResult = await this.userService.findUserByUsername(
@@ -36,6 +41,11 @@ export class AuthService {
     }
   }
 
+  /**
+   * Genera un token JWT para el usuario autenticado.
+   * @param user Información del usuario autenticado.
+   * @returns Objeto con el token JWT.
+   */
   login(user: UserEntity) {
     const payload: PayloadEntity = {
       username: user.username,
