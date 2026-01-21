@@ -9,7 +9,7 @@ import {
   DialogHeader,
   DialogDescription
 } from "@/components/ui/dialog";
-import Login from "@/components/login/Login";
+import Login from "@/features/auth/components/login/Login";
 const Form = () => {
   return (
     <div className={stylesForm.form}>

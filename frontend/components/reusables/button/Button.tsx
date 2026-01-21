@@ -2,10 +2,12 @@ import stylesButton from "./button.module.css";
 
 type ButtonProps = {
   text: string;
+  type?: "button" | "submit" | "reset";
+  disabled?: boolean;
 }
-const Button = ({text}: ButtonProps) => {
+const Button = ({ text, type = "button", ...otherProps}: ButtonProps) => {
   return (
-    <button type="button" className={stylesButton.loop}>
+    <button type={type} className={stylesButton.loop} {...otherProps}>
       {text}
     </button>
   );

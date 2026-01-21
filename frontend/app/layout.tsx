@@ -1,4 +1,5 @@
 import "./globals.css";
+import { Toaster } from 'sonner';
 
 export const metadata = {
   title: "Loop",
@@ -12,7 +13,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es">
-      <body>{children}</body>
+      <body>{children}         <Toaster position="top-center" richColors />
+      </body>
     </html>
   );
 }

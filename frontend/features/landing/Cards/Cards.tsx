@@ -1,6 +1,6 @@
 import stylesCards from "./cards.module.css";
 
-import SpotlightCard from "@/components/landing/SpotlightCard";
+import SpotlightCard from "@/components/ui/SpotlightCard";
 import { Users, Bookmark } from "@geist-ui/icons";
 
 const Cards = () => {

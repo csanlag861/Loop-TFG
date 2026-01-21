@@ -1,6 +1,6 @@
 import stylesPage from "./page.module.css";
-import Form from "@/components/landing/Form/Form";
-import Cards from "@/components/landing/Cards/Cards";
+import Form from "@/features/landing/Form/Form";
+import Cards from "@/features/landing/Cards/Cards";
 
 export default function LandingPage() {
   return (
