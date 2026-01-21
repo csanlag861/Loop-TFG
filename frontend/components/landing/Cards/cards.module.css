@@ -1,0 +1,39 @@
+.grid {
+  .card {
+    border: 1px solid var(--gris-03);
+    background-color: var(--gris-10);
+    color: var(--gris-01);
+
+    padding: 20px 24px;
+
+    width: 256px;
+    height: 224px;
+
+    transition:
+      border-color 0.3s ease,
+      background-color 0.3s ease;
+
+    &:hover {
+      border: 1px solid var(--color-03);
+      background-color: var(--color-10);
+    }
+
+    .cardText {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      h4 {
+        font-family: "Sohne-Regular";
+      }
+      p {
+        font-family: "Sohne-Light";
+        font-size: 12px;
+        color: var(--gris-03);
+      }
+
+      svg {
+        color: var(--gris-01);
+      }
+    }
+  }
+}

@@ -1,0 +1,27 @@
+.contenedor{
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    label{
+        font-size: 14px;
+        font-family: "Sohne-Light", system-ui, sans-serif;
+    }
+
+    input[type="text"], input[type="email"], input[type="password"]{
+        display: inline-block;
+        width: 384px;
+        height: 48px;
+        border: 0.5px solid var(--gris-03);
+        border-radius: 99999px;
+        padding: 24px;
+        font-size: 14px;
+        font-family: "Sohne-Light", system-ui, sans-serif;
+        color: var(--gris-03);
+
+        :focus {
+            outline: none;
+            border: .5px solid var(--gris-03);
+        }
+    }
+}
