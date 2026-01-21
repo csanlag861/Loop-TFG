@@ -5,7 +5,10 @@ import Input from "@/components/reusables/input/Input";
 import { useActionState } from "react";
 import LogIn from "@/components/actions/LogIn";
 const Login = () => {
-  const [actionState, action, isPending] = useActionState()
+  const [actionState, action, isPending] = useActionState(LogIn, {
+    message: "",
+    fieldErrors: {},
+  });
   return (
     <form>
       <Input label="Nombre de usuario" placeholder="Introduce tu nombre de usuario..." type="text" />
