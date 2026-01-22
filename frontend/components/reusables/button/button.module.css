@@ -5,20 +5,23 @@
   justify-content: center;
 
   width: 224px;
-  border: 1px solid var(--gris-08);
   padding: 8px;
   border-radius: 1000px;
-  color: var(--gris-01);
-
+  color: var(--color-03);
+  background-color: var(--color-09);
+  border: 1px solid var(--color-07);
   font-size: 14px;
 
   &:hover {
     cursor: pointer;
-    border: 1px solid var(--gris-03);
+    border: 1px solid var(--color-03);
 
     transition: border-color 0.3s ease;
   }
-  color: var(--color-03);
-  background-color: var(--color-09);
-  border: 1px solid var(--color-07);
+
+  &:disabled {
+    cursor: not-allowed;
+    background-color: var(--gris-08);
+    border: 1px solid var(--gris-03);
+  }
 }

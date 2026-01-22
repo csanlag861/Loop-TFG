@@ -90,7 +90,7 @@ const Form = () => {
           <DialogTrigger asChild>
             <button>Inicia Sesion</button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-md">
+          <DialogContent className="w-md h-168 flex items-center justify-center">
             <DialogTitle />
             <Login/>
           </DialogContent>

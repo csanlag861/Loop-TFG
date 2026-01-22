@@ -1,0 +1,25 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+
+  h2 {
+    font-size: 32px;
+    font-family: "Sohne-Regular", system-ui, sans-serif;
+    color: var(--bg-02);
+  }
+
+  p{
+    font-size: 14px;
+    font-family: "Sohne-Light", system-ui, sans-serif;
+  }
+
+  div {
+    p {
+      font-size: 14px;
+      font-family: "Sohne-Light", system-ui, sans-serif;
+      color: var(--gris-03);
+    }
+  }
+}
