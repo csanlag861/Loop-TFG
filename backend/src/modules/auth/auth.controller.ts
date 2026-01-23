@@ -1,4 +1,14 @@
-import { Request, Req, Res, Body, Controller, Get, Post, UseGuards, Logger } from '@nestjs/common';
+import {
+  Request,
+  Req,
+  Res,
+  Body,
+  Controller,
+  Get,
+  Post,
+  UseGuards,
+  Logger,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { UserService } from '../user/user.service';
@@ -12,7 +22,7 @@ export class AuthController {
   constructor(
     private authService: AuthService,
     private userService: UserService,
-  ) { }
+  ) {}
 
   @Post('/register')
   async register(@Body() user: CreateUserDto) {
@@ -21,10 +31,10 @@ export class AuthController {
 
   @UseGuards(LocalAuthGuard)
   @Post('/login')
-  login(@Req() req, @Res({ passthrough: true }) res) {
+  login(@Req() req) {
     logger.log(`Usuario ${req.user.username} ha iniciado sesión.`);
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
-    return this.authService.login(req.user, res);
+    return this.authService.login(req.user);
   }
 
   @UseGuards(JwtAuthGuard)

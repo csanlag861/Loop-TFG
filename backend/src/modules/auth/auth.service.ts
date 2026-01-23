@@ -5,14 +5,13 @@ import { LoginDto } from './dto/login.dto';
 import { UserEntity } from './user';
 import { JwtService } from '@nestjs/jwt';
 import { PayloadEntity } from './payload';
-import { Response } from 'express';
 
 @Injectable()
 export class AuthService {
   constructor(
     private userService: UserService,
     private jwtService: JwtService,
-  ) { }
+  ) {}
 
   /**
    * Valida un usuario con la información proporcionada.
@@ -47,20 +46,15 @@ export class AuthService {
    * @param user Información del usuario autenticado.
    * @returns Objeto con el token JWT.
    */
-  login(user: UserEntity, res: Response) {
+  login(user: UserEntity) {
     const payload: PayloadEntity = {
       username: user.username,
       sub: user.id,
       rolId: user.rolId,
     };
     const token = this.jwtService.sign(payload);
+    console.log(token, 'TOKEN GENERADO EN BACKEND');
 
-    res.cookie('access_token', token, {
-      httpOnly: true,
-      secure: false,
-      sameSite: 'lax',
-      maxAge: 8 * 60 * 60 * 1000
-    })
-    return { message: 'Login OK' };
+    return token;
   }
 }
