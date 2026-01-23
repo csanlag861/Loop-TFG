@@ -6,3 +6,6 @@ Repositorio de mi aplicación web presentada para el TFG
 
 Para parar los contenedores:
 > docker-compose -f docker-compose.dev.yml stop
+
+Permisos cuando trabaje en clase:
+> CMD ["sh", "-c", "npx prisma generate && chown -R 1001:1001 node_modules/.prisma && npm run start:dev"]
