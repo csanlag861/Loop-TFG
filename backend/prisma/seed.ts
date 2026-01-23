@@ -2,13 +2,14 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 
 import { prisma } from '../src/lib/prisma';
+import { SlugRol } from '@/common/enums/slug-rol.enum';
 
 async function main() {
   await prisma.rol.createMany({
     data: [
-      { nombre: 'ADMINISTRADOR' },
-      { nombre: 'USUARIO' },
-      { nombre: 'MODERADOR' },
+      { nombre: 'ADMIN', slug: SlugRol.ADMIN  },
+      { nombre: 'USUARIO', slug: SlugRol.USUARIO },
+      { nombre: 'MODERADOR', slug: SlugRol.MODERADOR },
     ],
     skipDuplicates: true,
   });

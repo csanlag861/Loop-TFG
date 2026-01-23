@@ -5,7 +5,7 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider        = "prisma-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -15,32 +15,74 @@ datasource db {
 model Rol {
   id       Int           @id @default(autoincrement())
   nombre   RolNombreEnum @unique
+  slug     String        @unique
   usuarios Usuario[]
 }
 
 enum RolNombreEnum {
   USUARIO
   MODERADOR
-  ADMINISTRADOR
+  ADMIN
 }
 
-  model Usuario {
-    id        Int               @id @default(autoincrement())
-    nombre    String
-    username  String            @unique
-    email     String            @unique
-    password  String
-    biografia String?
-    rolId     Int               @default(2)
-    rol       Rol               @relation(fields: [rolId], references: [id])
-    estado    UsuarioEstadoEnum @default(ACTIVO)
-    createdAt DateTime          @default(now())
-    avatarURL String?
-  }
+model Usuario {
+  id        Int               @id @default(autoincrement())
+  nombre    String
+  username  String            @unique
+  email     String            @unique
+  password  String
+  biografia String?
+  rol_id    Int
+  rol       Rol               @relation(fields: [rol_id], references: [id])
+  estado    UsuarioEstadoEnum @default(ACTIVO)
+  createdAt DateTime          @default(now())
+  avatarURL String?
+  carpetas  Carpeta[]
+  posts     Post[]
+}
 
 enum UsuarioEstadoEnum {
   ACTIVO
-  SILENCIAD
+  SILENCIADO
   BLOQUEADO
   SUSPENDIDO
+}
+
+model Tecnologia {
+  id     Int    @id @default(autoincrement())
+  nombre String @unique
+
+  posts Post[]
+}
+
+model Carpeta {
+  id            Int            @id @default(autoincrement())
+  usuario_id    Int
+  usuario       Usuario        @relation(fields: [usuario_id], references: [id])
+  nombre        String         @default("FAVORITOS")
+  createdAt     DateTime       @default(now())
+  postGuardados PostGuardado[]
+
+  @@unique([usuario_id, nombre])
+}
+
+model Post {
+  id         Int      @id @default(autoincrement())
+  usuario_id Int
+  usuario    Usuario  @relation(fields: [usuario_id], references: [id])
+  contenido  String   @db.VarChar(280)
+  createdAt  DateTime @default(now())
+
+  tecnologias   Tecnologia[]
+  postGuardados PostGuardado[]
+}
+
+model PostGuardado {
+  id         Int      @id @default(autoincrement())
+  post_id    Int
+  carpeta_id Int
+  createdAt  DateTime @default(now())
+
+  post    Post    @relation(fields: [post_id], references: [id])
+  carpeta Carpeta @relation(fields: [carpeta_id], references: [id])
 }
