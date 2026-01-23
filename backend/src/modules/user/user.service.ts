@@ -3,6 +3,7 @@ import { PrismaService } from '../prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import * as bcrypt from 'bcrypt';
 import { ResponseUserDto } from './dto/response-user.dto';
+import { SlugRol } from '@/common/enums/slug-rol.enum';
 
 @Injectable()
 export class UserService {
@@ -33,6 +34,12 @@ export class UserService {
     // Si no existe, procedemos a crear el usuario.
     try {
       const hashPassword = await this.hashPassword(user.password);
+      const rolID = await this.prisma.rol.findUnique({
+        where: {slug: SlugRol.USUARIO}
+      })
+      if (!rolID) {
+        throw new HttpException('El rol que intentas asignar no existe', HttpStatus.INTERNAL_SERVER_ERROR);
+      }
       const createUser = await this.prisma.usuario.create({
         data: {
           nombre: user.nombre,
@@ -41,6 +48,7 @@ export class UserService {
           password: hashPassword,
           biografia: user.biografia,
           avatarURL: user.avatarURL,
+          rol_id: rolID.id
         },
       });
 
@@ -53,7 +61,7 @@ export class UserService {
         biografia: createUser.biografia ?? undefined,
         avatarURL: createUser.avatarURL ?? undefined,
         estado: createUser.estado,
-        rolId: createUser.rolId,
+        rolId: createUser.rol_id,
       };
 
       return resUser;
