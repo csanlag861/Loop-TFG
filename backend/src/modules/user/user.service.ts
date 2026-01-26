@@ -35,10 +35,13 @@ export class UserService {
     try {
       const hashPassword = await this.hashPassword(user.password);
       const rolID = await this.prisma.rol.findUnique({
-        where: {slug: SlugRol.USUARIO}
-      })
+        where: { slug: SlugRol.USUARIO },
+      });
       if (!rolID) {
-        throw new HttpException('El rol que intentas asignar no existe', HttpStatus.INTERNAL_SERVER_ERROR);
+        throw new HttpException(
+          'El rol que intentas asignar no existe',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
       }
       const createUser = await this.prisma.usuario.create({
         data: {
@@ -48,7 +51,7 @@ export class UserService {
           password: hashPassword,
           biografia: user.biografia,
           avatarURL: user.avatarURL,
-          rol_id: rolID.id
+          rol_id: rolID.id,
         },
       });
 

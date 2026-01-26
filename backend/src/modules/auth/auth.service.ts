@@ -27,6 +27,7 @@ export class AuthService {
         user.password,
         userResult?.password || '',
       );
+
       if (userResult && passwordMatch) {
         const { password, ...result } = userResult;
         return result;
@@ -53,7 +54,6 @@ export class AuthService {
       rolId: user.rolId,
     };
     const token = this.jwtService.sign(payload);
-    console.log(token, 'TOKEN GENERADO EN BACKEND');
 
     return token;
   }

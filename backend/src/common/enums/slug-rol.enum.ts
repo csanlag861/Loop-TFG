@@ -1,5 +1,5 @@
 export enum SlugRol {
-    ADMIN = 'ADMIN',
-    USUARIO = 'USUARIO',
-    MODERADOR = 'MODERADOR'
+  ADMIN = 'ADMIN',
+  USUARIO = 'USUARIO',
+  MODERADOR = 'MODERADOR',
 }

@@ -1,6 +1,171 @@
 > Para levantar un cliente de bbdd en local
 npx prisma studio --config ./prisma.config.ts
 
+UseGuards(JwtAuthGuard)
+  @Post('create')
+  create(@Body() createPostDto: CreatePostDto) {
+    return this.postService.create(createPostDto);
+  }
+
+  create(createPostDto: CreatePostDto) {
+    return;
+  }
+
+como consigo acceder al id del usuario que está queriendo crear el post? más que nada porque la creación de un post conlleva lo siguiente: 
+model Post {
+  id         Int      @id @default(autoincrement())
+  usuario_id Int
+  usuario    Usuario  @relation(fields: [usuario_id], references: [id])
+  contenido  String   @db.VarChar(280)
+  createdAt  DateTime @default(now())
+
+  tecnologias   Tecnologia[]
+  postGuardados PostGuardado[]
+}
+
+y el usuario solo me pasará el contenido, y la tecnologia 
+
+Muy buena pregunta—esto es clave en APIs con autenticación 👇
+
+Tu caso es típico:
+👉 El usuario NO envía usuario_id
+👉 Lo sacas del JWT que valida el JwtAuthGuard
+
+🧠 Cómo funciona en NestJS
+
+Cuando usas:
+
+@UseGuards(JwtAuthGuard)
+
+
+Tu guard inyecta el usuario en req.user (si usas Passport JWT estándar).
+
+✅ OPCIÓN 1 (SIMPLE): usar @Req()
+Controller
+import { Request } from 'express';
+
+@UseGuards(JwtAuthGuard)
+@Post('create')
+create(@Body() dto: CreatePostDto, @Req() req: Request) {
+  const user = req.user;
+  return this.postService.create(dto, user);
+}
+
+Service
+create(dto: CreatePostDto, user: any) {
+  return this.prisma.post.create({
+    data: {
+      contenido: dto.contenido,
+      usuario_id: user.id,
+      tecnologias: {
+        connect: dto.tecnologias.map(id => ({ id })),
+      },
+    },
+  });
+}
+
+✅ OPCIÓN 2 (PRO): Crear un decorator @User()
+
+Esto es lo que se hace en proyectos profesionales 👇
+
+1️⃣ Decorator custom
+// src/auth/decorators/user.decorator.ts
+import { createParamDecorator, ExecutionContext } from '@nestjs/common';
+
+export const User = createParamDecorator(
+  (data: unknown, ctx: ExecutionContext) => {
+    const request = ctx.switchToHttp().getRequest();
+    return request.user;
+  },
+);
+
+2️⃣ Usarlo en el controller
+@UseGuards(JwtAuthGuard)
+@Post('create')
+create(@Body() dto: CreatePostDto, @User() user) {
+  return this.postService.create(dto, user);
+}
+
+
+🔥 Mucho más limpio.
+
+✅ OPCIÓN 3 (AÚN MÁS PRO): tipar el usuario
+
+Si tu JWT payload es:
+
+export interface JwtPayload {
+  id: number;
+  username: string;
+}
+
+
+Entonces:
+
+create(@Body() dto: CreatePostDto, @User() user: JwtPayload)
+
+🧩 Cómo debería ser tu CreatePostDto
+export class CreatePostDto {
+  contenido: string;
+  tecnologias: number[]; // ids
+}
+
+✅ Prisma create con relaciones MANY-TO-MANY
+return this.prisma.post.create({
+  data: {
+    contenido: dto.contenido,
+    usuario: {
+      connect: { id: user.id },
+    },
+    tecnologias: {
+      connect: dto.tecnologias.map(id => ({ id })),
+    },
+  },
+});
+
+⚠️ ERROR MUY COMÚN
+
+❌ No hagas esto:
+
+usuario_id: dto.usuario_id
+
+
+Porque el cliente podría crear posts como otro usuario → SECURITY BUG.
+
+🧠 Flujo real
+
+Usuario hace login → recibe JWT
+
+Frontend envía:
+
+POST /api/post/create
+Authorization: Bearer TOKEN
+{
+  "contenido": "Hola mundo",
+  "tecnologias": [1, 2, 5]
+}
+
+
+NestJS lee el JWT → req.user.id
+
+Prisma crea el post con ese usuario
+
+💎 Bonus PRO TIP
+
+En proyectos grandes se usa:
+
+@Post()
+create(@Body() dto: CreatePostDto, @User('id') userId: number)
+
+
+Decorator mejorado:
+
+return request.user[data];
+
+Si quieres
+
+Te puedo mostrar cómo configurar JwtStrategy para que req.user.id exista (muchos tutoriales lo hacen mal)
+o cómo devolver el post creado con usuario y tecnologías en una sola query Prisma.
+
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
 </p>
