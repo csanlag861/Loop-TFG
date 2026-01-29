@@ -3,19 +3,19 @@
 
 @font-face {
   font-family: "Sohne-Regular";
-  src: url('/fonts/Sohne-Normal.otf');
+  src: url("/fonts/Sohne-Normal.otf");
 }
 @font-face {
   font-family: "Sohne-Light";
-  src: url('/fonts/Sohne-Light.otf');
+  src: url("/fonts/Sohne-Light.otf");
 }
 @font-face {
   font-family: "Sohne-Bold";
-  src: url('/fonts/Sohne-Bold.otf');
+  src: url("/fonts/Sohne-Bold.otf");
 }
 @font-face {
   font-family: "SohneBreit-Bold";
-  src: url('/fonts/SohneBreit-Bold.otf');
+  src: url("/fonts/SohneBreit-Bold.otf");
 }
 
 /*
@@ -43,32 +43,31 @@ h3: 18
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-/*   outline: 2px solid aqua;   */
+  /*   outline: 2px solid aqua;   */
 }
 
 :root {
-  --bg-01: #0A0A0A;
+  --bg-01: #0a0a0a;
   --bg-02: #000000;
 
-  --gris-10: #1A1A1A;
-  --gris-09: #1A1A1A;
+  --gris-10: #1a1a1a;
+  --gris-09: #1a1a1a;
   --gris-08: #292929;
-  --gris-07: #2E2E2E;
+  --gris-07: #2e2e2e;
   --gris-06: #454545;
   --gris-05: #878787;
-  --gris-04: #8F8F8F;
-  --gris-03: #7D7D7D;
-  --gris-02: #A0A0A0;
-  --gris-01: #EDEDED;
+  --gris-04: #8f8f8f;
+  --gris-03: #7d7d7d;
+  --gris-02: #a0a0a0;
+  --gris-01: #ededed;
 
   --color-10: #232769;
-  --color-09: #2E338A;
-  --color-07: #4C54E4;
-  --primary-color: #535CFA;
-  --color-04: #8C92FC;
-  --color-03: #B0B4FD;
+  --color-09: #2e338a;
+  --color-07: #4c54e4;
+  --primary-color: #535cfa;
+  --color-04: #8c92fc;
+  --color-03: #b0b4fd;
 
-  
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
@@ -101,7 +100,6 @@ h3: 18
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
-
 }
 
 @theme inline {
@@ -145,6 +143,27 @@ h3: 18
   --radius-2xl: calc(var(--radius) + 8px);
   --radius-3xl: calc(var(--radius) + 12px);
   --radius-4xl: calc(var(--radius) + 16px);
+
+  --bg-01: #0a0a0a;
+  --bg-02: #000000;
+
+  --gris-10: #1a1a1a;
+  --gris-09: #1a1a1a;
+  --gris-08: #292929;
+  --gris-07: #2e2e2e;
+  --gris-06: #454545;
+  --gris-05: #878787;
+  --gris-04: #8f8f8f;
+  --gris-03: #7d7d7d;
+  --gris-02: #a0a0a0;
+  --gris-01: #ededed;
+
+  --color-10: #232769;
+  --color-09: #2e338a;
+  --color-07: #4c54e4;
+  --primary-color: #535cfa;
+  --color-04: #8c92fc;
+  --color-03: #b0b4fd;
 }
 
 body {

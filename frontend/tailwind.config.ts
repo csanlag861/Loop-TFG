@@ -18,6 +18,13 @@ const config: Config = {
         gris03: "var(--gris-03)",
         gris02: "var(--gris-02)",
         gris01: "var(--gris-01)",
+ 
+        color10: "var(--color-10)",
+        color09: "var(--color-09)",
+        color07: "var(--color-07)",
+        color04: "var(--color-04)",
+        color03: "var(--color-03)",
+        primarycolor: "var(--primary-color)",
       },
     },
   },
