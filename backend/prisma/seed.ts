@@ -5,6 +5,8 @@ import { prisma } from '../src/lib/prisma';
 import { SlugRol } from '../src/common/enums/slug-rol.enum';
 
 async function main() {
+  await prisma.post.deleteMany({});
+  await prisma.tecnologia.deleteMany({});
   // 1️⃣ Crear roles
   await prisma.rol.createMany({
     data: [
@@ -16,29 +18,108 @@ async function main() {
   });
 
   // 2️⃣ Crear tecnologías
-  const tecnologiasList = [
-    'Angular',
-    'TypeScript',
-    'React',
-    'NodeJS',
-    'PHP',
-    'Java',
-    'Docker',
-    'AWS',
-    'Azure',
-    'Python',
-    'MongoDB',
-    'PostgreSQL',
-    'Kubernetes',
-    'GraphQL',
-    'NestJS',
+  const tecnologiasSeed = [
+    {
+      nombre: 'Angular',
+      background: '#260B0B',
+      border: '#521E1E',
+      text: '#FF6E6E',
+    },
+    {
+      nombre: 'TypeScript',
+      background: '#0B0B26',
+      border: '#1E1E52',
+      text: '#6E6EFF',
+    },
+    {
+      nombre: 'React',
+      background: '#0B1A26',
+      border: '#1E3A52',
+      text: '#6EC1FF',
+    },
+    {
+      nombre: 'NodeJS',
+      background: '#1A260B',
+      border: '#3A521E',
+      text: '#C1FF6E',
+    },
+    {
+      nombre: 'PHP',
+      background: '#260B26',
+      border: '#521E52',
+      text: '#FF6EC1',
+    },
+    {
+      nombre: 'Java',
+      background: '#261A0B',
+      border: '#523A1E',
+      text: '#FFC16E',
+    },
+    {
+      nombre: 'Docker',
+      background: '#0B2626',
+      border: '#1E5252',
+      text: '#6EFFC1',
+    },
+    {
+      nombre: 'AWS',
+      background: '#1A0B26',
+      border: '#3A1E52',
+      text: '#C16EFF',
+    },
+    {
+      nombre: 'Azure',
+      background: '#0B1A26',
+      border: '#1E3A52',
+      text: '#6EC1FF',
+    },
+    {
+      nombre: 'Python',
+      background: '#1A260B',
+      border: '#3A521E',
+      text: '#C1FF6E',
+    },
+    {
+      nombre: 'MongoDB',
+      background: '#0B260B',
+      border: '#1E523A',
+      text: '#6EFFC1',
+    },
+    {
+      nombre: 'PostgreSQL',
+      background: '#0B1A26',
+      border: '#1E3A52',
+      text: '#6EC1FF',
+    },
+    {
+      nombre: 'Kubernetes',
+      background: '#0B2626',
+      border: '#1E5252',
+      text: '#6EFFC1',
+    },
+    {
+      nombre: 'GraphQL',
+      background: '#260B1A',
+      border: '#521E3A',
+      text: '#FF6EC1',
+    },
+    {
+      nombre: 'NestJS',
+      background: '#260B0B',
+      border: '#521E1E',
+      text: '#FF6E6E',
+    },
   ];
 
-  for (const tech of tecnologiasList) {
+  for (const tech of tecnologiasSeed) {
     await prisma.tecnologia.upsert({
-      where: { nombre: tech },
-      update: {},
-      create: { nombre: tech },
+      where: { nombre: tech.nombre },
+      update: {
+        background: tech.background,
+        border: tech.border,
+        text: tech.text,
+      },
+      create: tech,
     });
   }
 
@@ -125,11 +206,14 @@ async function main() {
     'Aprender Docker y Kubernetes juntos es un must para DevOps',
   ];
 
+  function getRandomTechnologies(tecnologias, max = 3) {
+    const shuffled = [...tecnologias].sort(() => 0.5 - Math.random());
+    return shuffled.slice(0, max);
+  }
+
   for (const content of postContents) {
     const randomUser = usuarios[Math.floor(Math.random() * usuarios.length)];
-    const relatedTech = tecnologias.filter(() =>
-      Math.random() > 0.5 ? true : false,
-    );
+    const relatedTech = getRandomTechnologies(tecnologias, 3);
 
     const post = await prisma.post.create({
       data: {

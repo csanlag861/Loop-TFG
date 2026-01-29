@@ -26,6 +26,7 @@ export class PostService {
       select: {
         contenido: true,
         createdAt: true,
+        id: true,
         usuario: {
           select: {
             avatarURL: true,
@@ -37,6 +38,9 @@ export class PostService {
           select: {
             id: true,
             nombre: true,
+            border: true,
+            background: true,
+            text: true,
           },
         },
       },

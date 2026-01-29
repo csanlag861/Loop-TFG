@@ -51,6 +51,9 @@ enum UsuarioEstadoEnum {
 model Tecnologia {
   id     Int    @id @default(autoincrement())
   nombre String @unique
+  background String?
+  border String?
+  text String?
 
   posts Post[]
 }
