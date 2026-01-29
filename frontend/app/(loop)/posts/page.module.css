@@ -1,0 +1,13 @@
+.section{
+    margin-top: 96px;
+    margin-left: 64px;
+    h1{
+        font-size: 32px;
+        color: var(--primary-color);
+    }
+
+    hr{
+        border: 1px solid var(--gris-07);
+        width: 100%;
+    }
+}
