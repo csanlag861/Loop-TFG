@@ -39,13 +39,6 @@ h3: 18
 
 */
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  /*   outline: 2px solid aqua;   */
-}
-
 :root {
   --bg-01: #0a0a0a;
   --bg-02: #000000;
@@ -220,6 +213,10 @@ body {
 @layer base {
   * {
     @apply border-border outline-ring/50;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    /* outline: 2px solid aqua; */
   }
   body {
     @apply bg-background text-foreground;
