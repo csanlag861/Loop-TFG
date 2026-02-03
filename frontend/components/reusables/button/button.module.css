@@ -4,7 +4,7 @@
   align-items: center;
   justify-content: center;
 
-  width: 224px;
+  width: var(--btn-width, 224px);
   padding: 8px;
   border-radius: 1000px;
   color: var(--color-03);

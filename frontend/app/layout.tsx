@@ -1,5 +1,6 @@
 import "./globals.css";
-import { Toaster } from 'sonner';
+import { Toaster } from "sonner";
+import { ThemeProvider } from "@/components/theme-provider";
 
 export const metadata = {
   title: "Loop",
@@ -13,7 +14,15 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es">
-      <body>{children}         <Toaster position="top-center" richColors />
+      <body>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children} <Toaster position="top-center" richColors />
+        </ThemeProvider>
       </body>
     </html>
   );
