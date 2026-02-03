@@ -5,7 +5,7 @@ import Post from "../post/post";
 export const PostList = async () => {
   const posts = await getPosts();  
   return (
-    <ul className={styleList.posts}>
+    <ul className={`${styleList.posts} mt-8`}>
       {posts.map((post) => {
         return <Post key={post.id} post={post} />;
       })}

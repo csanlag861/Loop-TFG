@@ -2,11 +2,15 @@ import stylePost from "./post.module.css";
 import { formatDistanceToNow } from "date-fns";
 import { es } from "date-fns/locale";
 import { Bookmark, Heart, MessageCircle } from '@geist-ui/icons'
+import Image from "next/image";
 
 const Post = ({ post }) => {
   return (
     <div className={stylePost.post}>
       <div className={stylePost.user}>
+        <div className="w-10 h-10 rounded-full overflow-hidden">
+          <Image src={post.usuario.avatarURL} alt="Avatar del usuario" width={40} height={40} className="object-cover w-full h-full" />
+        </div>
         <h2>{post.usuario.nombre}</h2>
         <h3>{post.usuario.username}</h3>
         <p>
