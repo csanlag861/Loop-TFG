@@ -1,5 +1,5 @@
 export class PayloadEntity {
-  sub: number;
+  id: string;
   username: string;
   rolId: number;
 }

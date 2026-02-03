@@ -3,6 +3,7 @@ import { z } from "zod";
 import { ActionState } from "../types/ActionState";
 import { redirect } from "next/navigation";
 import { setSessionCookie } from "../utils/session-cookie";
+import { homePath } from "@/utils/paths";
 
 const logInSchema = z.object({
   username: z
@@ -40,7 +41,6 @@ const LogIn = async (
       };
     }
     const data = await res.text();
-    console.log(data, "DATA");
     await setSessionCookie(data);
   } catch (error: any) {
     if (error?.name === "ZodError") {
@@ -66,7 +66,7 @@ const LogIn = async (
       };
     }
   }
-  redirect("/");
+  redirect(homePath());
 };
 
 export default LogIn;

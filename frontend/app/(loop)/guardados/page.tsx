@@ -1,0 +1,27 @@
+import {
+    Empty,
+    EmptyContent,
+    EmptyDescription,
+    EmptyHeader,
+    EmptyMedia,
+    EmptyTitle,
+} from "@/components/ui/empty"
+import Button from "@/components/reusables/button/Button"
+import { Bookmark } from "@geist-ui/icons"
+
+export default function GuardadosPage() {
+    return (
+        <Empty>
+            <EmptyHeader>
+                <EmptyMedia variant="icon">
+                    <Bookmark size={24} />
+                </EmptyMedia>
+                <EmptyTitle>No data</EmptyTitle>
+                <EmptyDescription>No data found</EmptyDescription>
+            </EmptyHeader>
+            <EmptyContent>
+                <Button text="Añadir Guardados"/>
+            </EmptyContent>
+        </Empty>
+    )
+}

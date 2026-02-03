@@ -134,6 +134,7 @@ export class UserService {
         avatarURL: true,
         nombre: true,
         username: true,
+        id: true,
       },
     });
   }

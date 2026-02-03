@@ -1,11 +1,10 @@
 import { GetCookies } from "@/lib/get-token";
-import { getAllPosts } from "@/utils/api";
+import { getUserData } from "@/utils/api";
 
-export async function getUserData() {
+export async function getDataUser() {
   const token = await GetCookies();
-
   try {
-    const res = await fetch(`${getAllPosts()}`, {
+    const res = await fetch(`${getUserData()}`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,

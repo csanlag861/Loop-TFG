@@ -1,3 +1,4 @@
+"use client";
 import { User } from "@geist-ui/icons";
 import { getUserData } from "../queries/user-data";
 import Image from "next/image";

@@ -1,7 +1,7 @@
 export const landingPath = () => "/landing";
 export const homePath = () => "/posts";
 
-export const searchPath = () => "/search";
+export const searchPath = () => "/busqueda";
 
 export const bookmarkPath = () => "/guardados";
 

@@ -50,7 +50,7 @@ export class AuthService {
   login(user: UserEntity) {
     const payload: PayloadEntity = {
       username: user.username,
-      sub: user.id,
+      id: user.id.toString(),
       rolId: user.rolId,
     };
     const token = this.jwtService.sign(payload);

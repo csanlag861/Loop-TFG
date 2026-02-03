@@ -10,6 +10,8 @@ export class UserController {
   @UseGuards(JwtAuthGuard)
   @Get('me')
   me(@User('userId') userId: number) {
+    console.log(userId, "userId que llega al back");
+    
     return this.userService.getUserData(userId);
   }
 }

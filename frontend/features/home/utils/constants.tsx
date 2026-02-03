@@ -7,23 +7,23 @@ export const navItems: NavItem[] = [
   {
     title: "Home",
     icon: <Home size={24} />,
-    href: `${homePath}`,
+    href: `${homePath()}`,
   },
   {
     title: "Búsqueda",
     icon: <Search size={24} />,
-    href: `${searchPath}`,
+    href: `${searchPath()}`,
   },
   {
     title: "Guardados",
     icon: <Bookmark size={24} />,
-    href: `${bookmarkPath}`,
+    href: `${bookmarkPath()}`,
   },
-  {
-    title: "Perfil",
-    icon: <Avatar />,
-    href: `${profilePath}`,
-  },
+    {
+      title: "Perfil",
+      icon: <Avatar />,
+      href: `${profilePath}`,
+    },
   {
     title: "Ajustes",
     icon: <Settings size={24} />,

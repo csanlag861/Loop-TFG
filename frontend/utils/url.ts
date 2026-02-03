@@ -1,4 +1,4 @@
-export const getBaseUrl = () => {
+/* export const getBaseUrl = () => {
   const environment = process.env.NODE_ENV;
 
   const baseUrl =
@@ -7,4 +7,4 @@ export const getBaseUrl = () => {
       : `https://${process.env.NEXT_PUBLIC_API_URL}`;
 
   return baseUrl;
-};
+}; */

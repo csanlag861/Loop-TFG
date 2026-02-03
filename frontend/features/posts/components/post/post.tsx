@@ -3,8 +3,10 @@ import { formatDistanceToNow } from "date-fns";
 import { es } from "date-fns/locale";
 import { Bookmark, Heart, MessageCircle } from '@geist-ui/icons'
 import Image from "next/image";
+import { getUserData } from "@/features/home/queries/user-data";
 
-const Post = ({ post }) => {
+const Post = async ({ post }) => {
+  const dataUser = await getUserData();
   return (
     <div className={stylePost.post}>
       <div className={stylePost.user}>

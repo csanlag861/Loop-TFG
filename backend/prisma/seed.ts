@@ -226,6 +226,38 @@ async function main() {
     });
   }
 
+  // 5️⃣ Crear carpetas de favoritos para cada usuario
+  for (const user of usuarios) {
+    const carpeta = await prisma.carpeta.create({
+      data: {
+        nombre: 'Favoritos',
+        usuario_id: user.id,
+      },
+    });
+
+    // 6️⃣ Guardar algunos posts en la carpeta de favoritos aleatoriamente
+    // Elegimos algunos usuarios que tendrán posts guardados
+    const guardarPosts = Math.random() > 0.3; // 70% de probabilidades de guardar posts
+    if (guardarPosts) {
+      const postsParaGuardar = [...postContents]
+        .sort(() => 0.5 - Math.random())
+        .slice(0, Math.floor(Math.random() * 5) + 1); // entre 1 y 5 posts
+
+      for (const content of postsParaGuardar) {
+        // Encontramos el post por contenido
+        const post = await prisma.post.findFirst({ where: { contenido: content } });
+        if (!post) continue;
+
+        await prisma.postGuardado.create({
+          data: {
+            post_id: post.id,
+            carpeta_id: carpeta.id
+          },
+        });
+      }
+    }
+  }
+
   console.log('✅ Seed completado correctamente');
 }
 

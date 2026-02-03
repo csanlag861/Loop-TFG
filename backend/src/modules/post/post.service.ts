@@ -32,6 +32,7 @@ export class PostService {
             avatarURL: true,
             nombre: true,
             username: true,
+            id: true,
           },
         },
         tecnologias: {

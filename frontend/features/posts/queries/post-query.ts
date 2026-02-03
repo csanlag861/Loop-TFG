@@ -1,12 +1,13 @@
 import { GetCookies } from "@/lib/get-token";
-import { getBaseUrl } from "@/utils/url";
 import { getAllPosts } from "@/utils/api";
 
 export async function getPosts() {
   const token = await GetCookies();
 
+
   try {
-    const res = await fetch(`${getBaseUrl()}${getAllPosts()}`, {
+    await new Promise(r => setTimeout(r, 2000));
+    const res = await fetch(`${getAllPosts()}`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
