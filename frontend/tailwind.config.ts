@@ -4,6 +4,11 @@ const config: Config = {
   content: ["./src/app/**/*.{ts,tsx}", "./src/components/**/*.{ts,tsx}"],
   theme: {
     extend: {
+      fontFamily: {
+        sohne: ['"Sohne-Regular"', "sans-serif"],
+        "sohne-light": ['"Sohne-Light"', "sans-serif"],
+        "sohne-bold": ['"Sohne-Bold"', "sans-serif"],
+      },
       colors: {
         bg01: "var(--bg-01)",
         bg02: "var(--bg-02)",
@@ -18,7 +23,7 @@ const config: Config = {
         gris03: "var(--gris-03)",
         gris02: "var(--gris-02)",
         gris01: "var(--gris-01)",
- 
+
         color10: "var(--color-10)",
         color09: "var(--color-09)",
         color07: "var(--color-07)",

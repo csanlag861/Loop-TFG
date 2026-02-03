@@ -40,8 +40,9 @@ h3: 18
 */
 
 :root {
-  --bg-01: #0a0a0a;
-  --bg-02: #000000;
+  /* Backgrounds */
+  --bg-01: #f7f7f7; /* fondo principal */
+  --bg-02: #ffffff; /* superficies / cards */
 
   --gris-10: #1a1a1a;
   --gris-09: #1a1a1a;
@@ -172,6 +173,27 @@ body {
 */
 
 .dark {
+  --bg-01: #0a0a0a;
+  --bg-02: #000000;
+
+  --gris-10: #1a1a1a;
+  --gris-09: #1a1a1a;
+  --gris-08: #292929;
+  --gris-07: #2e2e2e;
+  --gris-06: #454545;
+  --gris-05: #878787;
+  --gris-04: #8f8f8f;
+  --gris-03: #7d7d7d;
+  --gris-02: #a0a0a0;
+  --gris-01: #ededed;
+
+  --color-10: #232769;
+  --color-09: #2e338a;
+  --color-07: #4c54e4;
+  --primary-color: #535cfa;
+  --color-04: #8c92fc;
+  --color-03: #b0b4fd;
+
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
   --card: oklch(0.205 0 0);
