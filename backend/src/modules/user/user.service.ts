@@ -121,4 +121,20 @@ export class UserService {
     const hashedPassword = await bcrypt.hash(password, salt);
     return hashedPassword;
   }
+
+  /**
+   * Función para obtener los datos del usuario.
+   * @param id Identificador del usuario
+   * @returns Devuelve los datos del usuario.
+   */
+  async getUserData(id: number) {
+    return this.prisma.usuario.findUnique({
+      where: { id },
+      select: {
+        avatarURL: true,
+        nombre: true,
+        username: true,
+      },
+    });
+  }
 }
