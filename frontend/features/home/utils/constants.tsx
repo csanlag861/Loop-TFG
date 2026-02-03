@@ -1,6 +1,7 @@
-import { Home, Search, Bookmark, Settings } from "@geist-ui/icons";
+import { Home, Search, Bookmark, Settings, Minimize2, Sun } from "@geist-ui/icons";
 import { NavItem } from "./types";
 import { bookmarkPath, homePath, profilePath, searchPath } from "@/utils/paths";
+import Avatar from "../components/avatar";
 
 export const navItems: NavItem[] = [
   {
@@ -20,12 +21,25 @@ export const navItems: NavItem[] = [
   },
   {
     title: "Perfil",
+    icon: <Avatar />,
     href: `${profilePath}`,
   },
   {
     title: "Ajustes",
     icon: <Settings size={24} />,
-    href: `${profilePath}`
+    href: `${profilePath}`,
+  },
+  {
+    title: "Contraer",
+    icon: <Minimize2 size={24} />,
+    href: `${profilePath}`,
+    action: "toggle",
+  },
+  {
+    title: "Apariencia",
+    icon: <Sun size={24} />,
+    href: `${profilePath}`,
+    action: "mode",
   },
 ];
 

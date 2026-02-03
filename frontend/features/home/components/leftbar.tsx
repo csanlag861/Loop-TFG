@@ -20,14 +20,11 @@ const Sidebar = () => {
   return (
     <nav
       className={clsx(
-        "h-screen border-r border-(--gris-07) bg-(--bg-01) pt-20",
+        "sticky top-0 h-screen border-r border-(--gris-07) bg-(--bg-01) pt-20",
         "transition-all",
         isTransition && "duration-200",
         isOpen ? "w-[320px]" : "w-20",
       )}
-      onClick={() => {
-        handleToggle(!isOpen);
-      }}
     >
       <div className="px-3 py-2">
         <nav className="space-y-2">
@@ -37,6 +34,7 @@ const Sidebar = () => {
               isOpen={isOpen}
               isActive={pathname === navItem.href}
               navItem={navItem}
+              onToggle={() => handleToggle(!isOpen)}
             />
           ))}
         </nav>

@@ -10,7 +10,12 @@ import {
   DialogDescription
 } from "@/components/ui/dialog";
 import Login from "@/features/auth/components/login/Login";
+import { useRouter } from "next/navigation";
+import { homePath } from "@/utils/paths";
+
 const Form = () => {
+  const router = useRouter();
+
   return (
     <div className={stylesForm.form}>
       <h3>Unete Ahora</h3>
@@ -96,7 +101,7 @@ const Form = () => {
           </DialogContent>
         </Dialog>
         <hr />
-        <button className={stylesForm.explorar}>Explorar Contenido</button>
+        <button className={stylesForm.explorar} onClick={() => router.push(homePath())}>Explorar Contenido</button>
       </div>
     </div>
   );
