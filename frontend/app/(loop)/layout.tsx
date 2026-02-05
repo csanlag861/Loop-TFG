@@ -1,11 +1,10 @@
-import LeftBar from "@/components/reusables/left-bar/left-bar";
 import RightBar from "@/components/reusables/right-bar/right-bar";
-import { Sidebar } from "@/features/home/components/leftbar";
+import { SidebarWrapper } from "@/features/home/components/sidebar/wrapper";
 
 export default function RootLayout({ children }) {
   return (
         <div className="grid grid-cols-[320px_1fr_320px]">
-          <Sidebar />
+          <SidebarWrapper />
           
 
           <main className="bg-(--bg-02) p-4 ">{children}</main>

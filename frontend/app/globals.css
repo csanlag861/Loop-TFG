@@ -57,10 +57,14 @@ h3: 18
 
   --color-10: #232769;
   --color-09: #2e338a;
+  --color-08: #3b41b2;
   --color-07: #4c54e4;
   --primary-color: #535cfa;
+  --color-05: #757dfb;
   --color-04: #8c92fc;
   --color-03: #b0b4fd;
+  --color-02: #caccfd;
+  --color-01: #eeefff;
 
   --radius: 0.625rem;
   --background: oklch(1 0 0);
@@ -154,10 +158,14 @@ h3: 18
 
   --color-10: #232769;
   --color-09: #2e338a;
+  --color-08: #3b41b2;
   --color-07: #4c54e4;
   --primary-color: #535cfa;
+  --color-05: #757dfb;
   --color-04: #8c92fc;
   --color-03: #b0b4fd;
+  --color-02: #caccfd;
+  --color-01: #eeefff;
 }
 
 body {
@@ -189,11 +197,15 @@ body {
 
   --color-10: #232769;
   --color-09: #2e338a;
+  --color-08: #3b41b2;
   --color-07: #4c54e4;
   --primary-color: #535cfa;
+  --color-05: #757dfb;
   --color-04: #8c92fc;
   --color-03: #b0b4fd;
-
+  --color-02: #caccfd;
+  --color-01: #eeefff;
+  
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
   --card: oklch(0.205 0 0);
