@@ -2,6 +2,7 @@ import {
   IsArray,
   IsInt,
   IsNotEmpty,
+  IsOptional,
   IsString,
   MaxLength,
 } from 'class-validator';
@@ -14,5 +15,6 @@ export class CreatePostDto {
 
   @IsArray()
   @IsInt({ each: true })
+  @IsOptional()
   tecnologias: number[];
 }

@@ -1,12 +1,12 @@
 import stylePost from "./post.module.css";
 import { formatDistanceToNow } from "date-fns";
 import { es } from "date-fns/locale";
-import { Bookmark, Heart, MessageCircle } from '@geist-ui/icons'
+import { Bookmark, Heart, MessageCircle, MoreVertical } from '@geist-ui/icons'
 import Image from "next/image";
-import { getUserData } from "@/features/home/queries/user-data";
+import { getDataUser } from "@/features/home/queries/user-data";
 
 const Post = async ({ post }) => {
-  const dataUser = await getUserData();
+  const dataUser = await getDataUser();
   return (
     <div className={stylePost.post}>
       <div className={stylePost.user}>
@@ -21,6 +21,7 @@ const Post = async ({ post }) => {
             locale: es,
           })}
         </p>
+        {dataUser?.id === post.usuario.id && (<MoreVertical size={18}/>)}
       </div>
       <div className={stylePost.badges}>
         {post.tecnologias.map((tech) => (

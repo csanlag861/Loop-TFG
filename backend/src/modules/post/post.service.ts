@@ -14,9 +14,11 @@ export class PostService {
         usuario: {
           connect: { id: userId },
         },
-        tecnologias: {
-          connect: createPostDto.tecnologias.map((id) => ({ id })),
-        },
+        ...(createPostDto.tecnologias?.length > 0 && {
+          tecnologias: {
+            connect: createPostDto.tecnologias.map((id) => ({ id })),
+          },
+        }),
       },
     });
   }
