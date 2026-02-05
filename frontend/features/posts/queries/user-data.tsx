@@ -11,6 +11,10 @@ export async function getDataUser() {
       },
     });
 
+    if (res.statusText === "Unauthorized") {
+      return null;
+    }
+
     if (!res.ok) {
       console.error("Error al obtener los posts", res.statusText);
       return;

@@ -1,11 +1,11 @@
+"use server";
 import { GetCookies } from "@/lib/get-token";
-import { getAllPosts } from "@/utils/api";
+import { getUserData } from "@/utils/api";
 
-export async function getUserData() {
+export async function getDataUser() {
   const token = await GetCookies();
-
   try {
-    const res = await fetch(`${getAllPosts()}`, {
+    const res = await fetch(`${getUserData()}`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -13,11 +13,15 @@ export async function getUserData() {
     });
 
     if (!res.ok) {
-      console.error("Error al obtener los posts", res.statusText);
+      console.error("Error al obtener los datos del usuario", res.statusText);
       return;
+    }
+
+    if (res.statusText === "Unauthorized"){
+      return null;
     }
     return res.json();
   } catch (error) {
-    console.error("Salto en el try-catch del getPosts", error);
+    console.error("Salto en el try-catch del getDaataUser", error);
   }
 }

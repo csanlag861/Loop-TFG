@@ -1,9 +1,8 @@
-import { Home, Search, Bookmark } from "@geist-ui/icons";
+import { Home, Search } from "@geist-ui/icons";
 import { NavItem } from "./types";
-import { bookmarkPath, homePath, searchPath } from "@/utils/paths";
-import Avatar from "../components/avatar";
+import { homePath, searchPath } from "@/utils/paths";
 
-export const navItems: NavItem[] = [
+export const navItemsAnom: NavItem[] = [
   {
     title: "Home",
     icon: <Home size={24} />,
@@ -13,16 +12,6 @@ export const navItems: NavItem[] = [
     title: "Búsqueda",
     icon: <Search size={24} />,
     href: `${searchPath()}`,
-  },
-  {
-    title: "Guardados",
-    icon: <Bookmark size={24} />,
-    href: `${bookmarkPath()}`,
-  },
-  {
-    title: "Mi perfil",
-    icon: <Avatar />,
-    href: `${bookmarkPath()}`,
   },
 ];
 

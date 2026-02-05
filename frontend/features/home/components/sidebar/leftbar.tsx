@@ -3,10 +3,12 @@
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { clsx } from "clsx";
-import { navItems } from "../utils/constants";
+import { navItems } from "../../utils/constants";
+import { navItemsAnom } from "../../utils/constants-anon";
 import { SidebarItem } from "./nav-item";
+import { SidebarFooter } from "../settings";
 
-const Sidebar = () => {
+const Sidebar = ({ isAuthenticated }: { isAuthenticated: boolean }) => {
   const pathname = usePathname();
   const [isOpen, setOpen] = useState(false);
   const [isTransition, setTransition] = useState(false);
@@ -28,16 +30,25 @@ const Sidebar = () => {
     >
       <div className="px-3 py-2">
         <nav className="space-y-2">
-          {navItems.map((navItem) => (
+          {isAuthenticated ? (navItems.map((navItem) => (
             <SidebarItem
               key={navItem.title}
               isOpen={isOpen}
               isActive={pathname === navItem.href}
               navItem={navItem}
-              onToggle={() => handleToggle(!isOpen)}
-            />
-          ))}
+            />)
+          )) : (navItemsAnom.map((navItem) => (
+            <SidebarItem
+              key={navItem.title}
+              isOpen={isOpen}
+              isActive={pathname === navItem.href}
+              navItem={navItem}
+            />)))}
         </nav>
+      </div>
+
+      <div className="mt-8 py-2">
+        <SidebarFooter onToggle={() => handleToggle(!isOpen)} />
       </div>
     </nav>
   );
