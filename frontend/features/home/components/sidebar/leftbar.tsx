@@ -47,8 +47,8 @@ const Sidebar = ({ isAuthenticated }: { isAuthenticated: boolean }) => {
         </nav>
       </div>
 
-      <div className="mt-8 py-2">
-        <SettingsSidebar onToggle={() => handleToggle(!isOpen)} />
+      <div className="px-3 py-2">
+        <SettingsSidebar onToggle={() => handleToggle(!isOpen)} isOpen={isOpen} />
       </div>
     </nav>
   );

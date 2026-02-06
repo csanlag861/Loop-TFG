@@ -1,7 +1,7 @@
 import stylePost from "./post.module.css";
 import { formatDistanceToNow } from "date-fns";
 import { es } from "date-fns/locale";
-import { Bookmark, Heart, MessageCircle, MoreVertical } from '@geist-ui/icons'
+import { Bookmark, Heart, MessageCircle, MoreVertical } from "@geist-ui/icons";
 import Image from "next/image";
 import { getDataUser } from "@/features/home/queries/user-data";
 
@@ -11,17 +11,25 @@ const Post = async ({ post }) => {
     <div className={stylePost.post}>
       <div className={stylePost.user}>
         <div className="w-10 h-10 rounded-full overflow-hidden">
-          <Image src={post.usuario.avatarURL} alt="Avatar del usuario" width={40} height={40} className="object-cover w-full h-full" />
+          <Image
+            src={post.usuario.avatarURL}
+            alt="Avatar del usuario"
+            width={40}
+            height={40}
+            className="object-cover w-full h-full"
+          />
         </div>
-        <h2>{post.usuario.nombre}</h2>
-        <h3>{post.usuario.username}</h3>
-        <p>
-          {formatDistanceToNow(new Date(post.createdAt), {
-            addSuffix: true,
-            locale: es,
-          })}
-        </p>
-        {dataUser?.id === post.usuario.id && (<MoreVertical size={18}/>)}
+        <div className="flex items-baseline gap-2">
+          <h2>{post.usuario.nombre}</h2>
+          <h3>{post.usuario.username}</h3>
+          <p>
+            {formatDistanceToNow(new Date(post.createdAt), {
+              addSuffix: true,
+              locale: es,
+            })}
+          </p>
+        </div>
+        {dataUser?.id === post.usuario.id && <MoreVertical size={18} />}
       </div>
       <div className={stylePost.badges}>
         {post.tecnologias.map((tech) => (

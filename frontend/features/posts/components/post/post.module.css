@@ -4,6 +4,7 @@
   background-color: transparent;
   border: 1px solid var(--gris-07);
   border-radius: 10px;
+  word-break: break-word;
 
   padding: 12px 32px;
   display: flex;
@@ -20,7 +21,7 @@
     display: flex;
     gap: 8px;
     justify-content: baseline;
-    align-items: baseline;
+    align-items: center;
     h2 {
       font-size: 14px;
       font-family: "Sohne-Regular";

@@ -7,11 +7,7 @@ import { Button } from "../ui/button";
 const ThemeSwitcher = () => {
   const { theme, setTheme } = useTheme();
   return (
-    <Button
-      variant="outline"
-      size="icon"
-      onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-    >
+    <button className="group flex items-center gap-3 w-full rounded-lg px-3 py-2 transition-all duration-200 text-03 hover:bg-(--gris-08) focus:outline-0" onClick={() => setTheme(theme === "light" ? "dark" : "light")}>
       <Sun
         size={24}
         className="
@@ -26,8 +22,8 @@ const ThemeSwitcher = () => {
           dark:rotate-0 dark:scale-100
         "
       />
-      <span className="sr-only">Toggle theme</span>
-    </Button>
+      <span className="text-sm font-medium">Cambiar tema</span>
+    </button>
   );
 };
 
