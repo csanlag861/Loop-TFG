@@ -12,14 +12,15 @@ export async function getDataUser() {
       },
     });
 
+    if (res.statusText === "Unauthorized") {
+      return null;
+    }
+
     if (!res.ok) {
       console.error("Error al obtener los datos del usuario", res.statusText);
       return;
     }
 
-    if (res.statusText === "Unauthorized"){
-      return null;
-    }
     return res.json();
   } catch (error) {
     console.error("Salto en el try-catch del getDaataUser", error);

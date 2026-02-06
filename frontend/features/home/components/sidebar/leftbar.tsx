@@ -6,7 +6,7 @@ import { clsx } from "clsx";
 import { navItems } from "../../utils/constants";
 import { navItemsAnom } from "../../utils/constants-anon";
 import { SidebarItem } from "./nav-item";
-import { SidebarFooter } from "../settings";
+import { SettingsSidebar } from "../settings";
 
 const Sidebar = ({ isAuthenticated }: { isAuthenticated: boolean }) => {
   const pathname = usePathname();
@@ -48,7 +48,7 @@ const Sidebar = ({ isAuthenticated }: { isAuthenticated: boolean }) => {
       </div>
 
       <div className="mt-8 py-2">
-        <SidebarFooter onToggle={() => handleToggle(!isOpen)} />
+        <SettingsSidebar onToggle={() => handleToggle(!isOpen)} />
       </div>
     </nav>
   );

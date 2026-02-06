@@ -1,7 +1,7 @@
 "use client";
 import { Textarea } from "@/components/ui/textarea";
 import { useActionState, useEffect } from "react";
-import PublishPostAction from "../actions/publisPost-action";
+import PublishPostAction from "../../actions/publisPost-action";
 import { toast } from "sonner";
 import Button from "@/components/reusables/button/Button";
 
