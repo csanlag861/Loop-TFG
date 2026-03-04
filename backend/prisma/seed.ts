@@ -245,13 +245,16 @@ async function main() {
 
       for (const content of postsParaGuardar) {
         // Encontramos el post por contenido
-        const post = await prisma.post.findFirst({ where: { contenido: content } });
+        const post = await prisma.post.findFirst({
+          where: { contenido: content },
+        });
         if (!post) continue;
 
         await prisma.postGuardado.create({
           data: {
             post_id: post.id,
-            carpeta_id: carpeta.id
+            carpeta_id: carpeta.id,
+            usuario_id: user.id,
           },
         });
       }

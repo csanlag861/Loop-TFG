@@ -26,19 +26,20 @@ enum RolNombreEnum {
 }
 
 model Usuario {
-  id        Int               @id @default(autoincrement())
-  nombre    String
-  username  String            @unique
-  email     String            @unique
-  password  String
-  biografia String?
-  rol_id    Int
-  rol       Rol               @relation(fields: [rol_id], references: [id])
-  estado    UsuarioEstadoEnum @default(ACTIVO)
-  createdAt DateTime          @default(now())
-  avatarURL String?
-  carpetas  Carpeta[]
-  posts     Post[]
+  id            Int               @id @default(autoincrement())
+  nombre        String
+  username      String            @unique
+  email         String            @unique
+  password      String
+  biografia     String?
+  rol_id        Int
+  rol           Rol               @relation(fields: [rol_id], references: [id])
+  estado        UsuarioEstadoEnum @default(ACTIVO)
+  createdAt     DateTime          @default(now())
+  avatarURL     String?
+  carpetas      Carpeta[]
+  posts         Post[]
+  postGuardados PostGuardado[]
 }
 
 enum UsuarioEstadoEnum {
@@ -49,11 +50,11 @@ enum UsuarioEstadoEnum {
 }
 
 model Tecnologia {
-  id     Int    @id @default(autoincrement())
-  nombre String @unique
+  id         Int     @id @default(autoincrement())
+  nombre     String  @unique
   background String?
-  border String?
-  text String?
+  border     String?
+  text       String?
 
   posts Post[]
 }
@@ -84,8 +85,12 @@ model PostGuardado {
   id         Int      @id @default(autoincrement())
   post_id    Int
   carpeta_id Int
+  usuario_id Int
   createdAt  DateTime @default(now())
 
   post    Post    @relation(fields: [post_id], references: [id])
   carpeta Carpeta @relation(fields: [carpeta_id], references: [id])
+  usuario Usuario @relation(fields: [usuario_id], references: [id])
+
+  @@unique([post_id, carpeta_id])
 }
