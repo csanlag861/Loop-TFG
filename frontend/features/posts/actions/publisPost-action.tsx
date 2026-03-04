@@ -1,6 +1,6 @@
 "use server";
 import { z } from "zod";
-import { ActionState } from "../../types/ActionState";
+import { ActionState } from "../types/ActionState";
 import { redirect } from "next/navigation";
 import { homePath } from "@/utils/paths";
 import { createPost } from "@/utils/api";

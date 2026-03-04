@@ -5,4 +5,4 @@ export const searchPath = () => "/busqueda";
 
 export const bookmarkPath = () => "/guardados";
 
-export const profilePath = () => "/perfil";
+export const profilePath = ({param}: {param: number}) => `/perfil/${param}`;

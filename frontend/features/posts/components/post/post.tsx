@@ -1,35 +1,42 @@
 import stylePost from "./post.module.css";
 import { formatDistanceToNow } from "date-fns";
 import { es } from "date-fns/locale";
-import { Bookmark, Heart, MessageCircle, MoreVertical } from "@geist-ui/icons";
+import { Bookmark, Heart, MessageCircle } from "@geist-ui/icons";
 import Image from "next/image";
 import { getDataUser } from "@/features/home/queries/user-data";
+import MoreSettings from "../moreSettings/moreSettings";
+import Link from "next/link";
+import { profilePath } from "@/utils/paths";
 
 const Post = async ({ post }) => {
   const dataUser = await getDataUser();
   return (
     <div className={stylePost.post}>
       <div className={stylePost.user}>
-        <div className="w-10 h-10 rounded-full overflow-hidden">
-          <Image
-            src={post.usuario.avatarURL}
-            alt="Avatar del usuario"
-            width={40}
-            height={40}
-            className="object-cover w-full h-full"
-          />
+        <div className="w-full flex gap-3 items-center justify-baseline">
+          <Link href={profilePath({ param: post.usuario.id })}>
+            <div className="w-10 h-10 rounded-full overflow-hidden">
+              <Image
+                src={post.usuario.avatarURL}
+                alt="Avatar del usuario"
+                width={40}
+                height={40}
+                className="object-cover w-full h-full"
+              />
+            </div>
+          </Link>
+          <div className="flex items-baseline gap-2">
+            <h2>{post.usuario.nombre}</h2>
+            <h3>{post.usuario.username}</h3>
+            <p>
+              {formatDistanceToNow(new Date(post.createdAt), {
+                addSuffix: true,
+                locale: es,
+              })}
+            </p>
+          </div>
         </div>
-        <div className="flex items-baseline gap-2">
-          <h2>{post.usuario.nombre}</h2>
-          <h3>{post.usuario.username}</h3>
-          <p>
-            {formatDistanceToNow(new Date(post.createdAt), {
-              addSuffix: true,
-              locale: es,
-            })}
-          </p>
-        </div>
-        {dataUser?.id === post.usuario.id && <MoreVertical size={18} />}
+        {dataUser?.id === post.usuario.id && <MoreSettings post={post} />}
       </div>
       <div className={stylePost.badges}>
         {post.tecnologias.map((tech) => (
