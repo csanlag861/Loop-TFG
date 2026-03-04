@@ -1,0 +1,2 @@
+DUDA:
+1. Cuando yo hago el login, aparte de enviar la cookie puedo enviar la info del usuario para almacenarla en la cookie para así, no tener que hacer la petición al "me" o similar cuando quiera acceder al usuario_id / avatar_url.
