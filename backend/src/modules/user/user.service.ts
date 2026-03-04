@@ -135,6 +135,7 @@ export class UserService {
         nombre: true,
         username: true,
         id: true,
+        biografia: true,
       },
     });
   }

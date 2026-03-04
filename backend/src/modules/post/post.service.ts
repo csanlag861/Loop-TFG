@@ -73,6 +73,18 @@ export class PostService {
     });
   }
 
+  getPostsFromUser(user_id: number) {
+    return this.prisma.post.findMany({
+      where: {
+        usuario_id: user_id,
+      },
+      include: {
+        usuario: true,
+        tecnologias: true,
+      },
+    });
+  }
+
   update(id: number, updatePostDto: UpdatePostDto) {
     return this.prisma.post.update({
       where: { id: id },

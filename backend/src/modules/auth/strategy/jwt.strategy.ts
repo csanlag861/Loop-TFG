@@ -10,7 +10,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     super({
       jwtFromRequest: ExtractJwt.fromExtractors([
         ExtractJwt.fromAuthHeaderAsBearerToken(),
-        (req) => req.cookies?.access_token
+        (req) => req.cookies?.access_token,
       ]),
       ignoreExpiration: false,
       secretOrKey: secret,
@@ -18,8 +18,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   validate(payload: PayloadEntity) {
-    console.log(payload, "payload en validate de JWT STRATEGY");
-    
+    console.log(payload, 'payload en validate de JWT STRATEGY');
+
     return {
       userId: Number(payload.id),
       username: payload.username,

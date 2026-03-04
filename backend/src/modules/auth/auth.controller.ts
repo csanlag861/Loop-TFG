@@ -36,11 +36,4 @@ export class AuthController {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
     return this.authService.login(req.user);
   }
-
-  @UseGuards(JwtAuthGuard)
-  @Get('/profile')
-  async getProfile(@Request() req) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
-    return this.userService.getUserById(req.user.userId);
-  }
 }

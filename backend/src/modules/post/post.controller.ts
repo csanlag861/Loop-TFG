@@ -43,6 +43,15 @@ export class PostController {
     return this.postService.findOne(postId);
   }
 
+  @Get(':id/posts')
+  getPostsFromUser(@Param('id') id: string) {
+    const usuario_id = Number(id);
+    if (isNaN(usuario_id)) {
+      throw new HttpException('BAD_REQUEST', HttpStatus.BAD_REQUEST);
+    }
+    return this.postService.getPostsFromUser(usuario_id);
+  }
+
   @UseGuards(JwtAuthGuard, PostOwnerGuard)
   @Patch('update/:id')
   update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
