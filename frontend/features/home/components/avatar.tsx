@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 
 type UserData = {
   avatarURL: string;
+  id: string;
 };
 
 const Avatar = () => {
@@ -17,15 +18,15 @@ const Avatar = () => {
 
   if (!userData) return <User />;
   return (
-    <div className="w-7 h-7 rounded-full overflow-hidden shrink-0">
-      <Image
-        src={userData?.avatarURL}
-        alt="Avatar usuario"
-        width={24}
-        height={24}
-        className="object-cover w-full h-full"
-      />
-    </div>
+      <div className="w-7 h-7 rounded-full overflow-hidden shrink-0">
+        <Image
+          src={userData?.avatarURL}
+          alt="Avatar usuario"
+          width={24}
+          height={24}
+          className="object-cover w-full h-full"
+        />
+      </div>
   );
 };
 

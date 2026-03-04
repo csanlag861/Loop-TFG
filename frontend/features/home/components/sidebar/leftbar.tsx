@@ -8,7 +8,13 @@ import { navItemsAnom } from "../../utils/constants-anon";
 import { SidebarItem } from "./nav-item";
 import { SettingsSidebar } from "../settings";
 
-const Sidebar = ({ isAuthenticated }: { isAuthenticated: boolean }) => {
+const Sidebar = ({
+  isAuthenticated,
+  userId,
+}: {
+  isAuthenticated: boolean;
+  userId?: number;
+}) => {
   const pathname = usePathname();
   const [isOpen, setOpen] = useState(false);
   const [isTransition, setTransition] = useState(false);
@@ -18,6 +24,8 @@ const Sidebar = ({ isAuthenticated }: { isAuthenticated: boolean }) => {
     setOpen(open);
     setTimeout(() => setTransition(false), 200);
   };
+
+  const items = isAuthenticated ? navItems(userId || 0) : navItemsAnom;
 
   return (
     <nav
@@ -30,25 +38,22 @@ const Sidebar = ({ isAuthenticated }: { isAuthenticated: boolean }) => {
     >
       <div className="px-3 py-2">
         <nav className="space-y-2">
-          {isAuthenticated ? (navItems.map((navItem) => (
+          {items.map((navItem) => (
             <SidebarItem
               key={navItem.title}
               isOpen={isOpen}
               isActive={pathname === navItem.href}
               navItem={navItem}
-            />)
-          )) : (navItemsAnom.map((navItem) => (
-            <SidebarItem
-              key={navItem.title}
-              isOpen={isOpen}
-              isActive={pathname === navItem.href}
-              navItem={navItem}
-            />)))}
+            />
+          ))}
         </nav>
       </div>
 
       <div className="px-3 py-2">
-        <SettingsSidebar onToggle={() => handleToggle(!isOpen)} isOpen={isOpen} />
+        <SettingsSidebar
+          onToggle={() => handleToggle(!isOpen)}
+          isOpen={isOpen}
+        />
       </div>
     </nav>
   );

@@ -1,9 +1,9 @@
 import { Home, Search, Bookmark } from "@geist-ui/icons";
 import { NavItem } from "./types";
-import { bookmarkPath, homePath, searchPath } from "@/utils/paths";
+import { bookmarkPath, homePath, searchPath, profilePath } from "@/utils/paths";
 import Avatar from "../components/avatar";
 
-export const navItems: NavItem[] = [
+export const navItems = (userId: number): NavItem[] => [
   {
     title: "Home",
     icon: <Home size={24} />,
@@ -22,7 +22,7 @@ export const navItems: NavItem[] = [
   {
     title: "Mi perfil",
     icon: <Avatar />,
-    href: `${bookmarkPath()}`,
+    href: `${profilePath({ param: userId })}`,
   },
 ];
 
