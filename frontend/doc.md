@@ -13,3 +13,8 @@ terminar:
 
 dudas:
     1. Si editar post es un dialog que es client, y yo quiero que cuando el dialog isOpen aparezca un formulario con el post arriba (SSR), y el formulario abajo (CSR), cual es la mejor opcion para hacerlo?
+
+
+## PAGINACION
+1. Definir server action (order by id (en prisma)).
+2. React Query.
