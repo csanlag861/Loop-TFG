@@ -1,3 +1,4 @@
+"use client";
 import stylePost from "./post.module.css";
 import { formatDistanceToNow } from "date-fns";
 import { es } from "date-fns/locale";
@@ -8,8 +9,7 @@ import MoreSettings from "../moreSettings/moreSettings";
 import Link from "next/link";
 import { profilePath } from "@/utils/paths";
 
-const Post = async ({ post }) => {
-  const dataUser = await getDataUser();
+const Post = ({ post }) => {
   return (
     <div className={stylePost.post}>
       <div className={stylePost.user}>
@@ -36,7 +36,6 @@ const Post = async ({ post }) => {
             </p>
           </div>
         </div>
-        {dataUser?.id === post.usuario.id && <MoreSettings post={post} />}
       </div>
       <div className={stylePost.badges}>
         {post.tecnologias.map((tech) => (

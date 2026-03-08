@@ -2,6 +2,7 @@ import "./globals.css";
 import { Toaster } from "sonner";
 import { ThemeProvider } from "@/components/theme/theme-provider";
 import { cookies } from "next/headers";
+import { QueryProvider } from "./providers/query-provider";
 
 export const metadata = {
   title: "Loop",
@@ -25,7 +26,9 @@ export default async function RootLayout({
           disableTransitionOnChange
           storageKey="theme"
         >
-          {children} <Toaster position="top-center" richColors />
+          <QueryProvider>
+            {children} <Toaster position="top-center" richColors />
+          </QueryProvider>
         </ThemeProvider>
       </body>
     </html>

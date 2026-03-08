@@ -3,10 +3,11 @@ import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { ResponsePostDto } from '@/modules/post/dto/response-post.dto';
+import { ResponsePostlistDto } from './dto/response-postlist-dto';
 
 @Injectable()
 export class PostService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
   create(createPostDto: CreatePostDto, userId: number) {
     return this.prisma.post.create({
       data: {
@@ -23,31 +24,35 @@ export class PostService {
     });
   }
 
-  findAll(): Promise<ResponsePostDto[]> {
-    return this.prisma.post.findMany({
-      select: {
-        contenido: true,
-        createdAt: true,
-        id: true,
-        usuario: {
-          select: {
-            avatarURL: true,
-            nombre: true,
-            username: true,
-            id: true,
-          },
-        },
-        tecnologias: {
-          select: {
-            id: true,
-            nombre: true,
-            border: true,
-            background: true,
-            text: true,
-          },
-        },
+  async findAll(cursor?: number): Promise<ResponsePostlistDto> {
+    const take = 10;
+
+    const where = cursor ? { id: { lt: cursor } } : {};
+
+    // eslint-disable-next-line prefer-const
+    let [posts, count] = await this.prisma.$transaction([
+      this.prisma.post.findMany({
+        where,
+        take: take + 1,
+        include: { usuario: true, tecnologias: true },
+        orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],
+      }),
+      this.prisma.post.count({
+        where,
+      }),
+    ]);
+
+    const hasNextPage = posts.length > take;
+    posts = hasNextPage ? posts.slice(0, -1) : posts;
+
+    return {
+      list: posts,
+      metadata: {
+        count,
+        hasNextPage,
+        cursor: posts.at(-1)?.id,
       },
-    });
+    };
   }
 
   findOne(id: number): Promise<ResponsePostDto> {

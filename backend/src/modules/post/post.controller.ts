@@ -9,6 +9,8 @@ import {
   UseGuards,
   HttpException,
   HttpStatus,
+  Query,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { PostService } from './post.service';
 import { CreatePostDto } from './dto/create-post.dto';
@@ -19,7 +21,7 @@ import { PostOwnerGuard } from './guards/post-owner.guard';
 
 @Controller('post')
 export class PostController {
-  constructor(private readonly postService: PostService) {}
+  constructor(private readonly postService: PostService) { }
 
   @UseGuards(JwtAuthGuard)
   @Post('create')
@@ -30,8 +32,10 @@ export class PostController {
   }
 
   @Get('getAll')
-  findAll() {
-    return this.postService.findAll();
+  findAll(
+    @Query('cursor', new ParseIntPipe({ optional: true })) cursor?: number,
+  ) {
+    return this.postService.findAll(cursor);
   }
 
   @Get(':id')

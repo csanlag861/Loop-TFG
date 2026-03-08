@@ -2,7 +2,7 @@ import { fetcher } from "@/lib/fetcher";
 import { getProfile, getPostsFromUser } from "@/utils/api";
 import Image from "next/image";
 import { Separator } from "@/components/ui/separator";
-import Post from "@/features/posts/components/post-list/post-list";
+import Post from "@/features/posts/components/post-list-wrapper/post-list-wrapper";
 
 export const Perfil = async ({ id }: { id: string }) => {
   const data = await fetcher(getProfile({ param: parseInt(id) }));
