@@ -1,6 +1,5 @@
 "use client";
 
-import * as React from "react";
 import {
   Combobox,
   ComboboxChip,
@@ -13,6 +12,7 @@ import {
   ComboboxValue,
   useComboboxAnchor,
 } from "@/components/ui/combobox";
+import { Fragment, useState } from "react";
 
 interface Tecnologia {
   id: number;
@@ -27,8 +27,12 @@ interface Props {
 export function ComboboxTecnologias({ tecnologias, onChange }: Props) {
   const anchor = useComboboxAnchor();
   const nombres = tecnologias.map((t) => t.nombre);
+  const [techSeleccionada, setTechSeleccionada] = useState<boolean>(false);
+  const [listaTecnologias, setListaTecnologias] = useState<string[]>([]);
 
   const handleChange = (selectedNombres: string[]) => {
+    setListaTecnologias(selectedNombres);
+    setTechSeleccionada(selectedNombres.length > 0);
     const ids = tecnologias
       .filter((t) => selectedNombres.includes(t.nombre))
       .map((t) => t.id);
@@ -42,15 +46,15 @@ export function ComboboxTecnologias({ tecnologias, onChange }: Props) {
       items={nombres}
       onValueChange={handleChange}
     >
-      <ComboboxChips ref={anchor} className="w-full max-w-xs">
+      <ComboboxChips ref={anchor} className="w-full mt-2 bg-transparent! outline-0!">
         <ComboboxValue>
           {(values) => (
-            <React.Fragment>
+            <Fragment>
               {values.map((value: string) => (
                 <ComboboxChip key={value}>{value}</ComboboxChip>
               ))}
-              <ComboboxChipsInput placeholder="Tecnologías..." />
-            </React.Fragment>
+              <ComboboxChipsInput placeholder={!techSeleccionada ? "Tecnologías..." : "" } />
+            </Fragment>
           )}
         </ComboboxValue>
       </ComboboxChips>
@@ -58,7 +62,7 @@ export function ComboboxTecnologias({ tecnologias, onChange }: Props) {
         <ComboboxEmpty>No se encontraron tecnologías.</ComboboxEmpty>
         <ComboboxList>
           {(item) => (
-            <ComboboxItem key={item} value={item}>
+            <ComboboxItem key={item} value={item} disabled={listaTecnologias.length >= 3 && !listaTecnologias.includes(item) }>
               {item}
             </ComboboxItem>
           )}

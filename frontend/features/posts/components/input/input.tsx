@@ -25,12 +25,12 @@ const InputText = async () => {
         </div>
         <PublishPost tecnologias={tecnologias} />
       </div>
-      <div className="flex justify-center items-center gap-72">
+      {/* <div className="flex justify-center items-center gap-72">
         <div className="flex gap-4">
           <Code width={24} color="var(--primary-color)" />
           <Image width={24} color="var(--primary-color)" />
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

@@ -7,6 +7,7 @@ import Image from "next/image";
 import MoreSettings from "../moreSettings/moreSettings";
 import Link from "next/link";
 import { profilePath } from "@/utils/paths";
+import SavePostDropdown from "../guardarPost/guardarPost";
 
 const Post = ({ post }) => {
   return (
@@ -56,7 +57,7 @@ const Post = ({ post }) => {
       <div className={stylePost.acciones}>
         <MessageCircle size={16} />
         <Heart size={16} />
-        <Bookmark size={16} />
+        <SavePostDropdown post_id={post.id} />
       </div>
     </div>
   );
