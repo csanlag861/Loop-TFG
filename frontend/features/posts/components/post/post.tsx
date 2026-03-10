@@ -4,7 +4,6 @@ import { formatDistanceToNow } from "date-fns";
 import { es } from "date-fns/locale";
 import { Bookmark, Heart, MessageCircle } from "@geist-ui/icons";
 import Image from "next/image";
-import { getDataUser } from "@/features/home/queries/user-data";
 import MoreSettings from "../moreSettings/moreSettings";
 import Link from "next/link";
 import { profilePath } from "@/utils/paths";
@@ -36,6 +35,7 @@ const Post = ({ post }) => {
             </p>
           </div>
         </div>
+        {post.isOwner && <MoreSettings post={post} />}
       </div>
       <div className={stylePost.badges}>
         {post.tecnologias.map((tech) => (

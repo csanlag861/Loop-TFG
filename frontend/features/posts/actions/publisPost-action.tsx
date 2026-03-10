@@ -21,13 +21,17 @@ const PublishPostAction = async (
   try {
     const { contenido } = postSchema.parse(Object.fromEntries(formData));
 
+    const tecnologias: number[] = JSON.parse(
+      (formData.get("tecnologias") as string) ?? "[]",
+    );
+
     const res = await fetch(`${createPost()}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ contenido }),
+      body: JSON.stringify({ contenido, tecnologias }),
       credentials: "include",
     });
 

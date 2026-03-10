@@ -1,11 +1,23 @@
 "use client";
 import { Textarea } from "@/components/ui/textarea";
-import { useActionState, useEffect } from "react";
+import { useActionState, useEffect, useState } from "react";
 import PublishPostAction from "../../actions/publisPost-action";
 import { toast } from "sonner";
 import Button from "@/components/reusables/button/Button";
+import { ComboboxTecnologias } from "@/components/reusables/combobox/combobox-tech";
 
-const PublishPost = () => {
+interface Tecnologia {
+  id: number;
+  nombre: string;
+}
+
+interface Props {
+  tecnologias: Tecnologia[];
+}
+
+const PublishPost = ({ tecnologias }: Props) => {
+  const [ids, setIds] = useState<number[]>([]);
+
   const [actionState, action, isPending] = useActionState(PublishPostAction, {
     message: "",
     fieldErrors: {},
@@ -18,19 +30,26 @@ const PublishPost = () => {
   }, [actionState]);
   return (
     <form action={action}>
-      <Textarea
-        name="contenido"
-        placeholder="¿Qué has aprendido hoy?"
-        className="w-120 h-16 font-sohne-light mb-8"
+      <div className="flex flex-col">
+        <Textarea
+          name="contenido"
+          placeholder="¿Qué has aprendido hoyyyy?"
+          className="w-120 h-16 font-sohne-light mb-8"
+        />
+        {actionState?.fieldErrors?.contenido && (
+          <p className="text-sm text-red-500">
+            {actionState.fieldErrors.contenido[0]}
+          </p>
+        )}
+        <input type="hidden" name="tecnologias" value={JSON.stringify(ids)} />
+        <ComboboxTecnologias tecnologias={tecnologias} onChange={setIds} />
+      </div>
+      <Button
+        type="submit"
+        disabled={isPending}
+        text={isPending ? "Publicando..." : "Publicar"}
+        classname="[--btn-width:128px]"
       />
-      {actionState?.fieldErrors?.contenido && (
-        <p className="text-sm text-red-500">
-          {actionState.fieldErrors.contenido[0]}
-        </p>
-      )}
-      <Button type="submit" disabled={isPending} text={
-        isPending ? "Publicando..." : "Publicar"
-      } classname="[--btn-width:128px]" />
     </form>
   );
 };
