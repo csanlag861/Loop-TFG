@@ -4,6 +4,9 @@ import { UpdatePostDto } from './dto/update-post.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { ResponsePostDto } from '@/modules/post/dto/response-post.dto';
 import { ResponsePostlistDto } from './dto/response-postlist-dto';
+import { PostMapper } from './mapper/post.mapper';
+import { UserService } from '../user/user.service';
+import { UserEntity } from '../user/user.entity';
 
 @Injectable()
 export class PostService {
@@ -15,7 +18,7 @@ export class PostService {
         usuario: {
           connect: { id: userId },
         },
-        ...(createPostDto.tecnologias?.length > 0 && {
+        ...(createPostDto.tecnologias.length > 0 && {
           tecnologias: {
             connect: createPostDto.tecnologias.map((id) => ({ id })),
           },
@@ -24,7 +27,10 @@ export class PostService {
     });
   }
 
-  async findAll(cursor?: number): Promise<ResponsePostlistDto> {
+  async findAll(
+    cursor?: number,
+    user_id?: number,
+  ): Promise<ResponsePostlistDto> {
     const take = 10;
 
     const where = cursor ? { id: { lt: cursor } } : {};
@@ -45,8 +51,10 @@ export class PostService {
     const hasNextPage = posts.length > take;
     posts = hasNextPage ? posts.slice(0, -1) : posts;
 
+    const currentUser = user_id ? new UserEntity(user_id) : null;
+
     return {
-      list: posts,
+      list: posts.map((post) => PostMapper.toResponse(post, currentUser)),
       metadata: {
         count,
         hasNextPage,

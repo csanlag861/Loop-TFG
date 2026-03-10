@@ -18,6 +18,7 @@ import { UpdatePostDto } from './dto/update-post.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { User } from '../auth/decorators/user.decorator';
 import { PostOwnerGuard } from './guards/post-owner.guard';
+import { JwtAuthOptionalGuard } from '../auth/guards/jwt-auth-optional.guard';
 
 @Controller('post')
 export class PostController {
@@ -31,11 +32,13 @@ export class PostController {
     return this.postService.create(createPostDto, userId);
   }
 
+  @UseGuards(JwtAuthOptionalGuard)
   @Get('getAll')
   findAll(
     @Query('cursor', new ParseIntPipe({ optional: true })) cursor?: number,
+    @User('userId') user_id?: number,
   ) {
-    return this.postService.findAll(cursor);
+    return this.postService.findAll(cursor, user_id);
   }
 
   @Get(':id')
