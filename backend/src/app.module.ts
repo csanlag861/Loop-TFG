@@ -5,6 +5,7 @@ import { UserModule } from './modules/user/user.module';
 import { PostModule } from './modules/post/post.module';
 import { CarpetaModule } from './modules/carpeta/carpeta.module';
 import { GuardadosModule } from './modules/guardados/guardados.module';
+import { TecnologiaModule } from './modules/tecnologia/tecnologia.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { GuardadosModule } from './modules/guardados/guardados.module';
     PostModule,
     GuardadosModule,
     CarpetaModule,
+    TecnologiaModule,
   ],
   controllers: [],
   providers: [],
