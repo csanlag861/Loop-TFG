@@ -4,6 +4,8 @@ const prefix = "/api/";
 const prefixPosts = "post/"
 const prefixUser = "user/"
 const prefixTecnologia = "tecnologia"
+const prefixCarpetas = "carpeta"
+const prefixGuardados = "guardados"
 
 type Param = {
     param: string;
@@ -19,3 +21,7 @@ export const getUserData = () => `${API_BASE_URL}${prefix}${prefixUser}me`;
 export const getProfile = ({ param }: { param: number }) => `${API_BASE_URL}${prefix}${prefixUser}profile/${param}`;
 
 export const getTecnologias = () => `${API_BASE_URL}${prefix}${prefixTecnologia}`;
+
+export const obtenerCarpetas = () => `${API_BASE_URL}${prefix}${prefixCarpetas}`;
+
+export const guardarPost = () => `${API_BASE_URL}${prefix}${prefixGuardados}`;

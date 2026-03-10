@@ -30,11 +30,11 @@ const PublishPost = ({ tecnologias }: Props) => {
   }, [actionState]);
   return (
     <form action={action}>
-      <div className="flex flex-col">
+      <div className="flex flex-col w-120">
         <Textarea
           name="contenido"
-          placeholder="¿Qué has aprendido hoyyyy?"
-          className="w-120 h-16 font-sohne-light mb-8"
+          placeholder="¿Qué has aprendido hoy?"
+          className="h-16 font-sohne-light"
         />
         {actionState?.fieldErrors?.contenido && (
           <p className="text-sm text-red-500">
@@ -44,12 +44,14 @@ const PublishPost = ({ tecnologias }: Props) => {
         <input type="hidden" name="tecnologias" value={JSON.stringify(ids)} />
         <ComboboxTecnologias tecnologias={tecnologias} onChange={setIds} />
       </div>
-      <Button
-        type="submit"
-        disabled={isPending}
-        text={isPending ? "Publicando..." : "Publicar"}
-        classname="[--btn-width:128px]"
-      />
+      <div className="flex justify-end mt-4">
+        <Button
+          type="submit"
+          disabled={isPending}
+          text={isPending ? "Publicando..." : "Publicar"}
+          classname="[--btn-width:128px]"
+        />
+      </div>
     </form>
   );
 };
