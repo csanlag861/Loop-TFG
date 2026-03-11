@@ -1,19 +1,17 @@
-import { fetcher } from '@/lib/fetcher';
-import { useQuery } from '@tanstack/react-query';
-import { obtenerCarpetas } from '@/utils/api';
+import { fetcher } from "@/lib/fetcher";
+import { useQuery } from "@tanstack/react-query";
+import { obtenerCarpetas } from "@/utils/api";
 
 const getCarpetas = async () => {
-  const res = await fetcher(obtenerCarpetas());
-  if (!res.ok) throw new Error('Error al obtener carpetas');
-  console.log(res.json());
-  
-  return res.json();
+  const data = await fetcher(obtenerCarpetas());
+
+  return data;
 };
 
 export const useGetCarpetas = (enabled: boolean) => {
   return useQuery({
-    queryKey: ['carpetas'],
+    queryKey: ["carpetas"],
     queryFn: getCarpetas,
-    enabled
+    enabled,
   });
 };
