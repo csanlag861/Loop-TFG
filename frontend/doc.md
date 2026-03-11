@@ -15,6 +15,19 @@ dudas:
     1. Si editar post es un dialog que es client, y yo quiero que cuando el dialog isOpen aparezca un formulario con el post arriba (SSR), y el formulario abajo (CSR), cual es la mejor opcion para hacerlo?
 
 
-## PAGINACION
-1. Definir server action (order by id (en prisma)).
-2. React Query.
+COSAS QUE QUEDAN:
+- Filtrado NUQS
+- DASHBOARD ADMIN
+- Guardados Page
+- Edicion perfil usuario
+
+- Registro con Token
+-----------
+- Testing & refactor.
+
+
+NUQ:
+1. Crear fichero parseado: search-params.ts
+2. Modificar la URL con el hook useQuery: search-input
+3. Leer el parámetro en la llamada en el queryFn (post-list)
+4. Envolver la app con el Provider.
