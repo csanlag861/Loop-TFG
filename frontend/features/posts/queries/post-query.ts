@@ -2,13 +2,20 @@
 import { GetCookies } from "@/lib/get-token";
 import { getAllPosts } from "@/utils/api";
 
-export async function getPosts(cursor?: number) {
+export async function getPosts(cursor?: number, search: string = "", username: string = "", tech: string = "") {
   const token = await GetCookies();
 
-  const url = cursor ? `${getAllPosts()}?cursor=${cursor}` : getAllPosts();
+  const params = new URLSearchParams();
+  if (cursor) params.set("cursor", String(cursor));
+  if (search) params.set("search", search);
+  if (username) params.set("username", username);
+  if (tech) params.set("tech", tech);
+  const queryString = params.toString();
+
+  const url = queryString ? `${getAllPosts()}?${queryString}` : getAllPosts();
 
   try {
-    await new Promise(r => setTimeout(r, 2000));
+    await new Promise((r) => setTimeout(r, 2000));
     const res = await fetch(url, {
       method: "GET",
       headers: {
@@ -17,11 +24,11 @@ export async function getPosts(cursor?: number) {
     });
 
     if (!res.ok) {
-      console.error("Error al obtener los posts", res.statusText)
+      console.error("Error al obtener los posts", res.statusText);
       return;
     }
     return res.json();
   } catch (error) {
-    console.error("Salto en el try-catch del getPosts", error)
+    console.error("Salto en el try-catch del getPosts", error);
   }
 }

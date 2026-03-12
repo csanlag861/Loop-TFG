@@ -3,6 +3,7 @@ import { Toaster } from "sonner";
 import { ThemeProvider } from "@/components/theme/theme-provider";
 import { cookies } from "next/headers";
 import { QueryProvider } from "./providers/query-provider";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 
 export const metadata = {
   title: "Loop",
@@ -27,7 +28,9 @@ export default async function RootLayout({
           storageKey="theme"
         >
           <QueryProvider>
-            {children} <Toaster position="top-center" richColors />
+            <NuqsAdapter>
+              {children} <Toaster position="top-center" richColors />
+            </NuqsAdapter>
           </QueryProvider>
         </ThemeProvider>
       </body>

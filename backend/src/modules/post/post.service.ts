@@ -10,7 +10,7 @@ import { UserEntity } from '../user/user.entity';
 
 @Injectable()
 export class PostService {
-  constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
   create(createPostDto: CreatePostDto, userId: number) {
     return this.prisma.post.create({
       data: {
@@ -30,10 +30,28 @@ export class PostService {
   async findAll(
     cursor?: number,
     user_id?: number,
+    search?: string,
+    username?: string,
+    tech?: string,
   ): Promise<ResponsePostlistDto> {
     const take = 10;
 
-    const where = cursor ? { id: { lt: cursor } } : {};
+    const where = {
+      ...(cursor && { id: { lt: cursor } }),
+      ...(search && {
+        contenido: { contains: search, mode: 'insensitive' as const },
+      }),
+      ...(username && {
+        usuario: {
+          username: { contains: username, mode: 'insensitive' as const },
+        },
+      }),
+      ...(tech && {
+        tecnologias: {
+          some: { nombre: { contains: tech, mode: 'insensitive' as const } },
+        },
+      }),
+    };
 
     // eslint-disable-next-line prefer-const
     let [posts, count] = await this.prisma.$transaction([

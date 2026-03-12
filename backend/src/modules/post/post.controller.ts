@@ -22,7 +22,7 @@ import { JwtAuthOptionalGuard } from '../auth/guards/jwt-auth-optional.guard';
 
 @Controller('post')
 export class PostController {
-  constructor(private readonly postService: PostService) { }
+  constructor(private readonly postService: PostService) {}
 
   @UseGuards(JwtAuthGuard)
   @Post('create')
@@ -37,8 +37,11 @@ export class PostController {
   findAll(
     @Query('cursor', new ParseIntPipe({ optional: true })) cursor?: number,
     @User('userId') user_id?: number,
+    @Query('search') search?: string,
+    @Query('username') username?: string,
+    @Query('tech') tech?: string,
   ) {
-    return this.postService.findAll(cursor, user_id);
+    return this.postService.findAll(cursor, user_id, search, username, tech);
   }
 
   @Get(':id')

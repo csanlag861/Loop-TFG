@@ -1,6 +1,6 @@
 "use client";
 import { usePathname } from "next/navigation";
-import { Search } from "../search/search";
+import { Search } from "../../../features/search/search";
 import { useEffect } from "react";
 import EmptyRightBar from "../empty/empty";
 

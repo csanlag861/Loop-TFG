@@ -5,22 +5,28 @@ import { useInView } from "react-intersection-observer";
 import { useEffect } from "react";
 import styleList from "../post-list-wrapper/post-list.module.css";
 import Post from "../post/post";
+import { useSearchParams } from "next/navigation";
 
 const PostList = ({ initialData }) => {
+  const searchParams = useSearchParams();
+  const [search] = searchParams.get("search") ?? "";
+  const [username] = searchParams.get("username") ?? "";
+  const [tech] = searchParams.get("tech") ?? "";
+
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useInfiniteQuery({
-      queryKey: ["posts"],
-      queryFn: ({ pageParam }) => getPosts(pageParam),
+      queryKey: ["posts", search, username, tech],
+      queryFn: ({ pageParam }) => getPosts(pageParam, search, username, tech),
       initialPageParam: undefined as number | undefined,
       getNextPageParam: (lastPage) =>
         lastPage.metadata.hasNextPage ? lastPage.metadata.cursor : undefined,
-      initialData: {
+      initialData: search || username || tech ? undefined : {
         pages: [initialData],
         pageParams: [undefined],
       },
     });
 
-  const posts = data.pages.flatMap((page) => page.list);
+  const posts = data?.pages.flatMap((page) => page.list) ?? [];
 
   const { ref, inView } = useInView();
 
