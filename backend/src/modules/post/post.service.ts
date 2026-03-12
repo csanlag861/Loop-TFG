@@ -58,7 +58,14 @@ export class PostService {
       this.prisma.post.findMany({
         where,
         take: take + 1,
-        include: { usuario: true, tecnologias: true },
+        include: {
+          usuario: true,
+          tecnologias: true,
+          postGuardados: {
+            where: { usuario_id: user_id ?? 0 },
+            select: { id: true },
+          },
+        },
         orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],
       }),
       this.prisma.post.count({

@@ -14,15 +14,21 @@ terminar:
 dudas:
     1. Si editar post es un dialog que es client, y yo quiero que cuando el dialog isOpen aparezca un formulario con el post arriba (SSR), y el formulario abajo (CSR), cual es la mejor opcion para hacerlo?
 
+COSAS HECHAS:
+- Filtrado NUQS
 
 COSAS QUE QUEDAN:
-- Filtrado NUQS
-- DASHBOARD ADMIN
+
 - Guardados Page
 - Edicion perfil usuario
+- Editar post
+- RightBar posts con más tecnologías.
+
+- DASHBOARD ADMIN
 
 - Registro con Token
 -----------
+
 - Testing & refactor.
 
 

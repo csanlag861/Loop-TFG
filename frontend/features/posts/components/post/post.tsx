@@ -57,7 +57,7 @@ const Post = ({ post }) => {
       <div className={stylePost.acciones}>
         <MessageCircle size={16} />
         <Heart size={16} />
-        <SavePostDropdown post_id={post.id} />
+        <SavePostDropdown isGuardado={post.isGuardado} post_id={post.id} />
       </div>
     </div>
   );
