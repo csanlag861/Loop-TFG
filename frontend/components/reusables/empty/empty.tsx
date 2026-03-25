@@ -14,15 +14,12 @@ const EmptyRightBar = () => {
     return (
         <Empty>
             <EmptyHeader>
-                <EmptyMedia variant="icon">
+                <EmptyMedia variant="icon" className="w-12 h-12 rounded-full border border-(--gris-08)! bg-(--bg-01)">
                     <Bookmark size={24} />
                 </EmptyMedia>
-                <EmptyTitle>No data</EmptyTitle>
-                <EmptyDescription>No data found</EmptyDescription>
+                <EmptyTitle className="text-(--gris-01)">Aún no hay guardados</EmptyTitle>
+                <EmptyDescription>Guarda publicaciones para verlas más tarde.</EmptyDescription>
             </EmptyHeader>
-            <EmptyContent>
-                <Button text="Añadir Guardados" />
-            </EmptyContent>
         </Empty>
     )
 }

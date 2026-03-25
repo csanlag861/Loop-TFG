@@ -20,7 +20,7 @@ const Login = () => {
   return (
     <form action={action} className={stylesLogin.form}>
       <Image src="/favicon.ico" alt="Logo de Loop" width={62} height={62} />
-      <h2>Inicia Sesion</h2>
+      <h2 className="text-07! text-gris-10! dark:text-gris-01!">Inicia Sesion</h2>
       <Input name="username" label="Nombre de usuario" placeholder="Introduce tu nombre de usuario..." type="text" />
       {actionState?.fieldErrors?.email && (
         <p className="text-sm text-red-500">

@@ -1,39 +1,52 @@
-features:
-    1. Perfil
-    2. Guardados
-    3. Flag en LS o cookie del landing page.
+features: 1. Perfil 2. Guardados 3. Flag en LS o cookie del landing page.
 
-terminar:
-    1. editar post
-    2. theme
-    3. Fetcher Refactorizaar.    
-    4. Refactorizar para obtener los posts y no repetir tanto codigo.
-    5. Refactorizar el get-data
-    6. Skeleton del post
-
-dudas:
-    1. Si editar post es un dialog que es client, y yo quiero que cuando el dialog isOpen aparezca un formulario con el post arriba (SSR), y el formulario abajo (CSR), cual es la mejor opcion para hacerlo?
-
-COSAS HECHAS:
-- Filtrado NUQS
+terminar: 2. theme 3. Fetcher Refactorizaar.  
+ 1. Refactorizar para obtener los posts y no repetir tanto codigo. 5. Refactorizar el get-data 6. Skeleton del post
 
 COSAS QUE QUEDAN:
 
+
+- Filtrado NUQS
+  - Revisar porque a veces no funciona bien.
+
 - Guardados Page
+  - Mover a favoritos (me falta probarlo)
+  - Si intenta eliminar una carpeta que no tiene nada, mostrar un mensaje para ello.
+  - Si elimina la carpeta favoritos mostrar mensaje de que no puede.
+  - ENtender el código.
+  
 - Edicion perfil usuario
+  - Cambiar el avatar.
+
 - Editar post
-- RightBar posts con más tecnologías.
+  - Cuando se edita el post -> cerrar modal, y revalidar el path.
+
+- RightBar posts con las tecnologías.
 
 - DASHBOARD ADMIN
 
 - Registro con Token
------------
+---
 
+SEMANA SANTA:
 - Testing & refactor.
+- Desplegar.
 
+https://www.shadcn.io/template/damianricobelli-stepperize
 
-NUQ:
-1. Crear fichero parseado: search-params.ts
-2. Modificar la URL con el hook useQuery: search-input
-3. Leer el parámetro en la llamada en el queryFn (post-list)
-4. Envolver la app con el Provider.
+MESA ARRIBA DONDE EL SEGMENT
+CAMBIAR EL SALIR POR UN VOLVER A MESAS.
+GANAR ESPACIO CON TICKET Y FAMILIAS.
+
+MODO MOVIL
+- Familias: Una lista - desplegable, arriba.
+- Artículos: 3 por fila.
+- El ticket saldría en un modal al pinchar en un icono de carrito abajo a la derecha. El icono indica el número de artículos que hay en el carrito.
+font-size productos con imagenes a 20. sin productos a 22.
+media-query para poner grid a 3 productos.
+img salvador a 45px 
+footer paginacion.
+
+---
+ORDENAR ORDEN ALFABETICO LOS EMPLEDAOS. EN MODO MOVIL QUE SALGAN 2
+ION-GRID PARA LOS EMPLEADOS. 
