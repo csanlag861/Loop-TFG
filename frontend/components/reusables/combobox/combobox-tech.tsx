@@ -22,14 +22,16 @@ interface Tecnologia {
 interface Props {
   tecnologias: Tecnologia[];
   onChange: (ids: number[]) => void;
+  defaultValues?: string[];
 }
 
-export function ComboboxTecnologias({ tecnologias, onChange }: Props) {
+export function ComboboxTecnologias({ tecnologias, onChange, defaultValues }: Props) {
   const anchor = useComboboxAnchor();
-  const nombres = tecnologias.map((t) => t.nombre);
+  const nombres = tecnologias?.map((t) => t.nombre);
   const [techSeleccionada, setTechSeleccionada] = useState<boolean>(false);
-  const [listaTecnologias, setListaTecnologias] = useState<string[]>([]);
-
+  const [listaTecnologias, setListaTecnologias] = useState<string[]>(
+    defaultValues ?? [],
+  );
   const handleChange = (selectedNombres: string[]) => {
     setListaTecnologias(selectedNombres);
     setTechSeleccionada(selectedNombres.length > 0);
@@ -44,16 +46,22 @@ export function ComboboxTecnologias({ tecnologias, onChange }: Props) {
       multiple
       autoHighlight
       items={nombres}
+      value={listaTecnologias}
       onValueChange={handleChange}
     >
-      <ComboboxChips ref={anchor} className="w-full mt-2 bg-transparent! outline-0!">
+      <ComboboxChips
+        ref={anchor}
+        className="w-full mt-2 bg-transparent! outline-0!"
+      >
         <ComboboxValue>
           {(values) => (
             <Fragment>
               {values.map((value: string) => (
                 <ComboboxChip key={value}>{value}</ComboboxChip>
               ))}
-              <ComboboxChipsInput placeholder={!techSeleccionada ? "Tecnologías..." : "" } />
+              <ComboboxChipsInput
+                placeholder={!techSeleccionada ? "Tecnologías..." : ""}
+              />
             </Fragment>
           )}
         </ComboboxValue>
@@ -62,7 +70,13 @@ export function ComboboxTecnologias({ tecnologias, onChange }: Props) {
         <ComboboxEmpty>No se encontraron tecnologías.</ComboboxEmpty>
         <ComboboxList>
           {(item) => (
-            <ComboboxItem key={item} value={item} disabled={listaTecnologias.length >= 3 && !listaTecnologias.includes(item) }>
+            <ComboboxItem
+              key={item}
+              value={item}
+              disabled={
+                listaTecnologias.length >= 3 && !listaTecnologias.includes(item)
+              }
+            >
               {item}
             </ComboboxItem>
           )}

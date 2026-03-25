@@ -9,7 +9,9 @@ import { updatePost } from "@/utils/api";
 const postSchema = z.object({
   contenido: z
     .string()
-    .max(260, "El contenido del post no puede tener más de 260 caracteres"),
+    .max(260, "El contenido del POST no puede tener más de 260 carácteres."),
+  postId: z.string(),
+  tecnologiaIds: z.string(),
 });
 
 export const EditPostAction = async (
@@ -18,15 +20,20 @@ export const EditPostAction = async (
 ): Promise<ActionState> => {
   const token = await GetCookies();
   try {
-    const { contenido } = postSchema.parse(Object.fromEntries(formData));
+    const { contenido, postId, tecnologiaIds } = postSchema.parse(
+      Object.fromEntries(formData),
+    );
 
-    const res = await fetch(`${updatePost()}`, {
-      method: "POST",
+    const res = await fetch(updatePost(postId), {
+      method: "PATCH",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify({ contenido }),
+      body: JSON.stringify({
+        contenido,
+        tecnologias: JSON.parse(tecnologiaIds),
+      }),
       credentials: "include",
     });
 
