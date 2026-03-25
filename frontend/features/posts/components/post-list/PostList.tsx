@@ -9,9 +9,9 @@ import { useSearchParams } from "next/navigation";
 
 const PostList = ({ initialData }) => {
   const searchParams = useSearchParams();
-  const [search] = searchParams.get("search") ?? "";
-  const [username] = searchParams.get("username") ?? "";
-  const [tech] = searchParams.get("tech") ?? "";
+  const search = searchParams.get("search") ?? "";
+  const username = searchParams.get("username") ?? "";
+  const tech = searchParams.get("tech") ?? "";
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useInfiniteQuery({
@@ -24,6 +24,8 @@ const PostList = ({ initialData }) => {
         pages: [initialData],
         pageParams: [undefined],
       },
+      staleTime: 0,
+      gcTime: 0
     });
 
   const posts = data?.pages.flatMap((page) => page.list) ?? [];

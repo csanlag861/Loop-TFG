@@ -3,11 +3,11 @@ features: 1. Perfil 2. Guardados 3. Flag en LS o cookie del landing page.
 terminar: 2. theme 3. Fetcher Refactorizaar.  
  1. Refactorizar para obtener los posts y no repetir tanto codigo. 5. Refactorizar el get-data 6. Skeleton del post
 
-COSAS QUE QUEDAN:
-
-
+COSAS FUNCIONAN:
 - Filtrado NUQS
-  - Revisar porque a veces no funciona bien.
+
+
+COSAS QUE QUEDAN:
 
 - Guardados Page
   - Mover a favoritos (me falta probarlo)
@@ -32,7 +32,20 @@ SEMANA SANTA:
 - Testing & refactor.
 - Desplegar.
 
+DESPUES SEMANA SANTA:
+- Me gusta / Compartir.
+- COmentarios
+- Seguir
+- IA
+
+- CHAT
+- Eventos semanales con Logros
+
+
+
 https://www.shadcn.io/template/damianricobelli-stepperize
+
+INNGEST
 
 MESA ARRIBA DONDE EL SEGMENT
 CAMBIAR EL SALIR POR UN VOLVER A MESAS.

@@ -8,6 +8,8 @@ import {
   Delete,
   Query,
   ParseIntPipe,
+  HttpCode,
+  HttpStatus,
 } from '@nestjs/common';
 import { UsuariosService } from './usuarios.service';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
@@ -17,7 +19,7 @@ import { User } from '@/modules/auth/decorators/user.decorator';
 import { CambiarEstadoDto } from './dto/cambiar-estado.dto';
 import { CambiarRolDto } from './dto/cambiar-rol.dto';
 
-@Controller('usuarios')
+@Controller('admin/usuarios')
 export class UsuariosController {
   constructor(private readonly usuariosService: UsuariosService) {}
 

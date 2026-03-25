@@ -1,4 +1,3 @@
-// src/admin/usuarios/dto/filtrar-usuarios.dto.ts
 import { IsEnum, IsInt, IsOptional, IsString, Min } from 'class-validator';
 import { Type } from 'class-transformer';
 import { RolNombreEnum, UsuarioEstadoEnum } from '@prisma/client';
@@ -20,11 +19,11 @@ export class FiltrarUsuarioDto {
   @Type(() => Number)
   @IsInt()
   @Min(1)
-  pagina?: number = 1;
+  pagina: number = 1;
 
   @IsOptional()
-  @Type(() => Number) // DUDA
+  @Type(() => Number)
   @IsInt()
   @Min(1)
-  limite?: number = 20;
+  limite: number = 20;
 }

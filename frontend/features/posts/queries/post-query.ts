@@ -14,6 +14,8 @@ export async function getPosts(cursor?: number, search: string = "", username: s
 
   const url = queryString ? `${getAllPosts()}?${queryString}` : getAllPosts();
 
+  console.log(url)
+
   try {
     await new Promise((r) => setTimeout(r, 2000));
     const res = await fetch(url, {

@@ -10,7 +10,7 @@ import { UserEntity } from '../user/user.entity';
 
 @Injectable()
 export class PostService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaService) { }
   create(createPostDto: CreatePostDto, userId: number) {
     return this.prisma.post.create({
       data: {
@@ -35,6 +35,9 @@ export class PostService {
     tech?: string,
   ): Promise<ResponsePostlistDto> {
     const take = 10;
+
+    console.log(search);
+
 
     const where = {
       ...(cursor && { id: { lt: cursor } }),
@@ -77,7 +80,6 @@ export class PostService {
     posts = hasNextPage ? posts.slice(0, -1) : posts;
 
     const currentUser = user_id ? new UserEntity(user_id) : null;
-
     return {
       list: posts.map((post) => PostMapper.toResponse(post, currentUser)),
       metadata: {

@@ -48,6 +48,8 @@ export class AuthService {
    * @returns Objeto con el token JWT.
    */
   login(user: UserEntity) {
+    console.log("USER que llega ", user);
+    
     const payload: PayloadEntity = {
       username: user.username,
       id: user.id.toString(),
