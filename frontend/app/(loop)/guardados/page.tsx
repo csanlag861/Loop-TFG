@@ -1,27 +1,8 @@
-import {
-    Empty,
-    EmptyContent,
-    EmptyDescription,
-    EmptyHeader,
-    EmptyMedia,
-    EmptyTitle,
-} from "@/components/ui/empty"
-import Button from "@/components/reusables/button/Button"
-import { Bookmark } from "@geist-ui/icons"
+import { fetcher } from "@/lib/fetcher";
+import { obtenerCarpetas } from "@/utils/api";
+import GuardadosWrapper from "@/features/guardados/components/guardados-wrapper";
 
-export default function GuardadosPage() {
-    return (
-        <Empty>
-            <EmptyHeader>
-                <EmptyMedia variant="icon">
-                    <Bookmark size={24} />
-                </EmptyMedia>
-                <EmptyTitle>No data</EmptyTitle>
-                <EmptyDescription>No data found</EmptyDescription>
-            </EmptyHeader>
-            <EmptyContent>
-                <Button text="Añadir Guardados"/>
-            </EmptyContent>
-        </Empty>
-    )
+export default async function GuardadosPage() {
+  const carpetas = await fetcher(obtenerCarpetas());
+  return <GuardadosWrapper carpetasIniciales={carpetas} />;
 }
