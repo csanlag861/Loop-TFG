@@ -4,11 +4,11 @@ type ButtonProps = {
   text: string;
   type?: "button" | "submit" | "reset";
   disabled?: boolean;
-  classname?: string;
+  className?: string;
 }
-const Button = ({ text, type = "button", classname, ...otherProps}: ButtonProps) => {
+const Button = ({ text, type = "button", className, ...otherProps}: ButtonProps) => {
   return (
-    <button type={type} className={`${stylesButton.loop} ${classname}`} {...otherProps}>
+    <button type={type} className={`${stylesButton.loop} ${className}`} {...otherProps}>
       {text}
     </button>
   );

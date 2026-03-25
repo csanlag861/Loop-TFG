@@ -4,6 +4,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import * as bcrypt from 'bcrypt';
 import { ResponseUserDto } from './dto/response-user.dto';
 import { SlugRol } from '@/common/enums/slug-rol.enum';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UserService {
@@ -84,7 +85,10 @@ export class UserService {
    */
   async findUserByUsername(username: string) {
     try {
-      const user = await this.prisma.usuario.findFirst({ where: { username } });
+      const user = await this.prisma.usuario.findFirst({
+        where: { username },
+        include: { rol: true },
+      });
       return user;
     } catch (error) {
       console.error('Error finding user by username on BBDD: ', error);
@@ -127,9 +131,9 @@ export class UserService {
    * @param id Identificador del usuario
    * @returns Devuelve los datos del usuario.
    */
-  async getUserData(id: number) {
-    return this.prisma.usuario.findUnique({
-      where: { id },
+  async getProfileData(user_id: number, requestUser_id?: number) {
+    const user = await this.prisma.usuario.findUnique({
+      where: { id: user_id },
       select: {
         avatarURL: true,
         nombre: true,
@@ -138,5 +142,50 @@ export class UserService {
         biografia: true,
       },
     });
+
+    if (!user) {
+      throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
+    }
+
+    return {
+      ...user,
+      isOwner: requestUser_id ? requestUser_id === user.id : false,
+    };
+  }
+
+  async updateUser(user_id: number, dto: UpdateUserDto) {
+    const user = await this.prisma.usuario.findUnique({
+      where: { id: user_id },
+    });
+
+    if (!user) {
+      throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
+    }
+
+    if (dto.username) {
+      const usernameExists = await this.findUserByUsername(dto.username);
+      if (usernameExists && usernameExists.id !== user_id) {
+        throw new HttpException('Username ya en uso', HttpStatus.CONFLICT);
+      }
+    }
+
+    const updatedData = {
+      ...dto,
+      ...(dto.password && { password: await this.hashPassword(dto.password) }),
+    };
+
+    const updated = await this.prisma.usuario.update({
+      where: { id: user_id },
+      data: updatedData,
+      select: {
+        id: true,
+        nombre: true,
+        username: true,
+        biografia: true,
+        avatarURL: true,
+      },
+    });
+
+    return updated;
   }
 }

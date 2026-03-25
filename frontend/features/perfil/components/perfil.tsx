@@ -3,6 +3,7 @@ import { getProfile, getPostsFromUser } from "@/utils/api";
 import Image from "next/image";
 import { Separator } from "@/components/ui/separator";
 import Post from "@/features/posts/components/post/post";
+import { EditarPerfilButton } from "./editarPerfil-button";
 
 export const Perfil = async ({ id }: { id: string }) => {
   const data = await fetcher(getProfile({ param: parseInt(id) }));
@@ -10,7 +11,14 @@ export const Perfil = async ({ id }: { id: string }) => {
 
   return (
     <main className="min-h-screen w-full flex flex-col items-center justify-center">
-      <section className="h-112.25 w-full flex flex-col items-center justify-center gap-4">
+      <section className="h-112.25 w-full flex flex-col items-center justify-center gap-4 relative">
+
+        {data.isOwner && (
+          <div className="absolute top-0 right-0">
+            <EditarPerfilButton profileData={data} />
+          </div>
+        )}
+
         <div className="w-40 h-40 rounded-full overflow-hidden">
           <Image
             src={data.avatarURL}
@@ -30,12 +38,10 @@ export const Perfil = async ({ id }: { id: string }) => {
       <Separator className="w-full" />
       <section>
         <div className="flex flex-col items-center justify-center gap-2 text-01 text-[14px]">
-          <ul
-            className={`flex flex-col items-center justify-center gap-8 mt-8`}
-          >
-            {dataPosts.map((post) => {
-              return <Post key={post.id} post={post} />;
-            })}
+          <ul className="flex flex-col items-center justify-center gap-8 mt-8">
+            {dataPosts.map((post) => (
+              <Post key={post.id} post={post} />
+            ))}
           </ul>
         </div>
       </section>
