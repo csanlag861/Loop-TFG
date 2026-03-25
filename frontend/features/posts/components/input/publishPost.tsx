@@ -49,7 +49,7 @@ const PublishPost = ({ tecnologias }: Props) => {
           type="submit"
           disabled={isPending}
           text={isPending ? "Publicando..." : "Publicar"}
-          classname="[--btn-width:128px]"
+          className="[--btn-width:128px]"
         />
       </div>
     </form>
