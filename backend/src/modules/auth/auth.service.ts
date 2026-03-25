@@ -51,7 +51,7 @@ export class AuthService {
     const payload: PayloadEntity = {
       username: user.username,
       id: user.id.toString(),
-      rolId: user.rolId,
+      rol: user.rol.nombre,
     };
     const token = this.jwtService.sign(payload);
 

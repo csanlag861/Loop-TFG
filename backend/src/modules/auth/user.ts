@@ -1,4 +1,5 @@
 import { UsuarioEstadoEnum } from '@/common/enums/usuario-estado.enum';
+import { Rol } from '@prisma/client';
 export class UserEntity {
   id: number;
   nombre: string;
@@ -9,4 +10,5 @@ export class UserEntity {
   estado: UsuarioEstadoEnum;
   rolId: number;
   password: string;
+  rol: Rol;
 }
