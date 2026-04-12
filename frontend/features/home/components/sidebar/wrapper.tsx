@@ -7,5 +7,11 @@ export async function SidebarWrapper() {
   const isAuthenticated = !!cookieStore;
   const userData = isAuthenticated ? await getDataUser() : null;
 
-  return <Sidebar isAuthenticated={isAuthenticated} userId={userData?.id} />;
+  return (
+    <Sidebar
+      isAuthenticated={isAuthenticated}
+      userId={userData?.id}
+      isAdmin={userData?.isAdmin}
+    />
+  );
 }

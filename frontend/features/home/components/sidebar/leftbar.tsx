@@ -7,13 +7,17 @@ import { navItems } from "../../utils/constants";
 import { navItemsAnom } from "../../utils/constants-anon";
 import { SidebarItem } from "./nav-item";
 import { SettingsSidebar } from "../settings";
+import { dashboardPath } from "@/utils/paths";
+import { Shield } from "@geist-ui/icons";
 
 const Sidebar = ({
   isAuthenticated,
   userId,
+  isAdmin,
 }: {
   isAuthenticated: boolean;
   userId?: number;
+  isAdmin?: boolean;
 }) => {
   const pathname = usePathname();
   const [isOpen, setOpen] = useState(false);
@@ -54,6 +58,18 @@ const Sidebar = ({
           onToggle={() => handleToggle(!isOpen)}
           isOpen={isOpen}
         />
+        {isAdmin && (
+          <SidebarItem
+            key="dashboard"
+            isOpen={isOpen}
+            isActive={pathname === dashboardPath()}
+            navItem={{
+              title: "Dashboard",
+              href: dashboardPath(),
+              icon: <Shield size={24} />,
+            }}
+          />
+        )}
       </div>
     </nav>
   );
