@@ -40,6 +40,7 @@ model Usuario {
   carpetas      Carpeta[]
   posts         Post[]
   postGuardados PostGuardado[]
+  deletedAt     DateTime?
 }
 
 enum UsuarioEstadoEnum {

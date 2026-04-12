@@ -5,6 +5,7 @@ import * as bcrypt from 'bcrypt';
 import { ResponseUserDto } from './dto/response-user.dto';
 import { SlugRol } from '@/common/enums/slug-rol.enum';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { RolNombreEnum } from '@prisma/client';
 
 @Injectable()
 export class UserService {
@@ -86,7 +87,7 @@ export class UserService {
   async findUserByUsername(username: string) {
     try {
       const user = await this.prisma.usuario.findFirst({
-        where: { username },
+        where: { username, deletedAt: null },
         include: { rol: true },
       });
       return user;
@@ -103,7 +104,9 @@ export class UserService {
 
   async getUserById(id: number) {
     try {
-      const user = await this.prisma.usuario.findUnique({ where: { id } });
+      const user = await this.prisma.usuario.findUnique({
+        where: { id, deletedAt: null },
+      });
       if (!user) {
         throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
       }
@@ -133,13 +136,14 @@ export class UserService {
    */
   async getProfileData(user_id: number, requestUser_id?: number) {
     const user = await this.prisma.usuario.findUnique({
-      where: { id: user_id },
+      where: { id: user_id, deletedAt: null },
       select: {
         avatarURL: true,
         nombre: true,
         username: true,
         id: true,
         biografia: true,
+        rol: { select: { nombre: true, slug: true } },
       },
     });
 
@@ -150,6 +154,7 @@ export class UserService {
     return {
       ...user,
       isOwner: requestUser_id ? requestUser_id === user.id : false,
+      isAdmin: user.rol.nombre === RolNombreEnum.ADMIN,
     };
   }
 

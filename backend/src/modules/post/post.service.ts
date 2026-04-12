@@ -7,10 +7,11 @@ import { ResponsePostlistDto } from './dto/response-postlist-dto';
 import { PostMapper } from './mapper/post.mapper';
 import { UserService } from '../user/user.service';
 import { UserEntity } from '../user/user.entity';
+import { UsuarioEstadoEnum } from '@prisma/client';
 
 @Injectable()
 export class PostService {
-  constructor(private prisma: PrismaService) { }
+  constructor(private prisma: PrismaService) {}
   create(createPostDto: CreatePostDto, userId: number) {
     return this.prisma.post.create({
       data: {
@@ -36,18 +37,19 @@ export class PostService {
   ): Promise<ResponsePostlistDto> {
     const take = 10;
 
-    console.log(search);
-
-
     const where = {
+      usuario: {
+        deletedAt: null,
+        estado: {
+          notIn: [UsuarioEstadoEnum.BLOQUEADO, UsuarioEstadoEnum.SUSPENDIDO],
+        },
+        ...(username && {
+          username: { contains: username, mode: 'insensitive' as const },
+        }),
+      },
       ...(cursor && { id: { lt: cursor } }),
       ...(search && {
         contenido: { contains: search, mode: 'insensitive' as const },
-      }),
-      ...(username && {
-        usuario: {
-          username: { contains: username, mode: 'insensitive' as const },
-        },
       }),
       ...(tech && {
         tecnologias: {
@@ -117,6 +119,12 @@ export class PostService {
     return this.prisma.post.findMany({
       where: {
         usuario_id: user_id,
+        usuario: {
+          deletedAt: null,
+          estado: {
+            notIn: [UsuarioEstadoEnum.BLOQUEADO, UsuarioEstadoEnum.SUSPENDIDO],
+          },
+        },
       },
       include: {
         usuario: true,
