@@ -1,5 +1,5 @@
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
-const API_URL = process.env.API_URL
+const API_URL = process.env.API_URL;
 console.log("API:", process.env.NEXT_PUBLIC_API_URL);
 
 const prefix = "/api/";
@@ -9,6 +9,7 @@ const prefixTecnologia = "tecnologia";
 const prefixCarpetas = "carpeta";
 const prefixGuardados = "guardados";
 const prefixAdmin = "admin/";
+const prefixTecnologiaAdmin = "tecnologia";
 
 type Param = {
   param: string;
@@ -29,6 +30,14 @@ export const getProfile = ({ param }: { param: number }) =>
 export const updateProfile = () => `${API_URL}${prefix}${prefixUser}profile`;
 
 export const getTecnologias = () => `${API_URL}${prefix}${prefixTecnologia}`;
+export const createTecnologia = () =>
+  `${API_URL}${prefix}${prefixTecnologiaAdmin}`;
+
+export const updateTecnologia = ({ param }: { param: number }) =>
+  `${API_URL}${prefix}${prefixTecnologiaAdmin}/${param}`;
+
+export const deleteTecnologia = ({ param }: { param: number }) =>
+  `${API_URL}${prefix}${prefixTecnologiaAdmin}/${param}`;
 
 export const obtenerCarpetas = () => `${API_URL}${prefix}${prefixCarpetas}`;
 export const obtenerCarpetasCliente = () =>
@@ -50,3 +59,5 @@ export const updateAdminUsuarioEstado = ({ param }: { param: number }) =>
   `${API_URL}${prefix}${prefixAdmin}usuarios/${param}/estado`;
 export const deleteAdminUsuario = ({ param }: { param: number }) =>
   `${API_URL}${prefix}${prefixAdmin}usuarios/${param}`;
+export const restaurarAdminUsuario = ({ param }: { param: number }) =>
+  `${API_URL}${prefix}${prefixAdmin}usuarios/${param}/restaurar`;
