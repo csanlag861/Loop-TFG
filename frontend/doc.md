@@ -1,11 +1,12 @@
 features: 1. Perfil 2. Guardados 3. Flag en LS o cookie del landing page.
 
-terminar: 2. theme 3. Fetcher Refactorizaar.  
- 1. Refactorizar para obtener los posts y no repetir tanto codigo. 5. Refactorizar el get-data 6. Skeleton del post
+terminar: 2. theme 3. Fetcher Refactorizaar.
+
+1.  Refactorizar para obtener los posts y no repetir tanto codigo. 5. Refactorizar el get-data 6. Skeleton del post
 
 COSAS FUNCIONAN:
-- Filtrado NUQS
 
+- Filtrado NUQS
 
 COSAS QUE QUEDAN:
 
@@ -14,7 +15,6 @@ COSAS QUE QUEDAN:
   - Si intenta eliminar una carpeta que no tiene nada, mostrar un mensaje para ello.
   - Si elimina la carpeta favoritos mostrar mensaje de que no puede.
   - ENtender el código.
-  
 - Edicion perfil usuario
   - Cambiar el avatar.
 
@@ -26,13 +26,16 @@ COSAS QUE QUEDAN:
 - DASHBOARD ADMIN
 
 - Registro con Token
+
 ---
 
 SEMANA SANTA:
+
 - Testing & refactor.
 - Desplegar.
 
 DESPUES SEMANA SANTA:
+
 - Me gusta / Compartir.
 - COmentarios
 - Seguir
@@ -41,7 +44,26 @@ DESPUES SEMANA SANTA:
 - CHAT
 - Eventos semanales con Logros
 
-
+SEMANA 01:
+  Jueves: Soft delete, CRUD tecnologias.
+  Viernes: Desplegar el proyecto.
+  Sabado - Domingo: Testing & refactor.
+  
+SEMANA 02:
+  - Stepper registro
+  - Registro con tokens.
+  - Olvidar contraseña (mail, colas, etc)
+  - Me gusta / Compartir
+SEMANA 03:
+- Comentarios
+SEMANA 04:
+- Seguimiento
+SEMANA 05:
+- IA
+SEMANA 06:
+- CHAT
+SEMANA 07:
+- Despliegue + testing.
 
 https://www.shadcn.io/template/damianricobelli-stepperize
 
@@ -52,14 +74,16 @@ CAMBIAR EL SALIR POR UN VOLVER A MESAS.
 GANAR ESPACIO CON TICKET Y FAMILIAS.
 
 MODO MOVIL
+
 - Familias: Una lista - desplegable, arriba.
 - Artículos: 3 por fila.
 - El ticket saldría en un modal al pinchar en un icono de carrito abajo a la derecha. El icono indica el número de artículos que hay en el carrito.
-font-size productos con imagenes a 20. sin productos a 22.
-media-query para poner grid a 3 productos.
-img salvador a 45px 
-footer paginacion.
+  font-size productos con imagenes a 20. sin productos a 22.
+  media-query para poner grid a 3 productos.
+  img salvador a 45px
+  footer paginacion.
 
 ---
+
 ORDENAR ORDEN ALFABETICO LOS EMPLEDAOS. EN MODO MOVIL QUE SALGAN 2
-ION-GRID PARA LOS EMPLEADOS. 
+ION-GRID PARA LOS EMPLEADOS.
