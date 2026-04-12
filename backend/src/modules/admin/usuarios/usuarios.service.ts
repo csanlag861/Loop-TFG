@@ -15,15 +15,12 @@ import { CambiarEstadoDto } from './dto/cambiar-estado.dto';
 export class UsuariosService {
   constructor(private readonly prisma: PrismaService) {}
 
-  /*   create(createUsuarioDto: CreateUsuarioDto) {
-    return 'This action adds a new usuario';
-  }
- */
   async findAll(filtros: FiltrarUsuarioDto) {
-    const { busqueda, rol, estado, pagina, limite } = filtros;
+    const { busqueda, rol, estado, pagina, limite, eliminados } = filtros;
     const skip = (pagina - 1) * limite;
 
     const where = {
+      deletedAt: eliminados ? { not: null } : null,
       ...(busqueda && {
         OR: [
           { username: { contains: busqueda, mode: 'insensitive' as const } },
@@ -48,6 +45,7 @@ export class UsuariosService {
           estado: true,
           createdAt: true,
           avatarURL: true,
+          deletedAt: true,
           rol: { select: { nombre: true } },
         },
         orderBy: { createdAt: 'desc' },
@@ -68,7 +66,7 @@ export class UsuariosService {
 
   async findOne(id: number) {
     const usuario = await this.prisma.usuario.findUnique({
-      where: { id },
+      where: { id, deletedAt: null },
       select: {
         id: true,
         nombre: true,
@@ -78,6 +76,7 @@ export class UsuariosService {
         estado: true,
         createdAt: true,
         avatarURL: true,
+        deletedAt: true,
         rol: { select: { nombre: true } },
         _count: {
           select: { posts: true, carpetas: true },
@@ -85,22 +84,14 @@ export class UsuariosService {
       },
     });
 
-    if (!usuario)
+    if (!usuario || usuario.deletedAt)
       throw new HttpException('Usuario no encontrado', HttpStatus.NOT_FOUND);
 
     return usuario;
   }
 
-  /*   update(id: number, updateUsuarioDto: UpdateUsuarioDto) {
-    return `This action updates a #${id} usuario`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} usuario`;
-  } */
-
   async updateRol(id: number, cambiarRolDto: CambiarRolDto) {
-    await this.findOne(id); // DUDA
+    await this.findOne(id);
 
     const rol = await this.prisma.rol.findUnique({
       where: { nombre: cambiarRolDto.rol },
@@ -135,6 +126,32 @@ export class UsuariosService {
       );
     }
 
-    await this.prisma.usuario.delete({ where: { id } });
+    await this.prisma.usuario.update({
+      where: { id },
+      data: { deletedAt: new Date() },
+    });
+  }
+
+  async restaurar(id: number) {
+    const usuario = await this.prisma.usuario.findUnique({
+      where: { id },
+      select: { id: true, deletedAt: true },
+    });
+
+    if (!usuario) {
+      throw new HttpException('Usuario no encontrado', HttpStatus.NOT_FOUND);
+    }
+
+    if (!usuario.deletedAt) {
+      throw new HttpException(
+        'El usuario no está eliminado',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    return this.prisma.usuario.update({
+      where: { id },
+      data: { deletedAt: null },
+    });
   }
 }

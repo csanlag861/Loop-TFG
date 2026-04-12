@@ -52,11 +52,16 @@ export class UsuariosController {
   }
 
   @Delete(':id')
-  @HttpCode(HttpStatus.NO_CONTENT) // DUDA
+  @HttpCode(HttpStatus.NO_CONTENT)
   eliminar(
     @Param('id', ParseIntPipe) id: number,
     @User('userId') admin_id: number,
   ) {
     return this.usuariosService.eliminar(id, admin_id);
+  }
+
+  @Patch(':id/restaurar')
+  restaurar(@Param('id', ParseIntPipe) id: number) {
+    return this.usuariosService.restaurar(id);
   }
 }
