@@ -3,8 +3,11 @@
 
 import { prisma } from '../src/lib/prisma';
 import { SlugRol } from '../src/common/enums/slug-rol.enum';
+import bcrypt from 'bcrypt';
 
 async function main() {
+  const saltRounds = 10;
+
   await prisma.post.deleteMany({});
   await prisma.tecnologia.deleteMany({});
   // 1️⃣ Crear roles
@@ -128,52 +131,64 @@ async function main() {
   // 3️⃣ Crear usuarios
   const usuariosData = [
     {
-      nombre: 'Carlos Martínez',
-      username: 'carlos_dev',
+      nombre: 'Cristian',
+      username: 'csanlag861',
       email: 'carlos@example.com',
       biografia: 'Fullstack developer apasionado por Angular y NodeJS',
-      password: '123456',
+      password: bcrypt.hashSync('123456', saltRounds),
       rol_id: 1,
+      avatarURL:
+        'https://bmumcurtyjxqdrmnzptq.supabase.co/storage/v1/object/public/avatars/avatar_1.png',
     },
     {
       nombre: 'Laura Gómez',
       username: 'laura_front',
       email: 'laura@example.com',
       biografia: 'Frontend engineer, React y TypeScript son mi vida',
-      password: '123456',
+      password: bcrypt.hashSync('123456', saltRounds),
       rol_id: 2,
+      avatarURL:
+        'https://bmumcurtyjxqdrmnzptq.supabase.co/storage/v1/object/public/avatars/avatar_1.png',
     },
     {
       nombre: 'Miguel Sánchez',
       username: 'miguel_backend',
       email: 'miguel@example.com',
       biografia: 'Backend developer, experto en NodeJS y bases de datos',
-      password: '123456',
+      password: bcrypt.hashSync('123456', saltRounds),
       rol_id: 2,
+      avatarURL:
+        'https://bmumcurtyjxqdrmnzptq.supabase.co/storage/v1/object/public/avatars/avatar_2.png',
     },
     {
       nombre: 'Elena Ruiz',
       username: 'elena_cloud',
       email: 'elena@example.com',
       biografia: 'Ingeniera cloud, AWS y Docker son mis herramientas',
-      password: '123456',
+      password: bcrypt.hashSync('123456', saltRounds),
       rol_id: 2,
+      avatarURL:
+        'https://bmumcurtyjxqdrmnzptq.supabase.co/storage/v1/object/public/avatars/avatar_1.png',
     },
     {
       nombre: 'Javier Torres',
       username: 'javi_fullstack',
       email: 'javier@example.com',
       biografia: 'Desarrollador Fullstack, React y NestJS',
-      password: '123456',
+      password: bcrypt.hashSync('123456', saltRounds),
       rol_id: 2,
+      avatarURL:
+        'https://bmumcurtyjxqdrmnzptq.supabase.co/storage/v1/object/public/avatars/avatar_4.png',
     },
     {
-      nombre: 'Ana López',
-      username: 'ana_data',
+      nombre: 'Yara López',
+      username: 'yara_loopez',
       email: 'ana@example.com',
       biografia: 'Data engineer, Python y PostgreSQL',
-      password: '123456',
+      password: bcrypt.hashSync('123456', saltRounds),
       rol_id: 2,
+      avatarURL:
+        'https://bmumcurtyjxqdrmnzptq.supabase.co/storage/v1/object/public/avatars/avatar_1.png',
     },
   ];
 
