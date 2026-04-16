@@ -99,9 +99,9 @@ export function TecnologiaFormDialog({
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="bg-gris-09 border-gris-07 max-w-md">
+      <DialogContent className="bg-(--bg-01) border-(--gris-07) max-w-md">
         <DialogHeader>
-          <DialogTitle className="text-gris-01">
+          <DialogTitle className="text-(--text-01)">
             {isEditing ? "Editar tecnología" : "Nueva tecnología"}
           </DialogTitle>
         </DialogHeader>
@@ -210,7 +210,7 @@ export function TecnologiaFormDialog({
           <Button
             onClick={handleSubmit}
             disabled={loading}
-            className="bg-primary-color text-white hover:opacity-90"
+            className="bg-(--primary-color) text-(--gris-01) hover:bg-(--primary-color)/90"
           >
             {loading ? "Guardando..." : isEditing ? "Guardar cambios" : "Crear"}
           </Button>

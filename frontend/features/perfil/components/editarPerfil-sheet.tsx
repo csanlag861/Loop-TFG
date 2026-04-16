@@ -55,7 +55,7 @@ export const EditarPerfilSheet = ({
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent side="right" className="w-[400px] flex flex-col gap-6">
+      <SheetContent side="right" className="w-[400px] flex flex-col gap-6 p-4">
         <SheetHeader>
           <SheetTitle>Editar Perfil</SheetTitle>
           <SheetDescription>

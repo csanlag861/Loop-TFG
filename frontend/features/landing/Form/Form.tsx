@@ -7,11 +7,12 @@ import {
   DialogTrigger,
   DialogTitle,
   DialogHeader,
-  DialogDescription
+  DialogDescription,
 } from "@/components/ui/dialog";
 import Login from "@/features/auth/components/login/Login";
 import { useRouter } from "next/navigation";
 import { homePath } from "@/utils/paths";
+import RegisterStepper from "../Register/RegisterStepper";
 
 const Form = () => {
   const router = useRouter();
@@ -79,9 +80,17 @@ const Form = () => {
         <hr />
       </div>
 
-      <button type="button" className={stylesForm.loop}>
-        Registrarse en Loop
-      </button>
+      <Dialog>
+        <DialogTrigger asChild>
+          <button type="button" className={stylesForm.loop}>
+            Registrarse en Loop
+          </button>
+        </DialogTrigger>
+
+        <DialogContent className="w-md h-168 flex items-center justify-center">
+          <RegisterStepper />
+        </DialogContent>
+      </Dialog>
       <div className={stylesForm.terms}>
         <p>
           Al registrarte, aceptas los Términos de servicio y la Política de
@@ -97,11 +106,16 @@ const Form = () => {
           </DialogTrigger>
           <DialogContent className="w-md h-168 flex items-center justify-center">
             <DialogTitle />
-            <Login/>
+            <Login />
           </DialogContent>
         </Dialog>
         <hr />
-        <button className={stylesForm.explorar} onClick={() => router.push(homePath())}>Explorar Contenido</button>
+        <button
+          className={stylesForm.explorar}
+          onClick={() => router.push(homePath())}
+        >
+          Explorar Contenido
+        </button>
       </div>
     </div>
   );
