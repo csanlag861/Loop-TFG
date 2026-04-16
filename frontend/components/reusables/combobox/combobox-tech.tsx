@@ -25,7 +25,7 @@ interface Props {
   defaultValues?: string[];
 }
 
-export function ComboboxTecnologias({ tecnologias, onChange, defaultValues }: Props) {
+export function ComboboxTecnologias({ tecnologias = [], onChange, defaultValues }: Props) {
   const anchor = useComboboxAnchor();
   const nombres = tecnologias?.map((t) => t.nombre);
   const [techSeleccionada, setTechSeleccionada] = useState<boolean>(false);

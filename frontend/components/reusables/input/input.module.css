@@ -9,52 +9,28 @@
         font-family: "Sohne-Light", system-ui, sans-serif;
     }
 
-    input[type="text"],
-    input[type="email"],
-    input[type="password"] {
+    input[type="text"], input[type="email"], input[type="password"]{
         display: inline-block;
-        width: 100%;
+        width: 384px;
         height: 48px;
         border: 1px solid var(--gris-03);
         border-radius: 999px;
-        padding: 0 48px 0 16px;
+        padding: 0 16px;
         font-size: 14px;
         font-family: "Sohne-Light", system-ui, sans-serif;
-        color: var(--text-03);
-        background: transparent;
-        transition: border-color 0.2s;
+        color: var(--gris-03);
 
         &:focus {
             outline: none;
-            border-color: var(--primary-color);
+            border: 1px solid var(--gris-03);
         }
     }
 
-    .wrapper {
-        position: relative;
-        width: 384px;
-    }
-
-    .icon {
+    svg{
         cursor: pointer;
-        position: absolute;
-        right: 16px;
-        top: 50%;
-        transform: translateY(-50%);
+        position: relative;
+        left: 340px;
+        bottom: 39px;
         color: var(--gris-03);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .errorMessage {
-        color: #ff4d4d;
-        font-size: 12px;
-        margin-top: -4px;
-        padding-left: 16px;
-    }
-
-    .inputError {
-        border-color: #ff4d4d !important;
     }
 }

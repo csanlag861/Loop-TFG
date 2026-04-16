@@ -16,8 +16,10 @@ import { deletePostAction } from "./action/deleteAction";
 import { ConfirmDialog } from "./confirm-dialog";
 import { EditDialog } from "./edit-dialog";
 import { EditPostAction } from "./action/editAction";
+import { useQueryClient } from "@tanstack/react-query";
 
 const MoreSettings = ({ post }) => {
+  const queryClient = useQueryClient();
   const router = useRouter();
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [isEditOpen, setIsEditOpen] = useState(false);
@@ -36,6 +38,8 @@ const MoreSettings = ({ post }) => {
     }
     if (deleteState.status === "SUCCESS") {
       console.log("sucess");
+      setIsDeleteOpen(false);
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
       toast.success(deleteState.message);
       router.refresh();
     }
@@ -46,8 +50,9 @@ const MoreSettings = ({ post }) => {
       toast.error(editState.message);
     }
     if (editState.status === "SUCCESS") {
-      console.log("sucess");
       toast.success(editState.message);
+      setIsEditOpen(false);
+      queryClient.invalidateQueries({ queryKey: ["posts"] });
       router.refresh();
     }
   }, [editState.timestamp, editState.status, editState.message, router]);

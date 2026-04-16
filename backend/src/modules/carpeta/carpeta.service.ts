@@ -10,7 +10,7 @@ import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class CarpetaService {
-  DEFAULT: string = 'FAVORITOS';
+  DEFAULT: string = 'Favoritos';
   CONFLICT_EXCEPTION: string = 'P2002';
 
   constructor(private readonly prisma: PrismaService) {}
@@ -153,6 +153,9 @@ export class CarpetaService {
         const carpetaFavorito = await this.prisma.carpeta.findFirst({
           where: { usuario_id: user_id, nombre: this.DEFAULT },
         });
+
+        console.log(carpetaFavorito);
+        
 
         await this.prisma.$transaction([
           this.prisma.postGuardado.updateMany({

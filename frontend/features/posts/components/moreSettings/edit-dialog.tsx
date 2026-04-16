@@ -50,7 +50,6 @@ const EditDialog = ({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-lg gap-0 p-0 overflow-hidden">
         
-        {/* Header */}
         <DialogHeader className="px-5 py-4 border-b border-border">
           <DialogTitle className="flex items-center gap-2 text-sm font-medium">
             <Pencil size={14} className="text-muted-foreground" />
@@ -60,18 +59,15 @@ const EditDialog = ({
 
         <div className="px-5 py-4 flex flex-col gap-5">
 
-          {/* Estado: badge "Editando" */}
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-amber-400" />
             <span className="text-xs text-muted-foreground">Editando</span>
           </div>
 
-          {/* Preview del post original */}
           <div className="rounded-lg border border-border bg-muted/30 p-3 pointer-events-none select-none">
             <PostPreview post={post} />
           </div>
 
-          {/* Formulario */}
           <form ref={formRef} action={formAction}>
             <input type="hidden" name="postId" value={post.id} />
             <input
@@ -82,7 +78,6 @@ const EditDialog = ({
 
             <div className="flex flex-col gap-4">
 
-              {/* Textarea de contenido */}
               <div className="flex flex-col gap-2">
                 <Label htmlFor="contenido" className="text-sm">
                   Contenido
@@ -109,7 +104,6 @@ const EditDialog = ({
                 </p>
               </div>
 
-              {/* Selector de tecnologías */}
               <div className="flex flex-col gap-2">
                 <Label className="text-sm">Tecnologías</Label>
                 <ComboboxTecnologias
@@ -122,7 +116,6 @@ const EditDialog = ({
           </form>
         </div>
 
-        {/* Footer con acciones */}
         <div className="flex justify-end gap-2 px-5 py-4 border-t border-border">
           <Button variant="ghost" onClick={() => onOpenChange(false)}>
             Cancelar
