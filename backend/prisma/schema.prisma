@@ -41,6 +41,12 @@ model Usuario {
   posts         Post[]
   postGuardados PostGuardado[]
   deletedAt     DateTime?
+
+  likes       Like[]
+  comentarios Comentario[]
+
+  seguidores Seguidor[] @relation("Seguidores")
+  seguidos   Seguidor[] @relation("Seguidos")
 }
 
 enum UsuarioEstadoEnum {
@@ -80,6 +86,8 @@ model Post {
 
   tecnologias   Tecnologia[]
   postGuardados PostGuardado[]
+  likes         Like[]
+  comentarios   Comentario[]
 }
 
 model PostGuardado {
@@ -94,4 +102,52 @@ model PostGuardado {
   usuario Usuario @relation(fields: [usuario_id], references: [id])
 
   @@unique([post_id, carpeta_id])
+  @@index([usuario_id, carpeta_id])
+}
+
+model Like {
+  id         Int      @id @default(autoincrement())
+  usuario_id Int
+  post_id    Int
+  createdAt  DateTime @default(now())
+
+  usuario Usuario @relation(fields: [usuario_id], references: [id])
+  post    Post    @relation(fields: [post_id], references: [id])
+
+  @@unique([usuario_id, post_id])
+  @@index([post_id])
+  @@index([usuario_id])
+}
+
+model Comentario {
+  id         Int      @id @default(autoincrement())
+  usuario_id Int
+  post_id    Int
+  contenido  String   @db.VarChar(280)
+  parent_id  Int?
+  createdAt  DateTime @default(now())
+
+  usuario Usuario @relation(fields: [usuario_id], references: [id])
+  post    Post    @relation(fields: [post_id], references: [id])
+
+  parent     Comentario?  @relation("ComentarioRespuestas", fields: [parent_id], references: [id], onDelete: Cascade)
+  respuestas Comentario[] @relation("ComentarioRespuestas")
+
+  @@index([post_id])
+  @@index([usuario_id])
+  @@index([parent_id])
+}
+
+model Seguidor {
+  id          Int      @id @default(autoincrement())
+  seguidor_id Int
+  seguido_id  Int
+  createdAt   DateTime @default(now())
+
+  seguidor Usuario @relation("Seguidores", fields: [seguidor_id], references: [id])
+  seguido  Usuario @relation("Seguidos", fields: [seguido_id], references: [id])
+
+  @@unique([seguidor_id, seguido_id])
+  @@index([seguidor_id])
+  @@index([seguido_id])
 }
