@@ -12,7 +12,7 @@ import {
   ComboboxValue,
   useComboboxAnchor,
 } from "@/components/ui/combobox";
-import { Fragment, useState } from "react";
+import { Fragment, useState, useEffect, useMemo } from "react";
 
 interface Tecnologia {
   id: number;
@@ -23,18 +23,23 @@ interface Props {
   tecnologias: Tecnologia[];
   onChange: (ids: number[]) => void;
   defaultValues?: string[];
+  container?: HTMLElement | null | React.RefObject<HTMLElement | null>;
 }
 
-export function ComboboxTecnologias({ tecnologias = [], onChange, defaultValues }: Props) {
+export function ComboboxTecnologias({ tecnologias = [], onChange, defaultValues, container }: Props) {
   const anchor = useComboboxAnchor();
-  const nombres = tecnologias?.map((t) => t.nombre);
-  const [techSeleccionada, setTechSeleccionada] = useState<boolean>(false);
+  const nombres = useMemo(() => tecnologias?.map((t) => t.nombre), [tecnologias]);
+  const [techSeleccionada, setTechSeleccionada] = useState<boolean>(
+    (defaultValues?.length ?? 0) > 0,
+  );
   const [listaTecnologias, setListaTecnologias] = useState<string[]>(
     defaultValues ?? [],
   );
+
   const handleChange = (selectedNombres: string[]) => {
     setListaTecnologias(selectedNombres);
     setTechSeleccionada(selectedNombres.length > 0);
+
     const ids = tecnologias
       .filter((t) => selectedNombres.includes(t.nombre))
       .map((t) => t.id);
@@ -66,7 +71,7 @@ export function ComboboxTecnologias({ tecnologias = [], onChange, defaultValues 
           )}
         </ComboboxValue>
       </ComboboxChips>
-      <ComboboxContent anchor={anchor}>
+      <ComboboxContent anchor={anchor} container={container}>
         <ComboboxEmpty>No se encontraron tecnologías.</ComboboxEmpty>
         <ComboboxList>
           {(item) => (

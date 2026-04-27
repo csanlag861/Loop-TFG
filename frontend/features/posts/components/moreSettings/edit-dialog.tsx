@@ -10,16 +10,18 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Pencil } from "lucide-react";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { ComboboxTecnologias } from "@/components/reusables/combobox/combobox-tech";
 import PostPreview from "./postPreview";
 import type { PostEditable } from "@/types/post-types";
+import { useTecnologias } from "../../hooks/useTecnologias";
+import { useMemo } from "react";
 
 const MAX_CHARS = 280;
 
 type EditDialogProps = {
   post: PostEditable;
-  tecnologiasDisponibles: { id: number; nombre: string }[];
+  tecnologiasDisponibles?: { id: number; nombre: string }[];
   formAction: (formData: FormData) => void;
   open: boolean;
   onOpenChange: (open: boolean) => void;
@@ -32,11 +34,33 @@ const EditDialog = ({
   open,
   onOpenChange,
 }: EditDialogProps) => {
+  const { data: tecnologiasFetched = [] } = useTecnologias();
+  
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const tecnologias = useMemo(() => 
+    tecnologiasDisponibles ?? tecnologiasFetched, 
+    [tecnologiasDisponibles, tecnologiasFetched]
+  );
+
   const [contenido, setContenido] = useState(post.contenido);
   const [tecnologiaIds, setTecnologiaIds] = useState<number[]>(
     post.tecnologias.map((t) => t.id)
   );
   const formRef = useRef<HTMLFormElement>(null);
+  const lastOpenedPostId = useRef<number | null>(null);
+
+  // Sincronizar estado solo cuando el modal se abre para un post específico
+  useEffect(() => {
+    if (open && lastOpenedPostId.current !== post.id) {
+      setContenido(post.contenido);
+      setTecnologiaIds(post.tecnologias.map((t) => t.id));
+      lastOpenedPostId.current = post.id;
+    }
+    if (!open) {
+      lastOpenedPostId.current = null;
+    }
+  }, [open, post]);
 
   const charsRestantes = MAX_CHARS - contenido.length;
   const isOverLimit = charsRestantes < 0;
@@ -48,7 +72,8 @@ const EditDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-lg gap-0 p-0 overflow-hidden">
+      <DialogContent className="max-w-lg gap-0 p-0 overflow-visible">
+        <div ref={containerRef} />
         
         <DialogHeader className="px-5 py-4 border-b border-border">
           <DialogTitle className="flex items-center gap-2 text-sm font-medium">
@@ -107,9 +132,11 @@ const EditDialog = ({
               <div className="flex flex-col gap-2">
                 <Label className="text-sm">Tecnologías</Label>
                 <ComboboxTecnologias
-                  tecnologias={tecnologiasDisponibles}
+                  key={post.id + open}
+                  tecnologias={tecnologias}
                   defaultValues={post.tecnologias.map((t) => t.nombre)}
                   onChange={setTecnologiaIds}
+                  container={containerRef}
                 />
               </div>
             </div>
