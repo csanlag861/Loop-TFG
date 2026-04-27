@@ -10,6 +10,7 @@ const prefixCarpetas = "carpeta";
 const prefixGuardados = "guardados";
 const prefixAdmin = "admin/";
 const prefixTecnologiaAdmin = "tecnologia";
+const prefixLike = "like/";
 
 type Param = {
   param: string;
@@ -30,6 +31,8 @@ export const getProfile = ({ param }: { param: number }) =>
 export const updateProfile = () => `${API_URL}${prefix}${prefixUser}profile`;
 
 export const getTecnologias = () => `${API_URL}${prefix}${prefixTecnologia}`;
+export const getTecnologiasCliente = () =>
+  `${API_BASE_URL}${prefix}${prefixTecnologia}`;
 export const createTecnologia = () =>
   `${API_URL}${prefix}${prefixTecnologiaAdmin}`;
 
@@ -61,3 +64,11 @@ export const deleteAdminUsuario = ({ param }: { param: number }) =>
   `${API_URL}${prefix}${prefixAdmin}usuarios/${param}`;
 export const restaurarAdminUsuario = ({ param }: { param: number }) =>
   `${API_URL}${prefix}${prefixAdmin}usuarios/${param}/restaurar`;
+export const logInUrl = () => `${API_URL}${prefix}auth/login`;
+export const registerUrl = () => `${API_URL}${prefix}auth/register`;
+export const refreshUrl = () => `${API_URL}${prefix}auth/refresh`;
+
+export const likePost = ({ param }: { param: number }) =>
+  `${API_URL}${prefix}${prefixLike}${param}`;
+export const unlikePost = ({ param }: { param: number }) =>
+  `${API_URL}${prefix}${prefixLike}${param}`;

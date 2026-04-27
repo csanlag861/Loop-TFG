@@ -1,19 +1,27 @@
 import { UserEntity } from '@/modules/user/user.entity';
-import { Tecnologia, Usuario } from '@prisma/client';
+import { Tecnologia } from '@prisma/client';
+
+type PostWithExtras = {
+  id: number;
+  contenido: string;
+  createdAt: Date;
+  usuario_id: number;
+  usuario: {
+    id?: number;
+    username: string;
+    avatarURL: string | null;
+    nombre: string;
+  };
+  tecnologias: Tecnologia[];
+  postGuardados?: { id: number }[];
+  likes?: { id: number }[];
+  _count: {
+    likes: number;
+  };
+};
 
 export class PostMapper {
-  static toResponse(
-    post: {
-      id: number;
-      contenido: string;
-      createdAt: Date;
-      usuario_id: number;
-      usuario: Usuario;
-      tecnologias: Tecnologia[];
-      postGuardados: { id: number }[];
-    },
-    currentUser: UserEntity | null,
-  ) {
+  static toResponse(post: PostWithExtras, currentUser: UserEntity | null) {
     return {
       id: post.id,
       contenido: post.contenido,
@@ -21,8 +29,10 @@ export class PostMapper {
       usuario: post.usuario,
       tecnologias: post.tecnologias,
       isOwner: currentUser ? currentUser.isOwner(post.usuario_id) : false,
-      isGuardado: post.postGuardados.length > 0,
-      postGuardado_id: post.postGuardados[0]?.id ?? null,
+      isGuardado: !!post.postGuardados?.length,
+      postGuardado_id: post.postGuardados?.[0]?.id ?? null,
+      isLiked: !!post.likes?.length,
+      likesCount: post._count.likes,
     };
   }
 }

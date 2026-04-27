@@ -5,7 +5,6 @@ import { PrismaService } from '../prisma/prisma.service';
 import { ResponsePostDto } from '@/modules/post/dto/response-post.dto';
 import { ResponsePostlistDto } from './dto/response-postlist-dto';
 import { PostMapper } from './mapper/post.mapper';
-import { UserService } from '../user/user.service';
 import { UserEntity } from '../user/user.entity';
 import { UsuarioEstadoEnum } from '@prisma/client';
 
@@ -64,11 +63,31 @@ export class PostService {
         where,
         take: take + 1,
         include: {
-          usuario: true,
+          usuario: {
+            select: {
+              id: true,
+              username: true,
+              avatarURL: true,
+              nombre: true,
+            },
+          },
           tecnologias: true,
-          postGuardados: {
-            where: { usuario_id: user_id ?? 0 },
-            select: { id: true },
+          ...(user_id !== undefined && {
+            postGuardados: {
+              where: { usuario_id: user_id },
+              select: { id: true },
+            },
+          }),
+          ...(user_id !== undefined && {
+            likes: {
+              where: { usuario_id: user_id },
+              select: { id: true },
+            },
+          }),
+          _count: {
+            select: {
+              likes: true,
+            },
           },
         },
         orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],
@@ -96,6 +115,7 @@ export class PostService {
     return this.prisma.post.findUniqueOrThrow({
       where: { id },
       select: {
+        id: true,
         contenido: true,
         createdAt: true,
         usuario: {

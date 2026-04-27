@@ -1,4 +1,5 @@
 export class ResponsePostDto {
+  id: number;
   contenido: string;
   createdAt: Date;
   isOwner?: boolean;
@@ -11,4 +12,8 @@ export class ResponsePostDto {
     id: number;
     nombre: string;
   }[];
+  isGuardado?: boolean;
+  postGuardado_id?: number | null;
+  isLiked?: boolean;
+  likesCount?: number;
 }

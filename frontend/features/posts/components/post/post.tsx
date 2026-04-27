@@ -8,6 +8,7 @@ import MoreSettings from "../moreSettings/moreSettings";
 import Link from "next/link";
 import { profilePath } from "@/utils/paths";
 import SavePostDropdown from "../guardarPost/guardarPost";
+import { LikeButton } from "../likeButton/likeButton";
 
 const Post = ({ post }) => {
   return (
@@ -56,7 +57,11 @@ const Post = ({ post }) => {
       <p>{post.contenido}</p>
       <div className={stylePost.acciones}>
         <MessageCircle size={16} />
-        <Heart size={16} />
+        <LikeButton
+          post_id={post.id}
+          initialLiked={post.isLiked}
+          initialCount={post.likesCount}
+        />
         <SavePostDropdown isGuardado={post.isGuardado} post_id={post.id} />
       </div>
     </div>

@@ -2,7 +2,12 @@
 import { GetCookies } from "@/lib/get-token";
 import { getAllPosts } from "@/utils/api";
 
-export async function getPosts(cursor?: number, search: string = "", username: string = "", tech: string = "") {
+export async function getPosts(
+  cursor?: number,
+  search: string = "",
+  username: string = "",
+  tech: string = "",
+) {
   const token = await GetCookies();
 
   const params = new URLSearchParams();
@@ -14,7 +19,7 @@ export async function getPosts(cursor?: number, search: string = "", username: s
 
   const url = queryString ? `${getAllPosts()}?${queryString}` : getAllPosts();
 
-  console.log(url)
+  console.log(url);
 
   try {
     await new Promise((r) => setTimeout(r, 2000));
@@ -23,6 +28,7 @@ export async function getPosts(cursor?: number, search: string = "", username: s
       headers: {
         Authorization: `Bearer ${token}`,
       },
+      cache: "no-store",
     });
 
     if (!res.ok) {
@@ -32,5 +38,6 @@ export async function getPosts(cursor?: number, search: string = "", username: s
     return res.json();
   } catch (error) {
     console.error("Salto en el try-catch del getPosts", error);
+    throw error;
   }
 }
