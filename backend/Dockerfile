@@ -17,7 +17,8 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install --omit=dev
 
-COPY --from=build /app .
+COPY --from=build /app/dist ./dist
+COPY --from=build /app/prisma ./prisma
 
 COPY entrypoint.sh ./
 RUN chmod +x entrypoint.sh

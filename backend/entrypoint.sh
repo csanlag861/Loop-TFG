@@ -1,7 +1,16 @@
 #!/bin/sh
 
-echo "Running Prisma migrations..."
-npx prisma migrate deploy
+echo "⏳ Waiting for database..."
 
-echo "Starting app..."
+until npx prisma migrate deploy; do
+  echo "❌ Migration failed, retrying in 3s..."
+  sleep 3
+done
+
+echo "✅ Migrations applied"
+
+echo "🌱 Running seed..."
+npx prisma db seed || echo "⚠️ Seed skipped"
+
+echo "🚀 Starting app..."
 node dist/main
