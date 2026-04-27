@@ -8,6 +8,7 @@ import { GuardadosModule } from './modules/guardados/guardados.module';
 import { TecnologiaModule } from './modules/tecnologia/tecnologia.module';
 import { UsuariosModule } from './modules/admin/usuarios/usuarios.module';
 import { LikeModule } from './modules/like/like.module';
+import { SupabaseService } from './modules/supabase/supabase.service';
 
 @Module({
   imports: [
@@ -22,6 +23,6 @@ import { LikeModule } from './modules/like/like.module';
     LikeModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [SupabaseService],
 })
 export class AppModule {}

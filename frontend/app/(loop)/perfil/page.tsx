@@ -7,7 +7,7 @@ export default async function MyPerfil(){
     const cookies = await GetCookies();
 
     if (!cookies) {
-        redirect("/login");
+        redirect("/");
     }else{
         const data = await fetcher(getUserData());
         redirect(`/perfil/${data.id}`);

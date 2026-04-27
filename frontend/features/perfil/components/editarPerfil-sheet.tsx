@@ -10,7 +10,7 @@ import {
 import Input from "@/components/reusables/input/Input";
 import Button from "@/components/reusables/button/Button";
 import Image from "next/image";
-import { useActionState, useEffect } from "react";
+import { useActionState, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { updateProfileAction } from "../actions/updateProfile-action";
@@ -55,7 +55,10 @@ export const EditarPerfilSheet = ({
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent side="right" className="w-[400px] flex flex-col gap-6 p-4">
+      <SheetContent
+        side="right"
+        className="min-w-[450px] flex flex-col gap-6 p-8"
+      >
         <SheetHeader>
           <SheetTitle>Editar Perfil</SheetTitle>
           <SheetDescription>
@@ -63,9 +66,8 @@ export const EditarPerfilSheet = ({
           </SheetDescription>
         </SheetHeader>
 
-        <AvatarSection avatarURL={profileData.avatarURL} />
-
         <form action={formAction} className="flex flex-col gap-4">
+          <AvatarSection avatarURL={profileData.avatarURL} />
           <Input
             label="Nombre"
             placeholder={profileData.nombre}
@@ -107,18 +109,48 @@ type AvatarSectionProps = {
 };
 
 const AvatarSection = ({ avatarURL }: AvatarSectionProps) => {
+  const [image, setImage] = useState<string | undefined>(avatarURL);
+
+  const handleChange = (file: File) => {
+    const url = URL.createObjectURL(file);
+    setImage(url);
+  };
+
+  useEffect(() => {
+    return () => {
+      if (image) URL.revokeObjectURL(image);
+    };
+  }, [image]);
   return (
     <div className="flex items-center gap-4">
-      <div className="w-16 h-16 rounded-full overflow-hidden">
-        <Image
-          src={avatarURL ?? "/default-avatar.png"}
-          alt="Avatar del usuario"
-          width={64}
-          height={64}
-          className="object-cover w-full h-full"
-        />
-      </div>
-      <Button text="Publicar" />
+      <label htmlFor="avatar" className="cursor-pointer">
+        <div className="w-16 h-16 rounded-full overflow-hidden">
+          <Image
+            src={image || avatarURL || "/default-avatar.png"}
+            alt="Avatar del usuario"
+            width={64}
+            height={64}
+            className="object-cover w-full h-full"
+          />
+        </div>
+      </label>
+
+      <input
+        id="avatar"
+        name="avatar"
+        type="file"
+        accept="image/*"
+        hidden
+        onChange={(e) => {
+          if (e.target.files?.[0]) {
+            handleChange(e.target.files[0]);
+          }
+        }}
+      />
+
+      <span className="text-sm text-(--gris-06)">
+        Haz clic en la imagen para cambiarla
+      </span>
     </div>
   );
 };

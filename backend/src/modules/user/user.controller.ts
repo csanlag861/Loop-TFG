@@ -1,9 +1,21 @@
-import { Body, Controller, Get, Param, Patch, UseGuards } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Get,
+  Param,
+  Patch,
+  UploadedFile,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
 import { UserService } from './user.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { User } from '../auth/decorators/user.decorator';
 import { JwtAuthOptionalGuard } from '../auth/guards/jwt-auth-optional.guard';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { memoryStorage } from 'multer';
 
 @Controller('user')
 export class UserController {
@@ -26,7 +38,31 @@ export class UserController {
 
   @UseGuards(JwtAuthGuard)
   @Patch('profile')
-  updateProfile(@User('userId') user_id: number, @Body() dto: UpdateUserDto) {
-    return this.userService.updateUser(user_id, dto);
+  @UseInterceptors(
+    FileInterceptor('avatar', {
+      storage: memoryStorage(),
+      limits: {
+        fileSize: 1024 * 1024 * 2,
+      },
+      fileFilter: (req, file, cb) => {
+        if (file.mimetype.startsWith('image/')) {
+          cb(null, true);
+        } else {
+          cb(
+            new BadRequestException('Solo se permiten archivos de imagen'),
+            false,
+          );
+        }
+      },
+    }),
+  )
+  updateProfile(
+    @User('userId') user_id: number,
+    @Body() dto: UpdateUserDto,
+    @UploadedFile() file?: Express.Multer.File,
+  ) {
+    console.log('[Backend Controller] Received DTO:', dto);
+    console.log('[Backend Controller] Received File:', file ? `${file.originalname} (${file.size} bytes)` : 'No file');
+    return this.userService.updateUser(user_id, dto, file);
   }
 }

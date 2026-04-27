@@ -15,6 +15,7 @@ import { RolNombreEnum } from '@prisma/client';
 import { PayloadEntity } from '../auth/payload';
 import { AuthService } from '../auth/auth.service';
 import { DEFAULT_AVATAR_URL } from '@/common/constants/default-avatar';
+import { SupabaseService } from '../supabase/supabase.service';
 
 @Injectable()
 export class UserService {
@@ -22,6 +23,7 @@ export class UserService {
     private readonly prisma: PrismaService,
     @Inject(forwardRef(() => AuthService))
     private readonly authService: AuthService,
+    private readonly supabaseService: SupabaseService,
   ) {}
 
   /**
@@ -215,7 +217,11 @@ export class UserService {
     };
   }
 
-  async updateUser(user_id: number, dto: UpdateUserDto) {
+  async updateUser(
+    user_id: number,
+    dto: UpdateUserDto,
+    file?: Express.Multer.File,
+  ) {
     const user = await this.prisma.usuario.findUnique({
       where: { id: user_id },
     });
@@ -231,8 +237,24 @@ export class UserService {
       }
     }
 
+    let avatarURL = user.avatarURL;
+    if (file) {
+      console.log('[Backend Service] File detected, starting upload to Supabase...');
+      const upload = await this.supabaseService.uploadAvatar(file, user_id);
+      console.log('[Backend Service] Upload successful, new URL:', upload.publicURL);
+      avatarURL = upload.publicURL;
+
+      if (user.avatarURL && !user.avatarURL.includes(DEFAULT_AVATAR_URL)) {
+        const oldAvatar = user.avatarURL.split('/').pop();
+        if (oldAvatar) {
+          await this.supabaseService.deleteAvatar(oldAvatar);
+        }
+      }
+    }
+
     const updatedData = {
       ...dto,
+      avatarURL,
       ...(dto.password && { password: await this.hashPassword(dto.password) }),
     };
 

@@ -17,28 +17,32 @@ export const updateProfileAction = async (
 ): Promise<ActionState> => {
   const token = await GetCookies();
 
-  const body = {
-    nombre: formData.get("nombre") as string,
-    username: formData.get("username") as string,
-    biografia: formData.get("biografia") as string,
-    password: formData.get("password") as string,
-    avatarURL: formData.get("avatarURL") as string,
-  };
+  const newFormData = new FormData();
+  const fields = ["nombre", "username", "biografia", "password"];
+  
+  fields.forEach((field) => {
+    const value = formData.get(field);
+    if (value) {
+      console.log(`[Frontend Action] Appending field: ${field} = ${value}`);
+      newFormData.append(field, value as string);
+    }
+  });
 
-  // Eliminamos los campos vacíos para no mandar strings vacíos al backend
-  const cleanBody = Object.fromEntries(
-    Object.entries(body).filter(([_, v]) => v !== "" && v !== null),
-  );
+  const file = formData.get("avatar") as File;
+  console.log(`[Frontend Action] File retrieved from formData:`, file ? `${file.name} (${file.size} bytes)` : 'No file');
+  
+  if(file && file.size > 0){
+    console.log(`[Frontend Action] Appending file to newFormData as 'avatar'`);
+    newFormData.append("avatar", file);
+  }
 
   try {
     const res = await fetch(`${updateProfile()}`, {
       method: "PATCH",
       headers: {
-        "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      credentials: "include",
-      body: JSON.stringify(cleanBody),
+      body: newFormData,
     });
 
     if (!res.ok) {
@@ -59,7 +63,7 @@ export const updateProfileAction = async (
     };
   } catch (error) {
     const message =
-      error instanceof Error ? error.message : "Something went wrong";
+      error instanceof Error ? error.message : "Error al actualizar el perfil";
     return { status: "ERROR", message, timestamp: Date.now() };
   }
 };
