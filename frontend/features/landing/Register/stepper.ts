@@ -2,6 +2,7 @@ import { defineStepper } from "@stepperize/react";
 import { z } from "zod";
 
 const UsernameSchema = z.object({
+  nombre: z.string().min(1, "El nombre es obligatorio"),
   username: z.string().min(3, "Mínimo 3 caracteres"),
 });
 

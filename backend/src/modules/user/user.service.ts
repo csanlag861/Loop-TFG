@@ -1,15 +1,28 @@
-import { Injectable, HttpException, HttpStatus, Body } from '@nestjs/common';
+import {
+  Injectable,
+  HttpException,
+  HttpStatus,
+  Body,
+  Inject,
+  forwardRef,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import * as bcrypt from 'bcrypt';
-import { ResponseUserDto } from './dto/response-user.dto';
 import { SlugRol } from '@/common/enums/slug-rol.enum';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { RolNombreEnum } from '@prisma/client';
+import { PayloadEntity } from '../auth/payload';
+import { AuthService } from '../auth/auth.service';
+import { DEFAULT_AVATAR_URL } from '@/common/constants/default-avatar';
 
 @Injectable()
 export class UserService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    @Inject(forwardRef(() => AuthService))
+    private readonly authService: AuthService,
+  ) {}
 
   /**
    * Crea un nuevo usuario en la base de datos.
@@ -21,9 +34,38 @@ export class UserService {
     try {
       const userExists = await this.findUserByUsername(user.username);
       if (userExists) {
-        throw new HttpException('Conflict', HttpStatus.CONFLICT);
+        throw new HttpException(
+          'El username ya está en uso.',
+          HttpStatus.CONFLICT,
+        );
       }
     } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
+      if (error instanceof Error) {
+        console.error('Error finding user: ', error);
+        throw new HttpException(
+          'Internal Server Error',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      }
+    }
+
+    try {
+      const emailExists = await this.findUserByEmail(user.email);
+      if (emailExists) {
+        throw new HttpException(
+          'El email ya está en uso.',
+          HttpStatus.CONFLICT,
+        );
+      }
+    } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
       if (error instanceof Error) {
         console.error('Error finding user: ', error);
         throw new HttpException(
@@ -51,31 +93,46 @@ export class UserService {
           username: user.username,
           email: user.email,
           password: hashPassword,
-          biografia: user.biografia,
-          avatarURL: user.avatarURL,
+          avatarURL: user.avatarURL || DEFAULT_AVATAR_URL,
           rol_id: rolID.id,
         },
+        include: { rol: true },
       });
 
-      const resUser: ResponseUserDto = {
-        id: createUser.id,
-        nombre: createUser.nombre,
+      const payload: PayloadEntity = {
         username: createUser.username,
-        password: createUser.password,
-        email: createUser.email,
-        biografia: createUser.biografia ?? undefined,
-        avatarURL: createUser.avatarURL ?? undefined,
-        estado: createUser.estado,
-        rolId: createUser.rol_id,
+        id: createUser.id.toString(),
+        rol: createUser.rol.nombre,
       };
 
-      return resUser;
+      return this.authService.login(createUser as any);
     } catch (error) {
-      console.error('Error creating user: ', error);
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
+      console.error('Error al crear el usuario en la base de datos:', error);
       throw new HttpException(
-        'Internal Server Error',
+        'Ocurrió un error inesperado al crear tu cuenta. Por favor, inténtalo de nuevo más tarde.',
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
+    }
+  }
+
+  async findUserByEmail(email: string) {
+    try {
+      const user = await this.prisma.usuario.findFirst({
+        where: { email, deletedAt: null },
+      });
+      return user;
+    } catch (error) {
+      console.error('Error finding user by email on BBDD: ', error);
+      if (error instanceof Error) {
+        throw new HttpException(
+          'Internal Server Error',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      }
     }
   }
 

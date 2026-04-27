@@ -13,6 +13,7 @@ import Login from "@/features/auth/components/login/Login";
 import { useRouter } from "next/navigation";
 import { homePath } from "@/utils/paths";
 import RegisterStepper from "../Register/RegisterStepper";
+import Image from "next/image";
 
 const Form = () => {
   const router = useRouter();
@@ -87,7 +88,18 @@ const Form = () => {
           </button>
         </DialogTrigger>
 
-        <DialogContent className="w-md h-168 flex items-center justify-center">
+        <DialogContent className="w-md h-168 flex flex-col items-center justify-center">
+          <DialogTitle>
+            <div className="flex flex-col items-center gap-6 mb-6">
+              <Image
+                src="/favicon.ico"
+                alt="Logo Loop"
+                width={60}
+                height={60}
+              />
+              <h2 className="text-2xl font-bold">Únete a Loop</h2>
+            </div>
+          </DialogTitle>
           <RegisterStepper />
         </DialogContent>
       </Dialog>
@@ -104,8 +116,8 @@ const Form = () => {
           <DialogTrigger asChild>
             <button>Inicia Sesion</button>
           </DialogTrigger>
-          <DialogContent className="w-md h-168 flex items-center justify-center">
-            <DialogTitle />
+          <DialogContent className="w-md h-168 flex flex-col items-center justify-center">
+            <DialogTitle>Inicia Sesión</DialogTitle>
             <Login />
           </DialogContent>
         </Dialog>

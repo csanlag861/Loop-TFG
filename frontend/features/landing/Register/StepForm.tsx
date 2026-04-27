@@ -5,8 +5,13 @@ import { Resolver, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import InputField from "@/components/reusables/inputfield/inputField";
+import { RegisterAction } from "./actions/Register";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { homePath } from "@/utils/paths";
 
 type FormData = {
+  nombre: string;
   username: string;
   email: string;
   password: string;
@@ -14,6 +19,7 @@ type FormData = {
 
 const StepForm = () => {
   const stepper = useStepper();
+  const router = useRouter();
 
   const schema =
     "schema" in stepper.state.current.data
@@ -28,6 +34,7 @@ const StepForm = () => {
       : undefined,
     mode: "onChange",
     defaultValues: {
+      nombre: "",
       username: "",
       email: "",
       password: "",
@@ -43,29 +50,48 @@ const StepForm = () => {
   const onSubmit = async (data: FormData) => {
     setLoading(true);
 
-    await new Promise((res) => setTimeout(res, 800));
-
     if (!stepper.state.isLast) {
       stepper.navigation.next();
       setLoading(false);
       return;
     }
 
-    console.log("REGISTER FINAL:", data);
+    try {
+      const result = await RegisterAction({ status: "IDLE" }, data);
+      
+      if (result?.status === "SUCCESS") {
+        router.push(homePath());
+        return;
+      }
 
-    setLoading(false);
+      if (result?.status === "ERROR") {
+        toast.error(result.message);
+      }
+    } catch (error) {
+      toast.error("Error al conectar con el servidor");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
       {stepper.flow.switch({
         username: () => (
-          <InputField
-            label="Nombre de Usuario"
-            error={errors.username?.message}
-            register={register("username")}
-            placeholder="Nombre de usuario"
-          />
+          <>
+            <InputField
+              label="Nombre"
+              error={errors.nombre?.message}
+              register={register("nombre")}
+              placeholder="Tu nombre"
+            />
+            <InputField
+              label="Nombre de Usuario"
+              error={errors.username?.message}
+              register={register("username")}
+              placeholder="Nombre de usuario"
+            />
+          </>
         ),
         email: () => (
           <InputField
