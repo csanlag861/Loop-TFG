@@ -5,21 +5,24 @@ FROM node:20-alpine AS build
 
 WORKDIR /app
 
-# Copiar solo package files primero (para aprovechar caché)
+# Copiar package files
 COPY package*.json ./
 COPY prisma ./prisma/
 
-# Instalar dependencias (solo las necesarias para build)
-RUN npm ci --only=production && \
+# ❌ ANTES (solo production, no instala nest cli):
+# RUN npm ci --only=production
+
+# ✅ AHORA (instala TODO, incluyendo devDependencies):
+RUN npm ci && \
     npm cache clean --force
 
-# Copiar el resto del código
+# Copiar código fuente
 COPY . .
 
 # Generar Prisma Client
 RUN npx prisma generate
 
-# Build del proyecto
+# Build del proyecto (ahora SÍ encuentra nest)
 RUN npm run build
 
 # ============================================
@@ -29,17 +32,20 @@ FROM node:20-alpine AS production
 
 WORKDIR /app
 
-# Instalar solo bash (si lo necesitas) y limpiar caché
+# Instalar bash si lo necesitas
 RUN apk add --no-cache bash && \
     rm -rf /var/cache/apk/*
 
-# Copiar dependencias ya instaladas desde build
-COPY --from=build /app/node_modules ./node_modules
+# Copiar SOLO node_modules de producción
+# (se instalarán de nuevo solo las deps de producción)
+COPY package*.json ./
+RUN npm ci --only=production && \
+    npm cache clean --force
 
-# Copiar archivos compilados
+# Copiar archivos compilados desde build
 COPY --from=build /app/dist ./dist
 
-# Copiar Prisma schema y client generado
+# Copiar Prisma
 COPY --from=build /app/prisma ./prisma
 
 # Copiar entrypoint
@@ -49,5 +55,9 @@ RUN chmod +x entrypoint.sh
 # Exponer puerto
 EXPOSE 3000
 
-# Usar entrypoint
+# Healthcheck (opcional pero recomendado)
+HEALTHCHECK --interval=30s --timeout=3s --start-period=40s \
+  CMD node -e "require('http').get('http://localhost:3000/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"
+
+# Entrypoint
 ENTRYPOINT ["./entrypoint.sh"]
