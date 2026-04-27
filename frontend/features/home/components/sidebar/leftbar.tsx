@@ -57,6 +57,7 @@ const Sidebar = ({
         <SettingsSidebar
           onToggle={() => handleToggle(!isOpen)}
           isOpen={isOpen}
+          isAuthenticated={isAuthenticated}
         />
         {isAdmin && (
           <SidebarItem

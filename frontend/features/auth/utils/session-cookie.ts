@@ -1,21 +1,39 @@
 import { cookies } from "next/headers";
 
 export const SESSION_COOKIE_NAME = "access_token";
+export const REFRESH_COOKIE_NAME = "refresh_token";
 
-export const setSessionCookie = async (
-  sessionToken: string,
+export const setAuthCookies = async (
+  accessToken: string,
+  refreshToken: string,
 ) => {
-  const cookie = {
-    name: SESSION_COOKIE_NAME,
-    value: sessionToken,
-    attributes: {
-      httpOnly: true,
-      sameSite: "lax" as const,
-      secure: process.env.NODE_ENV === "production",
-      path: "/",
-      maxAge: 60*60*8,
-    },
-  };
+  const cookieStore = await cookies();
 
-  (await cookies()).set(cookie.name, cookie.value, cookie.attributes);
+  // Access Token (15 minutos)
+  cookieStore.set({
+    name: SESSION_COOKIE_NAME,
+    value: accessToken,
+    httpOnly: true,
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
+    path: "/",
+    maxAge: 60 * 15, 
+  });
+
+  // Refresh Token (7 días)
+  cookieStore.set({
+    name: REFRESH_COOKIE_NAME,
+    value: refreshToken,
+    httpOnly: true,
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
+    path: "/",
+    maxAge: 60 * 60 * 24 * 7,
+  });
+};
+
+export const clearAuthCookies = async () => {
+  const cookieStore = await cookies();
+  cookieStore.delete(SESSION_COOKIE_NAME);
+  cookieStore.delete(REFRESH_COOKIE_NAME);
 };

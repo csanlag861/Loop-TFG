@@ -2,8 +2,9 @@
 import { z } from "zod";
 import { ActionState } from "../types/ActionState";
 import { redirect } from "next/navigation";
-import { setSessionCookie } from "../utils/session-cookie";
+import { setAuthCookies } from "../utils/session-cookie";
 import { homePath } from "@/utils/paths";
+import { logInUrl } from "@/utils/api";
 
 const logInSchema = z.object({
   username: z
@@ -25,7 +26,7 @@ const LogIn = async (
       Object.fromEntries(formData),
     );
 
-    const res = await fetch("http://backend:3000/api/auth/login", {
+    const res = await fetch(logInUrl(), {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -40,8 +41,8 @@ const LogIn = async (
         message: data.message || "Error al iniciar sesión",
       };
     }
-    const data = await res.text();
-    await setSessionCookie(data);
+    const data = await res.json();
+    await setAuthCookies(data.accessToken, data.refreshToken);
   } catch (error: any) {
     if (error?.name === "ZodError") {
       return {

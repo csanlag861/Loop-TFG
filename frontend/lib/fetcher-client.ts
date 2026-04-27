@@ -1,16 +1,29 @@
 export async function fetcherClient(url: string, options?: RequestInit) {
-  const res = await fetch(url, {
+  const defaultOptions = {
     ...options,
-    credentials: "include",
+    credentials: "include" as RequestCredentials,
     headers: {
       "Content-Type": "application/json",
       ...options?.headers,
     },
-  });
+  };
+
+  let res = await fetch(url, defaultOptions);
 
   if (res.status === 401) {
-    window.location.href = "/login";
-    return;
+    try {
+      const refreshRes = await fetch("/api/auth/refresh", { method: "POST" });
+      if (refreshRes.ok) {
+        // Retry the original request
+        res = await fetch(url, defaultOptions);
+      } else {
+        window.location.href = "/";
+        return;
+      }
+    } catch {
+      window.location.href = "/";
+      return;
+    }
   }
 
   if (!res.ok) {

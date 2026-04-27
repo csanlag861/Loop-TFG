@@ -15,6 +15,8 @@ import { UserService } from '../user/user.service';
 import { CreateUserDto } from '../user/dto/create-user.dto';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
+import { RefreshTokenDto } from './dto/refresh-token.dto';
+
 const logger = new Logger('App - Auth');
 
 @Controller('auth')
@@ -35,5 +37,10 @@ export class AuthController {
     logger.log(`Usuario ${req.user.username} ha iniciado sesión.`);
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
     return this.authService.login(req.user);
+  }
+
+  @Post('/refresh')
+  refresh(@Body() refreshTokenDto: RefreshTokenDto) {
+    return this.authService.refreshTokens(refreshTokenDto.refreshToken);
   }
 }

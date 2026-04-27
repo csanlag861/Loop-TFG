@@ -1,4 +1,11 @@
-import { Injectable, Body, HttpException, HttpStatus } from '@nestjs/common';
+import {
+  Injectable,
+  Body,
+  HttpException,
+  HttpStatus,
+  Inject,
+  forwardRef,
+} from '@nestjs/common';
 import { UserService } from '@/modules/user/user.service';
 import * as bcrypt from 'bcrypt';
 import { LoginDto } from './dto/login.dto';
@@ -9,6 +16,7 @@ import { PayloadEntity } from './payload';
 @Injectable()
 export class AuthService {
   constructor(
+    @Inject(forwardRef(() => UserService))
     private userService: UserService,
     private jwtService: JwtService,
   ) {}
@@ -48,15 +56,43 @@ export class AuthService {
    * @returns Objeto con el token JWT.
    */
   login(user: UserEntity) {
-    console.log("USER que llega ", user);
-    
     const payload: PayloadEntity = {
       username: user.username,
       id: user.id.toString(),
       rol: user.rol.nombre,
     };
-    const token = this.jwtService.sign(payload);
 
-    return token;
+    const accessToken = this.signAccessToken(payload);
+    const refreshToken = this.signRefreshToken(payload);
+    
+    return { accessToken, refreshToken };
+  }
+
+  signAccessToken(payload: PayloadEntity): string {
+    return this.jwtService.sign(payload, { expiresIn: '15m' });
+  }
+
+  signRefreshToken(payload: PayloadEntity): string {
+    return this.jwtService.sign(payload, { expiresIn: '7d' });
+  }
+
+  async refreshTokens(refreshToken: string) {
+    try {
+      const payload = this.jwtService.verify<PayloadEntity>(refreshToken);
+      const { iat, exp, ...newPayload } = payload as any;
+      
+      const newAccessToken = this.signAccessToken(newPayload as PayloadEntity);
+      const newRefreshToken = this.signRefreshToken(newPayload as PayloadEntity);
+
+      return {
+        accessToken: newAccessToken,
+        refreshToken: newRefreshToken,
+      };
+    } catch (error) {
+      throw new HttpException(
+        'Refresh token inválido o expirado',
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
   }
 }
