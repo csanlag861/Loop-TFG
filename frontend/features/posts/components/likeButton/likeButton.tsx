@@ -7,7 +7,7 @@ import { unlikePostAction } from "@/features/posts/actions/unlike-action";
 import { Heart, HeartFill } from "@geist-ui/icons";
 import { toast } from "sonner";
 
-export function LikeButton({
+export const LikeButton = ({
   post_id,
   initialLiked,
   initialCount,
@@ -15,7 +15,7 @@ export function LikeButton({
   readonly post_id: number;
   readonly initialLiked: boolean;
   readonly initialCount: number;
-}) {
+}) => {
   const [liked, setLiked] = useState<boolean>(initialLiked);
   const [count, setCount] = useState<number>(initialCount ?? 0);
 
@@ -91,4 +91,4 @@ export function LikeButton({
       {count}
     </button>
   );
-}
+};

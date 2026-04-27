@@ -2,15 +2,16 @@
 import stylePost from "./post.module.css";
 import { formatDistanceToNow } from "date-fns";
 import { es } from "date-fns/locale";
-import { Bookmark, Heart, MessageCircle } from "@geist-ui/icons";
+import { MessageCircle } from "@geist-ui/icons";
 import Image from "next/image";
 import MoreSettings from "../moreSettings/moreSettings";
 import Link from "next/link";
 import { profilePath } from "@/utils/paths";
 import SavePostDropdown from "../guardarPost/guardarPost";
-import { LikeButton } from "../likeButton/likeButton";
+import { PostEditable, TecnologiaPost } from "@/types/post-types";
+import { LikeButton } from "@/features/posts/components/likeButton/likeButton";
 
-const Post = ({ post }) => {
+const Post = ({ post }: { post: PostEditable }) => {
   return (
     <div className={stylePost.post}>
       <div className={stylePost.user}>
@@ -40,7 +41,7 @@ const Post = ({ post }) => {
         {post.isOwner && <MoreSettings post={post} />}
       </div>
       <div className={stylePost.badges}>
-        {post.tecnologias.map((tech) => (
+        {post.tecnologias.map((tech: TecnologiaPost) => (
           <div
             key={tech.id}
             style={{
@@ -59,10 +60,10 @@ const Post = ({ post }) => {
         <MessageCircle size={16} />
         <LikeButton
           post_id={post.id}
-          initialLiked={post.isLiked}
-          initialCount={post.likesCount}
+          initialLiked={post.isLiked ?? false}
+          initialCount={post.likesCount ?? 0}
         />
-        <SavePostDropdown isGuardado={post.isGuardado} post_id={post.id} />
+        <SavePostDropdown isGuardado={post.isGuardado ?? false} post_id={post.id} />
       </div>
     </div>
   );

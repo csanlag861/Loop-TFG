@@ -10,7 +10,7 @@ type ActionState = {
   fieldErrors?: Record<string, string[] | undefined>;
   timestamp: number;
 };
-export const deletePostAction = async (id: string): Promise<ActionState> => {
+export const deletePostAction = async (id: number): Promise<ActionState> => {
   const token = await GetCookies();
   console.log(`${deletePost({ param: id })}`);
   

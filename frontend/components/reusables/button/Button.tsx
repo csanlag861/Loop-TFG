@@ -1,11 +1,10 @@
+import { ButtonHTMLAttributes } from "react";
 import stylesButton from "./button.module.css";
 
-type ButtonProps = {
+interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   text: string;
-  type?: "button" | "submit" | "reset";
-  disabled?: boolean;
-  className?: string;
 }
+
 const Button = ({ text, type = "button", className, ...otherProps}: ButtonProps) => {
   return (
     <button type={type} className={`${stylesButton.loop} ${className}`} {...otherProps}>

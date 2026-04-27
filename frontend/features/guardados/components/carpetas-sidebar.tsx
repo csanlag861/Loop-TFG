@@ -17,6 +17,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
+import { Carpeta } from "./guardados-wrapper";
 
 const CarpetasSidebar = () => {
   const [nombre, setNombre] = useState("");
@@ -32,7 +33,7 @@ const CarpetasSidebar = () => {
   const carpetaActivaId =
     Number(searchParams.get("carpeta")) || carpetas?.[0]?.id;
   const carpetaActiva =
-    carpetas?.find((c) => c.id === carpetaActivaId) ?? carpetas?.[0];
+    carpetas?.find((c: Carpeta) => c.id === carpetaActivaId) ?? carpetas?.[0];
 
   const { mutate: crear, isPending: creando } = useMutation({
     mutationFn: () =>

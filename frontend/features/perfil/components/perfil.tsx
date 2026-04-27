@@ -4,6 +4,8 @@ import Image from "next/image";
 import { Separator } from "@/components/ui/separator";
 import Post from "@/features/posts/components/post/post";
 import { EditarPerfilButton } from "./editarPerfil-button";
+import { PostEditable } from "@/types/post-types";
+
 
 export const Perfil = async ({ id }: { id: string }) => {
   const data = await fetcher(getProfile({ param: parseInt(id) }));
@@ -39,7 +41,7 @@ export const Perfil = async ({ id }: { id: string }) => {
       <section>
         <div className="flex flex-col items-center justify-center gap-2 text-01 text-[14px]">
           <ul className="flex flex-col items-center justify-center gap-8 mt-8">
-            {dataPosts.map((post) => (
+            {dataPosts.map((post: PostEditable) => (
               <Post key={post.id} post={post} />
             ))}
           </ul>

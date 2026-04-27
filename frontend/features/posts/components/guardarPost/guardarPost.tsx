@@ -1,5 +1,5 @@
 "use client";
-import { Bookmark, BookmarkFill } from "@geist-ui/icons";
+import { Bookmark } from "@geist-ui/icons";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,6 +12,8 @@ import { useGetCarpetas } from "@/features/posts/hooks/getCarpetas";
 import { useSavePost } from "@/features/posts/hooks/guardarPost";
 import { toast } from "sonner";
 import { useState } from "react";
+import { Carpeta } from "@/features/guardados/components/guardados-wrapper";
+
 
 const SavePostDropdown = ({
   post_id,
@@ -78,7 +80,7 @@ const SavePostDropdown = ({
             Cargando carpetas...
           </DropdownMenuItem>
         )}
-        {carpetas?.map((carpeta) => (
+        {carpetas?.map((carpeta: Carpeta) => (
           <DropdownMenuItem
             key={carpeta.id}
             onClick={() => handleSave(carpeta.id)}

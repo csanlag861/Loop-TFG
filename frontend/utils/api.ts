@@ -12,15 +12,11 @@ const prefixAdmin = "admin/";
 const prefixTecnologiaAdmin = "tecnologia";
 const prefixLike = "like/";
 
-type Param = {
-  param: string;
-};
-
 export const getAllPosts = () => `${API_URL}${prefix}${prefixPosts}getAll`;
 export const createPost = () => `${API_URL}${prefix}${prefixPosts}create`;
 export const updatePost = (param: string) =>
   `${API_URL}${prefix}${prefixPosts}update/${param}`;
-export const deletePost = ({ param }: { param: Param }) =>
+export const deletePost = ({ param }: { param: number | string }) =>
   `${API_URL}${prefix}${prefixPosts}delete/${param}`;
 export const getPostsFromUser = ({ param }: { param: number }) =>
   `${API_URL}${prefix}${prefixPosts}${param}/posts`;

@@ -17,4 +17,8 @@ export interface PostEditable {
     username: string;
     avatarURL: string;
   };
+  isOwner?: boolean;
+  isLiked?: boolean;
+  likesCount?: number;
+  isGuardado?: boolean;
 }

@@ -132,7 +132,7 @@ const EditDialog = ({
               <div className="flex flex-col gap-2">
                 <Label className="text-sm">Tecnologías</Label>
                 <ComboboxTecnologias
-                  key={post.id + open}
+                  key={`${post.id}-${open}`}
                   tecnologias={tecnologias}
                   defaultValues={post.tecnologias.map((t) => t.nombre)}
                   onChange={setTecnologiaIds}

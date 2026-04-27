@@ -3,7 +3,7 @@ import { formatDistanceToNow } from "date-fns";
 import { es } from "date-fns/locale";
 import { MessageCircle, Heart, Bookmark } from "lucide-react";
 import Image from "next/image";
-import type { PostEditable } from "@/types/post-types";
+import type { PostEditable, TecnologiaPost } from "@/types/post-types";
 
 const PostPreview = ({ post }: { post: PostEditable }) => {
   return (
@@ -31,7 +31,7 @@ const PostPreview = ({ post }: { post: PostEditable }) => {
 
       {post.tecnologias.length > 0 && (
         <div className="flex flex-wrap gap-1">
-          {post.tecnologias.map((tech) => (
+          {post.tecnologias.map((tech: TecnologiaPost) => (
             <span
               key={tech.id}
               style={{

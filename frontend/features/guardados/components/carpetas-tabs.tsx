@@ -4,15 +4,22 @@ import { fetcherClient } from "@/lib/fetcher-client";
 import { obtenerCarpeta } from "@/utils/api";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import Post from "@/features/posts/components/post/post";
+import { PostEditable } from "@/types/post-types";
 import { Carpeta } from "./guardados-wrapper";
 import { useRouter } from "next/navigation";
 import EmptyRightBar from "@/components/reusables/empty/empty";
+
+interface PostGuardado {
+  id: number;
+  post: PostEditable;
+}
 
 type Props = {
   carpetas: Carpeta[];
   carpetaActiva: Carpeta;
   setCarpetaActiva: (carpeta: Carpeta) => void;
 };
+
 
 const CarpetasTabs = ({ carpetas, carpetaActiva, setCarpetaActiva }: Props) => {
   const router = useRouter();
@@ -54,7 +61,7 @@ const CarpetasTabs = ({ carpetas, carpetaActiva, setCarpetaActiva }: Props) => {
             {!isLoading && carpetaConPosts?.postGuardados?.length === 0 && (
               <EmptyRightBar/>
             )}
-            {carpetaConPosts?.postGuardados?.map((pg) => (
+            {carpetaConPosts?.postGuardados?.map((pg: PostGuardado) => (
               <Post key={pg.id} post={pg.post} />
             ))}
           </div>

@@ -6,8 +6,9 @@ import { useEffect } from "react";
 import styleList from "../post-list-wrapper/post-list.module.css";
 import Post from "../post/post";
 import { useSearchParams } from "next/navigation";
+import { PostEditable } from "@/types/post-types";
 
-const PostList = ({ initialData }) => {
+const PostList = ({ initialData }: { initialData: any }) => {
   const searchParams = useSearchParams();
   const search = searchParams.get("search") ?? "";
   const username = searchParams.get("username") ?? "";
@@ -28,7 +29,7 @@ const PostList = ({ initialData }) => {
       gcTime: 0
     });
 
-  const posts = data?.pages.flatMap((page) => page.list) ?? [];
+  const posts = data?.pages.flatMap((page: any) => page.list) ?? [];
 
   const { ref, inView } = useInView();
 
@@ -40,7 +41,7 @@ const PostList = ({ initialData }) => {
 
   return (
     <ul className={`${styleList.posts} mt-8`}>
-      {posts.map((post) => (
+      {posts.map((post: PostEditable) => (
         <Post key={post.id} post={post} />
       ))}
 

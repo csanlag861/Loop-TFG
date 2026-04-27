@@ -17,8 +17,9 @@ import { ConfirmDialog } from "./confirm-dialog";
 import { EditDialog } from "./edit-dialog";
 import { EditPostAction } from "./action/editAction";
 import { useQueryClient } from "@tanstack/react-query";
+import { PostEditable } from "@/types/post-types";
 
-const MoreSettings = ({ post }) => {
+const MoreSettings = ({ post }: { post: PostEditable }) => {
   const queryClient = useQueryClient();
   const router = useRouter();
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
