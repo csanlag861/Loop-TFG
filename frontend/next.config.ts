@@ -1,5 +1,7 @@
 import type { NextConfig } from "next";
 
+const API_URL = process.env.API_URL || "http://looptfg-backend-o5hyfi:3000";
+
 const nextConfig: NextConfig = {
   /* config options here */
   images: {
@@ -15,7 +17,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/api/:path*",
-        destination: "http://backend:3000/api/:path*",
+        destination: `${API_URL}/api/:path*`,
       },
     ];
   },

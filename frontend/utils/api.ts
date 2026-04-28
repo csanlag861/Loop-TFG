@@ -1,5 +1,5 @@
 const isServer = typeof window === "undefined";
-const API_URL = process.env.API_URL || "http://backend:3000";
+const API_URL = process.env.API_URL || "http://looptfg-backend-o5hyfi:3000";
 
 // On the client, we use relative paths (e.g., /api/...)
 // On the server (SSR, Server Actions, Middleware), we use the full internal URL

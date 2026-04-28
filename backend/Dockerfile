@@ -55,9 +55,5 @@ RUN chmod +x entrypoint.sh
 # Exponer puerto
 EXPOSE 3000
 
-# Healthcheck (opcional pero recomendado)
-HEALTHCHECK --interval=30s --timeout=3s --start-period=40s \
-  CMD node -e "require('http').get('http://localhost:3000/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"
-
 # Entrypoint
 ENTRYPOINT ["./entrypoint.sh"]
