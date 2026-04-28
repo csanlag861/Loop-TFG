@@ -1,6 +1,7 @@
 #!/bin/sh
 
 echo "⏳ Waiting for database..."
+echo "DATABASE_URL=$DATABASE_URL"
 
 until npx prisma migrate deploy; do
   echo "❌ Migration failed, retrying in 3s..."
