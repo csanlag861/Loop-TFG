@@ -14,6 +14,7 @@ const prefixGuardados = "guardados";
 const prefixAdmin = "admin/";
 const prefixTecnologiaAdmin = "tecnologia";
 const prefixLike = "like/";
+const prefixComentarios = "comentarios/";
 
 export const getAllPosts = () => `${BASE_URL}${prefix}${prefixPosts}getAll`;
 export const createPost = () => `${BASE_URL}${prefix}${prefixPosts}create`;
@@ -73,3 +74,8 @@ export const likePost = ({ param }: { param: number }) =>
   `${BASE_URL}${prefix}${prefixLike}${param}`;
 export const unlikePost = ({ param }: { param: number }) =>
   `${BASE_URL}${prefix}${prefixLike}${param}`;
+
+export const createComentario = () =>
+  `${BASE_URL}${prefix}${prefixComentarios}`;
+export const deleteComentario = ({ param }: { param: number }) =>
+  `${BASE_URL}${prefix}${prefixComentarios}${param}`;

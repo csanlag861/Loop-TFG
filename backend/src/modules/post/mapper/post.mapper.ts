@@ -17,6 +17,7 @@ type PostWithExtras = {
   likes?: { id: number }[];
   _count: {
     likes: number;
+    comentarios: number;
   };
 };
 
@@ -33,6 +34,7 @@ export class PostMapper {
       postGuardado_id: post.postGuardados?.[0]?.id ?? null,
       isLiked: !!post.likes?.length,
       likesCount: post._count.likes,
+      comentariosCount: post._count.comentarios,
     };
   }
 }

@@ -10,8 +10,11 @@ import { profilePath } from "@/utils/paths";
 import SavePostDropdown from "../guardarPost/guardarPost";
 import { PostEditable, TecnologiaPost } from "@/types/post-types";
 import { LikeButton } from "@/features/posts/components/likeButton/likeButton";
+import { useState } from "react";
+import CommentModal from "@/features/comentarios/components/comentarioModal";
 
 const Post = ({ post }: { post: PostEditable }) => {
+  const [isComentarioOpen, setIsComentarioOpen] = useState(false);
   return (
     <div className={stylePost.post}>
       <div className={stylePost.user}>
@@ -57,14 +60,29 @@ const Post = ({ post }: { post: PostEditable }) => {
       </div>
       <p>{post.contenido}</p>
       <div className={stylePost.acciones}>
-        <MessageCircle size={16} />
+        <div className="flex items-center gap-1">
+          <MessageCircle
+            size={16}
+            className="cursor-pointer"
+            onClick={() => setIsComentarioOpen(true)}
+          />
+          <span>{post.comentariosCount ?? 0}</span>
+        </div>
         <LikeButton
           post_id={post.id}
           initialLiked={post.isLiked ?? false}
           initialCount={post.likesCount ?? 0}
         />
-        <SavePostDropdown isGuardado={post.isGuardado ?? false} post_id={post.id} />
+        <SavePostDropdown
+          isGuardado={post.isGuardado ?? false}
+          post_id={post.id}
+        />
       </div>
+      <CommentModal
+        open={isComentarioOpen}
+        onOpenChange={setIsComentarioOpen}
+        post={post}
+      />
     </div>
   );
 };

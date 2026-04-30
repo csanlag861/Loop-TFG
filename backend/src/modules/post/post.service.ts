@@ -87,6 +87,7 @@ export class PostService {
           _count: {
             select: {
               likes: true,
+              comentarios: true,
             },
           },
         },

@@ -9,6 +9,7 @@ import { TecnologiaModule } from './modules/tecnologia/tecnologia.module';
 import { UsuariosModule } from './modules/admin/usuarios/usuarios.module';
 import { LikeModule } from './modules/like/like.module';
 import { SupabaseService } from './modules/supabase/supabase.service';
+import { ComentariosModule } from './modules/comentarios/comentarios.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { SupabaseService } from './modules/supabase/supabase.service';
     TecnologiaModule,
     UsuariosModule,
     LikeModule,
+    ComentariosModule,
   ],
   controllers: [],
   providers: [SupabaseService],

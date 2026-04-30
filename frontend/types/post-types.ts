@@ -21,4 +21,5 @@ export interface PostEditable {
   isLiked?: boolean;
   likesCount?: number;
   isGuardado?: boolean;
+  comentariosCount?: number;
 }
