@@ -1,7 +1,11 @@
 #!/bin/sh
 
+if [ -z "$DATABASE_URL" ]; then
+  echo "❌ DATABASE_URL is not set. Aborting."
+  exit 1
+fi
+
 echo "⏳ Waiting for database..."
-echo "DATABASE_URL=$DATABASE_URL"
 
 until npx prisma migrate deploy; do
   echo "❌ Migration failed, retrying in 3s..."
@@ -9,7 +13,6 @@ until npx prisma migrate deploy; do
 done
 
 echo "✅ Migrations applied"
-
 echo "🌱 Running seed..."
 npx prisma db seed || echo "⚠️ Seed skipped"
 
