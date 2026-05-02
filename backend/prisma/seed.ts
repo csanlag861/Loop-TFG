@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
 
-import { prisma } from '../src/lib/prisma';
+import { PrismaClient } from '@prisma/client';
 import { SlugRol } from '../src/common/enums/slug-rol.enum';
 import bcrypt from 'bcrypt';
 
+const prisma = new PrismaClient();
 async function main() {
   const saltRounds = 10;
 
