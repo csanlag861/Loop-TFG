@@ -1,21 +1,25 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-
-import { PrismaClient } from '@prisma/client';
-import { SlugRol } from '../src/common/enums/slug-rol.enum';
+import { PrismaClient, Tecnologia } from '@prisma/client';
 import bcrypt from 'bcrypt';
 
 const prisma = new PrismaClient();
+
+/**
+ * Seed principal - Crea datos de ejemplo para desarrollo y testing
+ * Este archivo es completamente independiente del código fuente de la aplicación
+ */
 async function main() {
   const saltRounds = 10;
 
+  // Limpieza de datos existentes
   await prisma.post.deleteMany({});
   await prisma.tecnologia.deleteMany({});
+
   // 1️⃣ Crear roles
   await prisma.rol.createMany({
     data: [
-      { nombre: 'ADMIN', slug: SlugRol.ADMIN },
-      { nombre: 'USUARIO', slug: SlugRol.USUARIO },
-      { nombre: 'MODERADOR', slug: SlugRol.MODERADOR },
+      { nombre: 'ADMIN', slug: 'admin' },
+      { nombre: 'USUARIO', slug: 'usuario' },
+      { nombre: 'MODERADOR', slug: 'moderador' },
     ],
     skipDuplicates: true,
   });
@@ -221,7 +225,16 @@ async function main() {
     'Aprender Docker y Kubernetes juntos es un must para DevOps',
   ];
 
-  function getRandomTechnologies(tecnologias, max = 3) {
+  /**
+   * Función helper para obtener tecnologías aleatorias
+   * @param tecnologias - Array de tecnologías disponibles
+   * @param max - Número máximo de tecnologías a retornar
+   * @returns Array de tecnologías seleccionadas aleatoriamente
+   */
+  function getRandomTechnologies(
+    tecnologias: Tecnologia[],
+    max = 3,
+  ): Tecnologia[] {
     const shuffled = [...tecnologias].sort(() => 0.5 - Math.random());
     return shuffled.slice(0, max);
   }
@@ -230,7 +243,7 @@ async function main() {
     const randomUser = usuarios[Math.floor(Math.random() * usuarios.length)];
     const relatedTech = getRandomTechnologies(tecnologias, 3);
 
-    const post = await prisma.post.create({
+    await prisma.post.create({
       data: {
         usuario_id: randomUser.id,
         contenido: content,
@@ -284,7 +297,7 @@ main()
     await prisma.$disconnect();
   })
   .catch(async (e) => {
-    console.error(e);
+    console.error('❌ Error ejecutando seed:', e);
     await prisma.$disconnect();
     process.exit(1);
   });
