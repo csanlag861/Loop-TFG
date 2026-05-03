@@ -17,4 +17,4 @@ echo "🌱 Running seed..."
 npx prisma db seed || echo "⚠️ Seed skipped"
 
 echo "🚀 Starting app..."
-node dist/main
+node dist/main.js
