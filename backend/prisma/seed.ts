@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import { PrismaClient, Tecnologia } from '@prisma/client';
 import bcrypt from 'bcrypt';
 
