@@ -6,18 +6,39 @@ import { MessageCircle } from "@geist-ui/icons";
 import Image from "next/image";
 import MoreSettings from "../moreSettings/moreSettings";
 import Link from "next/link";
-import { profilePath } from "@/utils/paths";
+import { profilePath, postPath } from "@/utils/paths";
 import SavePostDropdown from "../guardarPost/guardarPost";
 import { PostEditable, TecnologiaPost } from "@/types/post-types";
 import { LikeButton } from "@/features/posts/components/likeButton/likeButton";
 import { useState } from "react";
 import CommentModal from "@/features/comentarios/components/comentarioModal";
 
-const Post = ({ post }: { post: PostEditable }) => {
+const Post = ({
+  post,
+  variant = "feed",
+}: {
+  post: PostEditable;
+  variant?: "feed" | "detail";
+}) => {
+  if (!post) return null;
+
   const [isComentarioOpen, setIsComentarioOpen] = useState(false);
+  const isDetail = variant === "detail";
   return (
-    <div className={stylePost.post}>
-      <div className={stylePost.user}>
+    <div
+      className={`
+        ${stylePost.post}
+        ${isDetail ? "p-6 text-lg" : "p-4"}`}
+      style={{ position: "relative" }}
+    >
+      {!isDetail && (
+        <Link
+          href={postPath({ id: post.id })}
+          className={stylePost.stretchedLink}
+          aria-label="Ver post"
+        />
+      )}
+      <div className={stylePost.user} style={{ position: "relative", zIndex: 1 }}>
         <div className="w-full flex gap-3 items-center justify-baseline">
           <Link href={profilePath({ param: post.usuario.id })}>
             <div className="w-10 h-10 rounded-full overflow-hidden">
@@ -59,7 +80,7 @@ const Post = ({ post }: { post: PostEditable }) => {
         ))}
       </div>
       <p>{post.contenido}</p>
-      <div className={stylePost.acciones}>
+      <div className={stylePost.acciones} style={{ position: "relative", zIndex: 1 }}>
         <div className="flex items-center gap-1">
           <MessageCircle
             size={16}

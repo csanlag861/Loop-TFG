@@ -27,7 +27,6 @@ export default function CommentModal({ open, onOpenChange, post }: any) {
     initialState,
   );
 
-  // 🔥 manejo de respuesta
   useEffect(() => {
     if (!state?.status) return;
 

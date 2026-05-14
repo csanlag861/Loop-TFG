@@ -45,10 +45,12 @@ const createComentarioAction = async (
       };
     }
 
+    const comment = await res.json();
+
     return {
       status: "SUCCESS",
       message: "Comentario publicado",
-      payload: undefined,
+      payload: comment,
       fieldErrors: {},
     };
   } catch (error: any) {

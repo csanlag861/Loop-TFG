@@ -10,8 +10,8 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
-  
-  p{
+
+  p {
     color: var(--gris-01);
     font-size: 12px;
     font-family: "Sohne-Light";
@@ -63,10 +63,17 @@
     }
   }
 
-  .acciones{
+  .stretchedLink {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    border-radius: 10px;
+  }
+
+  .acciones {
     display: flex;
     justify-content: space-around;
     align-items: center;
-    color: var(--color-03);
+    color: var(--primary-color);
   }
 }
