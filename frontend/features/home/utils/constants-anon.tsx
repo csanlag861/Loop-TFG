@@ -1,18 +1,13 @@
 import { Home, Search } from "@geist-ui/icons";
 import { NavItem } from "./types";
-import { homePath, searchPath } from "@/utils/paths";
+import { homePath } from "@/utils/paths";
 
 export const navItemsAnom: NavItem[] = [
   {
     title: "Home",
     icon: <Home size={24} />,
     href: `${homePath()}`,
-  },
-  {
-    title: "Búsqueda",
-    icon: <Search size={24} />,
-    href: `${searchPath()}`,
-  },
+  }
 ];
 
 export const closedClassName =
