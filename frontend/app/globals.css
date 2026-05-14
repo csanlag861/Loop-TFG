@@ -40,21 +40,27 @@ h3: 18
 */
 
 :root {
-  /* Backgrounds */
-  --bg-01: #f7f7f7; /* fondo principal */
-  --bg-02: #ffffff; /* superficies / cards */
+  /* =========================================
+     FONDOS (Profundidad Espacial)
+     ========================================= */
+  --bg-01: #fafafa; /* Background 1: Lienzo base de la app */
+  --bg-02: #ffffff; /* Background 2: Superficies flotantes (Cards, Modals) */
 
-  --gris-10: #1a1a1a;
-  --gris-09: #1a1a1a;
-  --gris-08: #292929;
-  --gris-07: #2e2e2e;
-  --gris-06: #454545;
-  --gris-05: #878787;
-  --gris-04: #8f8f8f;
-  --gris-03: #7d7d7d;
-  --gris-02: #a0a0a0;
-  --gris-01: #ededed;
+  /* =========================================
+     ESCALA DE GRISES (Invertida para Light Mode)
+     ========================================= */
+  --gris-01: #171717; /* Texto primario (era el más claro en oscuro) */
+  --gris-02: #404040; /* Texto secundario */
+  --gris-03: #595959; /* Texto terciario/muted */
+  --gris-04: #737373; /* Texto muted */
+  --gris-05: #8c8c8c; /* Bordes fuertes / Texto sutil */
+  --gris-06: #cccccc; /* Bordes / Separadores */
+  --gris-07: #d6d6d6; /* Bordes sutiles */
+  --gris-08: #e0e0e0; /* Fondos de interacción (hover) */
+  --gris-09: #ebebeb; /* Fondos de componentes (inputs, dialogs) */
+  --gris-10: #f5f5f5; /* Fondos sutiles (era el más oscuro en modo oscuro) */
 
+  /* Colores primarios */
   --color-10: #232769;
   --color-09: #2e338a;
   --color-08: #3b41b2;
@@ -67,36 +73,50 @@ h3: 18
   --color-01: #eeefff;
 
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
+
+  /* =========================================
+     VARIABLES DE SHADCN (Mapeadas a la lógica)
+     ========================================= */
+  --background: oklch(0.985 0 0); /* #fafafa */
+  --foreground: oklch(0.205 0 0); /* #171717 */
+  
+  --card: oklch(1 0 0); /* #ffffff */
+  --card-foreground: oklch(0.205 0 0); /* #171717 */
+  
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
+  --popover-foreground: oklch(0.205 0 0);
+  
+  --muted: oklch(0.965 0 0); /* #f5f5f5 */
+  --muted-foreground: oklch(0.556 0 0); /* #737373 */
+  
+  --accent: oklch(0.925 0 0); /* #ebebeb */
   --accent-foreground: oklch(0.205 0 0);
+  
+  --primary: oklch(0.488 0.243 264.376);
+  --primary-foreground: oklch(0.985 0 0);
+
+  --secondary: oklch(0.965 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+
   --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
+
+  --border: oklch(0.88 0 0); /* #cccccc */
+  --input: oklch(0.85 0 0); /* #b3b3b3 */
   --ring: oklch(0.708 0 0);
+
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
   --chart-4: oklch(0.828 0.189 84.429);
   --chart-5: oklch(0.769 0.188 70.08);
+
   --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.205 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
   --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent: oklch(0.925 0 0);
   --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-border: oklch(0.88 0 0);
   --sidebar-ring: oklch(0.708 0 0);
 }
 
@@ -142,30 +162,30 @@ h3: 18
   --radius-3xl: calc(var(--radius) + 12px);
   --radius-4xl: calc(var(--radius) + 16px);
 
-  --bg-01: #0a0a0a;
-  --bg-02: #000000;
+  --color-bg-01: var(--bg-01);
+  --color-bg-02: var(--bg-02);
 
-  --gris-10: #1a1a1a;
-  --gris-09: #1a1a1a;
-  --gris-08: #292929;
-  --gris-07: #2e2e2e;
-  --gris-06: #454545;
-  --gris-05: #878787;
-  --gris-04: #8f8f8f;
-  --gris-03: #7d7d7d;
-  --gris-02: #a0a0a0;
-  --gris-01: #ededed;
+  --color-gris-10: var(--gris-10);
+  --color-gris-09: var(--gris-09);
+  --color-gris-08: var(--gris-08);
+  --color-gris-07: var(--gris-07);
+  --color-gris-06: var(--gris-06);
+  --color-gris-05: var(--gris-05);
+  --color-gris-04: var(--gris-04);
+  --color-gris-03: var(--gris-03);
+  --color-gris-02: var(--gris-02);
+  --color-gris-01: var(--gris-01);
 
-  --color-10: #232769;
-  --color-09: #2e338a;
-  --color-08: #3b41b2;
-  --color-07: #4c54e4;
-  --primary-color: #535cfa;
-  --color-05: #757dfb;
-  --color-04: #8c92fc;
-  --color-03: #b0b4fd;
-  --color-02: #caccfd;
-  --color-01: #eeefff;
+  --color-10: var(--color-10);
+  --color-09: var(--color-09);
+  --color-08: var(--color-08);
+  --color-07: var(--color-07);
+  --color-primary-color: var(--primary-color);
+  --color-05: var(--color-05);
+  --color-04: var(--color-04);
+  --color-03: var(--color-03);
+  --color-02: var(--color-02);
+  --color-01: var(--color-01);
 }
 
 body {
