@@ -13,6 +13,7 @@ const prefixAdmin = "admin/";
 const prefixTecnologiaAdmin = "tecnologia";
 const prefixLike = "like/";
 const prefixComentarios = "comentarios/";
+const prefixAuth = "auth/"
 
 export const getAllPosts = () => `${BASE_URL}${prefix}${prefixPosts}getAll`;
 export const createPost = () => `${BASE_URL}${prefix}${prefixPosts}create`;
@@ -84,3 +85,6 @@ export const toggleSeguir = ({ param }: { param: number }) =>
   `${BASE_URL}${prefix}${prefixUser}${param}/seguir`;
 export const checkSeguir = ({ param }: { param: number }) =>
   `${BASE_URL}${prefix}${prefixUser}${param}/check`;
+
+export const googleLogin = () => `${BASE_URL}${prefix}${prefixAuth}/google`
+export const githubLogin = () => `${BASE_URL}${prefix}${prefixAuth}/github`

@@ -14,16 +14,17 @@ import { useRouter } from "next/navigation";
 import { homePath } from "@/utils/paths";
 import RegisterStepper from "../Register/RegisterStepper";
 import Image from "next/image";
+import { githubLogin, googleLogin } from "@/utils/api";
 
 const Form = () => {
   const router = useRouter();
 
   const handleGoogleLogin = () => {
-    router.push("http://localhost:3000/api/auth/google");
+    router.push(googleLogin());
   };
 
   const handleGithubLogin = () => {
-    router.push("http://localhost:3000/api/auth/github");
+    router.push(githubLogin());
   };
 
   return (
