@@ -7,6 +7,7 @@
     label{
         font-size: 14px;
         font-family: "Sohne-Light", system-ui, sans-serif;
+        color: var(--gris-01);
     }
 
     input[type="text"], input[type="email"], input[type="password"]{
@@ -18,11 +19,16 @@
         padding: 0 16px;
         font-size: 14px;
         font-family: "Sohne-Light", system-ui, sans-serif;
-        color: var(--gris-03);
+        color: var(--gris-01);
 
         &:focus {
             outline: none;
             border: 1px solid var(--gris-03);
+        }
+
+        &::placeholder {
+            color: var(--gris-04);
+            opacity: 1;
         }
     }
 

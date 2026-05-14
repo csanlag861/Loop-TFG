@@ -101,7 +101,7 @@ export function TecnologiaFormDialog({
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="bg-(--bg-01) border-(--gris-07) max-w-md">
         <DialogHeader>
-          <DialogTitle className="text-(--text-01)">
+          <DialogTitle className="text-gris01">
             {isEditing ? "Editar tecnología" : "Nueva tecnología"}
           </DialogTitle>
         </DialogHeader>
