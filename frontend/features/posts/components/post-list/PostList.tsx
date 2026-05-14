@@ -20,7 +20,7 @@ const PostList = ({ initialData }: { initialData: any }) => {
       queryFn: ({ pageParam }) => getPosts(pageParam, search, username, tech),
       initialPageParam: undefined as number | undefined,
       getNextPageParam: (lastPage) =>
-        lastPage.metadata.hasNextPage ? lastPage.metadata.cursor : undefined,
+        lastPage?.metadata?.hasNextPage ? lastPage.metadata.cursor : undefined,
       initialData: search || username || tech ? undefined : {
         pages: [initialData],
         pageParams: [undefined],

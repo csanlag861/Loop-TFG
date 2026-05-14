@@ -19,7 +19,7 @@ export default function CommentList({
       queryFn: ({ pageParam }) => getCommentsByPost(postId, pageParam),
       initialPageParam: undefined as number | undefined,
       getNextPageParam: (lastPage) =>
-        lastPage.metadata.hasNextPage ? lastPage.metadata.cursor : undefined,
+        lastPage?.metadata?.hasNextPage ? lastPage.metadata.cursor : undefined,
       initialData: {
         pages: [initialData],
         pageParams: [undefined],
