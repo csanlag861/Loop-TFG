@@ -29,7 +29,7 @@ async function bootstrap() {
     }),
   );
 
-  await app.listen(envs.PORT);
+  await app.listen(envs.PORT, "0.0.0.0");  
   logger.log('App running on PORT:');
 }
 
