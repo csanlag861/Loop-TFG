@@ -12,19 +12,12 @@ import Post from "@/features/posts/components/post/post";
 import createComentarioAction from "../actions/createComentario";
 import { DialogTitle } from "@radix-ui/react-dialog";
 
-const initialState = {
-  status: "",
-  message: "",
-  payload: undefined,
-  fieldErrors: {},
-};
-
 export default function CommentModal({ open, onOpenChange, post }: any) {
   const router = useRouter();
 
   const [state, formAction, isPending] = useActionState(
     createComentarioAction,
-    initialState,
+    null,
   );
 
   useEffect(() => {

@@ -14,7 +14,7 @@ const comentarioSchema = z.object({
 });
 
 const createComentarioAction = async (
-  _actionState: ActionState,
+  _actionState: ActionState | null,
   formData: FormData,
 ): Promise<ActionState> => {
   const token = await GetCookies();
