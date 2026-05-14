@@ -1,8 +1,6 @@
 const isServer = typeof window === "undefined";
 const API_URL = process.env.API_URL || "http://looptfg-backend-o5hyfi:3000";
 
-// On the client, we use relative paths (e.g., /api/...)
-// On the server (SSR, Server Actions, Middleware), we use the full internal URL
 const BASE_URL = isServer ? API_URL : "";
 
 const prefix = "/api/";
@@ -24,6 +22,8 @@ export const deletePost = ({ param }: { param: number | string }) =>
   `${BASE_URL}${prefix}${prefixPosts}delete/${param}`;
 export const getPostsFromUser = ({ param }: { param: number }) =>
   `${BASE_URL}${prefix}${prefixPosts}${param}/posts`;
+export const getPostById = ({ param }: { param: number }) =>
+  `${BASE_URL}${prefix}${prefixPosts}${param}`;
 
 export const getUserData = () => `${BASE_URL}${prefix}${prefixUser}me`;
 export const getProfile = ({ param }: { param: number }) =>
@@ -31,7 +31,6 @@ export const getProfile = ({ param }: { param: number }) =>
 export const updateProfile = () => `${BASE_URL}${prefix}${prefixUser}profile`;
 
 export const getTecnologias = () => `${BASE_URL}${prefix}${prefixTecnologia}`;
-// Unified client/server helper
 export const getTecnologiasCliente = getTecnologias;
 
 export const createTecnologia = () =>
@@ -44,7 +43,6 @@ export const deleteTecnologia = ({ param }: { param: number }) =>
   `${BASE_URL}${prefix}${prefixTecnologiaAdmin}/${param}`;
 
 export const obtenerCarpetas = () => `${BASE_URL}${prefix}${prefixCarpetas}`;
-// Unified client/server helper
 export const obtenerCarpetasCliente = obtenerCarpetas;
 
 export const guardarPost = () => `${BASE_URL}${prefix}${prefixGuardados}`;
@@ -79,3 +77,10 @@ export const createComentario = () =>
   `${BASE_URL}${prefix}${prefixComentarios}`;
 export const deleteComentario = ({ param }: { param: number }) =>
   `${BASE_URL}${prefix}${prefixComentarios}${param}`;
+export const getCommentsByPost = ({ param }: { param: number }) =>
+  `${BASE_URL}${prefix}${prefixPosts}${param}/comments`;
+
+export const toggleSeguir = ({ param }: { param: number }) =>
+  `${BASE_URL}${prefix}${prefixUser}${param}/seguir`;
+export const checkSeguir = ({ param }: { param: number }) =>
+  `${BASE_URL}${prefix}${prefixUser}${param}/check`;

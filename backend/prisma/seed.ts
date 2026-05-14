@@ -1,9 +1,18 @@
 import 'dotenv/config';
 import { PrismaClient, Tecnologia } from '@prisma/client';
 import bcrypt from 'bcrypt';
+import { PrismaPg } from '@prisma/adapter-pg';
+import { Pool } from 'pg';
 
-const prisma = new PrismaClient();
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+});
 
+const adapter = new PrismaPg(pool);
+
+const prisma = new PrismaClient({
+  adapter,
+});
 /**
  * Seed principal - Crea datos de ejemplo para desarrollo y testing
  * Este archivo es completamente independiente del código fuente de la aplicación
@@ -12,8 +21,15 @@ async function main() {
   const saltRounds = 10;
 
   // Limpieza de datos existentes
+  await prisma.postGuardado.deleteMany({});
+  await prisma.like.deleteMany({});
+  await prisma.comentario.deleteMany({});
   await prisma.post.deleteMany({});
+  await prisma.carpeta.deleteMany({});
+  await prisma.seguidor.deleteMany({});
+  await prisma.usuario.deleteMany({});
   await prisma.tecnologia.deleteMany({});
+  await prisma.rol.deleteMany({});
 
   // 1️⃣ Crear roles
   await prisma.rol.createMany({
@@ -24,6 +40,16 @@ async function main() {
     ],
     skipDuplicates: true,
   });
+
+  const roles = await prisma.rol.findMany();
+
+  const adminRole = roles.find((r) => r.nombre === 'ADMIN');
+  const userRole = roles.find((r) => r.nombre === 'USUARIO');
+  const moderadorRole = roles.find((r) => r.nombre === 'MODERADOR');
+
+  if (!adminRole || !userRole || !moderadorRole) {
+    throw new Error('No se pudieron obtener los roles');
+  }
 
   // 2️⃣ Crear tecnologías
   const tecnologiasSeed = [
@@ -141,7 +167,7 @@ async function main() {
       email: 'carlos@example.com',
       biografia: 'Fullstack developer apasionado por Angular y NodeJS',
       password: bcrypt.hashSync('123456', saltRounds),
-      rol_id: 1,
+      rol_id: adminRole.id,
       avatarURL:
         'https://bmumcurtyjxqdrmnzptq.supabase.co/storage/v1/object/public/avatars/avatar_1.png',
     },
@@ -151,7 +177,7 @@ async function main() {
       email: 'laura@example.com',
       biografia: 'Frontend engineer, React y TypeScript son mi vida',
       password: bcrypt.hashSync('123456', saltRounds),
-      rol_id: 2,
+      rol_id: userRole.id,
       avatarURL:
         'https://bmumcurtyjxqdrmnzptq.supabase.co/storage/v1/object/public/avatars/avatar_1.png',
     },
@@ -161,7 +187,7 @@ async function main() {
       email: 'miguel@example.com',
       biografia: 'Backend developer, experto en NodeJS y bases de datos',
       password: bcrypt.hashSync('123456', saltRounds),
-      rol_id: 2,
+      rol_id: userRole.id,
       avatarURL:
         'https://bmumcurtyjxqdrmnzptq.supabase.co/storage/v1/object/public/avatars/avatar_2.png',
     },
@@ -171,7 +197,7 @@ async function main() {
       email: 'elena@example.com',
       biografia: 'Ingeniera cloud, AWS y Docker son mis herramientas',
       password: bcrypt.hashSync('123456', saltRounds),
-      rol_id: 2,
+      rol_id: userRole.id,
       avatarURL:
         'https://bmumcurtyjxqdrmnzptq.supabase.co/storage/v1/object/public/avatars/avatar_1.png',
     },
@@ -181,7 +207,7 @@ async function main() {
       email: 'javier@example.com',
       biografia: 'Desarrollador Fullstack, React y NestJS',
       password: bcrypt.hashSync('123456', saltRounds),
-      rol_id: 2,
+      rol_id: userRole.id,
       avatarURL:
         'https://bmumcurtyjxqdrmnzptq.supabase.co/storage/v1/object/public/avatars/avatar_4.png',
     },
@@ -191,7 +217,7 @@ async function main() {
       email: 'ana@example.com',
       biografia: 'Data engineer, Python y PostgreSQL',
       password: bcrypt.hashSync('123456', saltRounds),
-      rol_id: 2,
+      rol_id: userRole.id,
       avatarURL:
         'https://bmumcurtyjxqdrmnzptq.supabase.co/storage/v1/object/public/avatars/avatar_1.png',
     },

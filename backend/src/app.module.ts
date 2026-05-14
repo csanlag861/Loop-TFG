@@ -10,6 +10,7 @@ import { UsuariosModule } from './modules/admin/usuarios/usuarios.module';
 import { LikeModule } from './modules/like/like.module';
 import { SupabaseService } from './modules/supabase/supabase.service';
 import { ComentariosModule } from './modules/comentarios/comentarios.module';
+import { SeguidorModule } from './modules/seguidor/seguidor.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { ComentariosModule } from './modules/comentarios/comentarios.module';
     UsuariosModule,
     LikeModule,
     ComentariosModule,
+    SeguidorModule,
   ],
   controllers: [],
   providers: [SupabaseService],

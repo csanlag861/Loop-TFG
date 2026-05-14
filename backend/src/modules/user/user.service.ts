@@ -16,6 +16,8 @@ import { PayloadEntity } from '../auth/payload';
 import { AuthService } from '../auth/auth.service';
 import { DEFAULT_AVATAR_URL } from '@/common/constants/default-avatar';
 import { SupabaseService } from '../supabase/supabase.service';
+import { OAuthProfile } from '../auth/dto/oauth-profile.dto';
+import { UserEntity } from '../auth/user';
 
 @Injectable()
 export class UserService {
@@ -210,10 +212,30 @@ export class UserService {
       throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
     }
 
+    const [isFollowing, seguidoresCount, seguidosCount] = await Promise.all([
+      requestUser_id
+        ? this.prisma.seguidor
+            .findUnique({
+              where: {
+                seguidor_id_seguido_id: {
+                  seguidor_id: requestUser_id,
+                  seguido_id: user.id,
+                },
+              },
+            })
+            .then(Boolean)
+        : Promise.resolve(false),
+      this.prisma.seguidor.count({ where: { seguido_id: user.id } }),
+      this.prisma.seguidor.count({ where: { seguidor_id: user.id } }),
+    ]);
+
     return {
       ...user,
       isOwner: requestUser_id ? requestUser_id === user.id : false,
       isAdmin: user.rol.nombre === RolNombreEnum.ADMIN,
+      isFollowing,
+      seguidoresCount,
+      seguidosCount,
     };
   }
 
@@ -239,10 +261,15 @@ export class UserService {
 
     let avatarURL = user.avatarURL;
     if (file) {
-      console.log('[Backend Service] File detected, starting upload to Supabase...');
+      console.log(
+        '[Backend Service] File detected, starting upload to Supabase...',
+      );
       const upload = await this.supabaseService.uploadAvatar(file, user_id);
-      console.log('[Backend Service] Upload successful, new URL:', upload.publicURL);
-      avatarURL = upload.publicURL;
+      console.log(
+        '[Backend Service] Upload successful, new URL:',
+        upload.publicURL,
+      );
+      avatarURL = upload.publicURL as string;
 
       if (user.avatarURL && !user.avatarURL.includes(DEFAULT_AVATAR_URL)) {
         const oldAvatar = user.avatarURL.split('/').pop();
@@ -271,5 +298,43 @@ export class UserService {
     });
 
     return updated;
+  }
+
+  async findOrCreateOAuthUser(profile: OAuthProfile): Promise<UserEntity> {
+    let user = await this.prisma.usuario.findFirst({
+      where: { providerId: profile.providerId, provider: profile.provider },
+      include: { rol: true },
+    });
+    if (user) return user as unknown as UserEntity;
+
+    user = await this.prisma.usuario.findUnique({
+      where: { email: profile.email },
+      include: { rol: true },
+    });
+    if (user) {
+      return user as unknown as UserEntity;
+    }
+
+    const baseUsername = profile.email.split('@')[0];
+    const uniqueSuffix = Math.floor(1000 + Math.random() * 9000);
+
+    return (await this.prisma.usuario.create({
+      data: {
+        email: profile.email,
+        nombre: profile.firstName || 'Usuario',
+        username: `${baseUsername}${uniqueSuffix}`,
+        biografia: profile.lastName || '',
+        avatarURL: profile.avatar,
+        provider: profile.provider,
+        providerId: profile.providerId,
+        rol_id: (
+          await this.prisma.rol.findFirstOrThrow({
+            where: { slug: SlugRol.USUARIO },
+          })
+        ).id,
+        password: null,
+      },
+      include: { rol: true },
+    })) as unknown as UserEntity;
   }
 }

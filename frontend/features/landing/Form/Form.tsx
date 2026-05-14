@@ -18,11 +18,19 @@ import Image from "next/image";
 const Form = () => {
   const router = useRouter();
 
+  const handleGoogleLogin = () => {
+    router.push("http://localhost:3000/api/auth/google");
+  };
+
+  const handleGithubLogin = () => {
+    router.push("http://localhost:3000/api/auth/github");
+  };
+
   return (
     <div className={stylesForm.form}>
       <h3>Unete Ahora</h3>
       <div className={stylesForm.oauth}>
-        <button type="button">
+        <button type="button" onClick={handleGoogleLogin}>
           Registrarse con Google{" "}
           <svg
             data-testid="geist-icon"
@@ -49,7 +57,7 @@ const Form = () => {
             ></path>
           </svg>
         </button>
-        <button type="button">
+        <button type="button" onClick={handleGithubLogin}>
           Registrarse con GitHub
           <svg
             data-testid="geist-icon"

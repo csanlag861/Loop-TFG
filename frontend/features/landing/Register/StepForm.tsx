@@ -117,11 +117,11 @@ const StepForm = () => {
         type="submit"
         disabled={!isValid || loading}
         className={`
-          rounded-full py-3 text-white transition
+          rounded-full py-3 transition
           ${
             !isValid || loading
-              ? "bg-(--gris-07) cursor-not-allowed"
-              : "bg-(--primary-color) hover:bg-(--color-08)"
+              ? "bg-muted text-muted-foreground cursor-not-allowed"
+              : "bg-(--primary-color) text-white hover:bg-(--color-08)"
           }
         `}
       >

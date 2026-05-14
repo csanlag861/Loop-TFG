@@ -12,6 +12,7 @@ import { LoginDto } from './dto/login.dto';
 import { UserEntity } from './user';
 import { JwtService } from '@nestjs/jwt';
 import { PayloadEntity } from './payload';
+import { OAuthProfile } from './dto/oauth-profile.dto';
 
 @Injectable()
 export class AuthService {
@@ -64,7 +65,7 @@ export class AuthService {
 
     const accessToken = this.signAccessToken(payload);
     const refreshToken = this.signRefreshToken(payload);
-    
+
     return { accessToken, refreshToken };
   }
 
@@ -80,9 +81,11 @@ export class AuthService {
     try {
       const payload = this.jwtService.verify<PayloadEntity>(refreshToken);
       const { iat, exp, ...newPayload } = payload as any;
-      
+
       const newAccessToken = this.signAccessToken(newPayload as PayloadEntity);
-      const newRefreshToken = this.signRefreshToken(newPayload as PayloadEntity);
+      const newRefreshToken = this.signRefreshToken(
+        newPayload as PayloadEntity,
+      );
 
       return {
         accessToken: newAccessToken,
@@ -95,4 +98,25 @@ export class AuthService {
       );
     }
   }
+
+  loginOAuthUser(user: UserEntity) {
+    const payload: PayloadEntity = {
+      username: user.username,
+      id: user.id.toString(),
+      rol: user.rol.nombre,
+    };
+
+    const accessToken = this.signAccessToken(payload);
+    const refreshToken = this.signRefreshToken(payload);
+
+    return { accessToken, refreshToken };
+  }
+
+  async handleOAuthLogin(profile: OAuthProfile) {
+    const user = await this.userService.findOrCreateOAuthUser(profile);
+
+    return this.loginOAuthUser(user);
+  }
+
+  
 }

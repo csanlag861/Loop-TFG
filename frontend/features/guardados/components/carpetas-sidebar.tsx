@@ -82,7 +82,7 @@ const CarpetasSidebar = () => {
             value={nombre}
             onChange={(e) => setNombre(e.target.value)}
             placeholder="ej: React..."
-            className="bg-transparent border rounded-md px-3 py-2 text-sm text-01 placeholder:text-[var(--gris-03)] focus:outline-none focus:border-[var(--primary-color)] transition-colors"
+            className="bg-transparent border rounded-md px-3 py-2 text-sm text-gris01 placeholder:text-[var(--gris-03)] focus:outline-none focus:border-[var(--primary-color)] transition-colors"
           />
         </div>
         <Button
