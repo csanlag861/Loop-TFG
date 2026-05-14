@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import { REFRESH_COOKIE_NAME, setAuthCookies } from "@/features/auth/utils/session-cookie";
+import {
+  REFRESH_COOKIE_NAME,
+  setAuthCookies,
+} from "@/features/auth/utils/session-cookie";
 import { refreshUrl } from "@/utils/api";
 
 export async function POST(req: NextRequest) {
@@ -9,7 +12,10 @@ export async function POST(req: NextRequest) {
     const refreshToken = cookieStore.get(REFRESH_COOKIE_NAME)?.value;
 
     if (!refreshToken) {
-      return NextResponse.json({ message: "No refresh token found" }, { status: 401 });
+      return NextResponse.json(
+        { message: "No refresh token found" },
+        { status: 401 },
+      );
     }
 
     const response = await fetch(refreshUrl(), {
@@ -21,12 +27,14 @@ export async function POST(req: NextRequest) {
     });
 
     if (!response.ok) {
-      return NextResponse.json({ message: "Refresh token failed" }, { status: 401 });
+      return NextResponse.json(
+        { message: "Refresh token failed" },
+        { status: 401 },
+      );
     }
 
     const data = await response.json();
-    
-    // Update cookies securely server-side
+
     await setAuthCookies(data.accessToken, data.refreshToken);
 
     return NextResponse.json({
@@ -35,6 +43,9 @@ export async function POST(req: NextRequest) {
     });
   } catch (error) {
     console.error("Error in refresh route handler:", error);
-    return NextResponse.json({ message: "Internal server error" }, { status: 500 });
+    return NextResponse.json(
+      { message: "Internal server error" },
+      { status: 500 },
+    );
   }
 }
