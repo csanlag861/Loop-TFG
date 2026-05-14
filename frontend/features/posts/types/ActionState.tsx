@@ -1,7 +1,7 @@
 export type ActionState = {
   status?: "ERROR" | "SUCCESS" | "ERROR2";
   message: string;
-  payload?: FormData;
+  payload?: any;
   fieldErrors?: Record<string, string[] | undefined>;
   timestamp?: number;
 };

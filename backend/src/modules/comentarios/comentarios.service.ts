@@ -1,7 +1,6 @@
 import {
   BadRequestException,
   ForbiddenException,
-  HttpCode,
   HttpStatus,
   Injectable,
   NotFoundException,
@@ -26,7 +25,7 @@ export class ComentariosService {
       }
     }
 
-    await this.prisma.comentario.create({
+    return this.prisma.comentario.create({
       data: {
         usuario_id: user_id,
         post_id,
@@ -34,11 +33,16 @@ export class ComentariosService {
         parent_id: parent_id ?? null,
       },
       include: {
-        usuario: true,
+        usuario: {
+          select: {
+            id: true,
+            username: true,
+            avatarURL: true,
+            nombre: true,
+          },
+        },
       },
     });
-
-    return HttpStatus.CREATED;
   }
 
   async remove(id: number, user_id: number) {

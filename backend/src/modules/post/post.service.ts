@@ -1,4 +1,9 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { PrismaService } from '../prisma/prisma.service';
@@ -112,28 +117,88 @@ export class PostService {
     };
   }
 
-  findOne(id: number): Promise<ResponsePostDto> {
-    return this.prisma.post.findUniqueOrThrow({
-      where: { id },
-      select: {
-        id: true,
-        contenido: true,
-        createdAt: true,
-        usuario: {
-          select: {
-            avatarURL: true,
-            nombre: true,
-            username: true,
+  async findOne(id: number, user_id?: number) {
+    try {
+      const post = await this.prisma.post.findUniqueOrThrow({
+        where: { id },
+        include: {
+          usuario: {
+            select: {
+              id: true,
+              username: true,
+              avatarURL: true,
+              nombre: true,
+            },
+          },
+          tecnologias: true,
+          ...(user_id !== undefined && {
+            postGuardados: {
+              where: { usuario_id: user_id },
+              select: { id: true },
+            },
+          }),
+          ...(user_id !== undefined && {
+            likes: {
+              where: { usuario_id: user_id },
+              select: { id: true },
+            },
+          }),
+          _count: {
+            select: {
+              likes: true,
+              comentarios: true,
+            },
           },
         },
-        tecnologias: {
+      });
+
+      const currentUser = user_id ? new UserEntity(user_id) : null;
+
+      return PostMapper.toResponse(post, currentUser);
+    } catch (error) {
+      throw new NotFoundException(`Post con ID ${id} no encontrado`);
+    }
+  }
+
+  async findByPost(post_id: number, cursor?: number) {
+    const take = 10;
+
+    let comentarios = await this.prisma.comentario.findMany({
+      where: {
+        post_id,
+        parent_id: null,
+        ...(cursor && { id: { lt: cursor } }),
+        usuario: {
+          deletedAt: null,
+          estado: {
+            notIn: [UsuarioEstadoEnum.BLOQUEADO, UsuarioEstadoEnum.SUSPENDIDO],
+          },
+        },
+      },
+      take: take + 1,
+      orderBy: [{ id: 'desc' }],
+      include: {
+        usuario: {
           select: {
             id: true,
+            username: true,
+            avatarURL: true,
             nombre: true,
           },
         },
       },
     });
+
+    const hasNextPage = comentarios.length > take;
+    comentarios = hasNextPage ? comentarios.slice(0, -1) : comentarios;
+
+    return {
+      list: comentarios,
+      metadata: {
+        hasNextPage,
+        cursor: comentarios.at(-1)?.id,
+      },
+    };
   }
 
   getPostsFromUser(user_id: number) {

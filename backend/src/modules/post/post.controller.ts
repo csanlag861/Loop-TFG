@@ -44,33 +44,40 @@ export class PostController {
     return this.postService.findAll(cursor, user_id, search, username, tech);
   }
 
+  @UseGuards(JwtAuthOptionalGuard)
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    const postId = Number(id);
-    if (isNaN(postId)) {
-      throw new HttpException('BAD_REQUEST', HttpStatus.BAD_REQUEST);
-    }
-    return this.postService.findOne(postId);
+  findOne(
+    @Param('id', ParseIntPipe) id: number,
+    @User('userId') user_id?: number,
+  ) {
+    return this.postService.findOne(id, user_id);
+  }
+
+  @Get(':id/comments')
+  findComments(
+    @Param('id', ParseIntPipe) id: number,
+    @Query('cursor', new ParseIntPipe({ optional: true })) cursor?: number,
+  ) {
+    return this.postService.findByPost(id, cursor);
   }
 
   @Get(':id/posts')
-  getPostsFromUser(@Param('id') id: string) {
-    const usuario_id = Number(id);
-    if (isNaN(usuario_id)) {
-      throw new HttpException('BAD_REQUEST', HttpStatus.BAD_REQUEST);
-    }
-    return this.postService.getPostsFromUser(usuario_id);
+  getPostsFromUser(@Param('id', ParseIntPipe) id: number) {
+    return this.postService.getPostsFromUser(id);
   }
 
   @UseGuards(JwtAuthGuard, PostOwnerGuard)
   @Patch('update/:id')
-  update(@Param('id') id: string, @Body() updatePostDto: UpdatePostDto) {
-    return this.postService.update(+id, updatePostDto);
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updatePostDto: UpdatePostDto,
+  ) {
+    return this.postService.update(id, updatePostDto);
   }
 
   @UseGuards(JwtAuthGuard, PostOwnerGuard)
   @Delete('delete/:id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id', ParseIntPipe) id: number) {
     return this.postService.remove(+id);
   }
 }
