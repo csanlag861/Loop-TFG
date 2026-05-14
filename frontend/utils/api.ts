@@ -1,7 +1,7 @@
 const isServer = typeof window === "undefined";
 const API_URL = process.env.API_URL || "http://looptfg-backend-o5hyfi:3000";
 
-const BASE_URL = isServer ? API_URL : "";
+const BASE_URL = API_URL;
 
 const prefix = "api/";
 const prefixPosts = "post/";
