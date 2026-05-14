@@ -4,7 +4,7 @@ const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 const BASE_URL = isServer ? API_URL : NEXT_PUBLIC_API_URL;
 
-const prefix = "api/";
+const prefix = "/api/";
 const prefixPosts = "post/";
 const prefixUser = "user/";
 const prefixTecnologia = "tecnologia";
@@ -87,5 +87,5 @@ export const toggleSeguir = ({ param }: { param: number }) =>
 export const checkSeguir = ({ param }: { param: number }) =>
   `${BASE_URL}${prefix}${prefixUser}${param}/check`;
 
-export const googleLogin = () => `${BASE_URL}${prefix}${prefixAuth}/google`
-export const githubLogin = () => `${BASE_URL}${prefix}${prefixAuth}/github`
+export const googleLogin = () => `${BASE_URL}${prefix}${prefixAuth}google`
+export const githubLogin = () => `${BASE_URL}${prefix}${prefixAuth}github`
