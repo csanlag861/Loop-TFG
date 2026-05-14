@@ -25,7 +25,7 @@ export async function likePostAction(post_id: number) {
     const data = await res.json();
     console.log(`✅ Like creado:`, data);
 
-    revalidateTag("posts", "updateTag");
+    revalidateTag("posts", "max");
   } catch (error) {
     console.error("❌ Error en likePostAction:", error);
     throw error;

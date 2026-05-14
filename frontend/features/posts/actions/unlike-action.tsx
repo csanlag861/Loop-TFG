@@ -27,7 +27,7 @@ export async function unlikePostAction(post_id: number) {
     const data = await res.json();
     console.log(`✅ Like eliminado:`, data);
 
-    revalidateTag("posts", "updateTag");
+    revalidateTag("posts", "max");
     return { success: true, data };
   } catch (error) {
     console.error("❌ Error en unlikePostAction:", error);

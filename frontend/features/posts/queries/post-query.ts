@@ -32,8 +32,7 @@ export async function getPosts(
     });
 
     if (!res.ok) {
-      console.error("Error al obtener los posts", res.statusText);
-      return;
+      throw new Error(`Error al obtener los posts: ${res.statusText}`)
     }
     return res.json();
   } catch (error) {
