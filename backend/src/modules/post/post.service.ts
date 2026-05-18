@@ -201,22 +201,64 @@ export class PostService {
     };
   }
 
-  getPostsFromUser(user_id: number) {
-    return this.prisma.post.findMany({
-      where: {
-        usuario_id: user_id,
-        usuario: {
-          deletedAt: null,
-          estado: {
-            notIn: [UsuarioEstadoEnum.BLOQUEADO, UsuarioEstadoEnum.SUSPENDIDO],
-          },
+  async getPostsFromUser(
+    user_id: number,
+    cursor?: number,
+    request_user_id?: number,
+  ) {
+    const take = 10;
+
+    const where = {
+      usuario_id: user_id, // Filtrar por el autor
+      ...(cursor && { id: { lt: cursor } }),
+      usuario: {
+        deletedAt: null,
+        estado: {
+          notIn: [UsuarioEstadoEnum.BLOQUEADO, UsuarioEstadoEnum.SUSPENDIDO],
         },
       },
-      include: {
-        usuario: true,
-        tecnologias: true,
-      },
-    });
+    };
+
+    // eslint-disable-next-line prefer-const
+    let [posts, count] = await this.prisma.$transaction([
+      this.prisma.post.findMany({
+        where,
+        take: take + 1,
+        include: {
+          usuario: {
+            select: { id: true, username: true, avatarURL: true, nombre: true },
+          },
+          tecnologias: true,
+          ...(request_user_id !== undefined && {
+            postGuardados: {
+              where: { usuario_id: request_user_id },
+              select: { id: true },
+            },
+          }),
+          ...(request_user_id !== undefined && {
+            likes: {
+              where: { usuario_id: request_user_id },
+              select: { id: true },
+            },
+          }),
+          _count: { select: { likes: true, comentarios: true } },
+        },
+        orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],
+      }),
+      this.prisma.post.count({ where }),
+    ]);
+
+    const hasNextPage = posts.length > take;
+    posts = hasNextPage ? posts.slice(0, -1) : posts;
+
+    const currentUser = request_user_id
+      ? new UserEntity(request_user_id)
+      : null;
+
+    return {
+      list: posts.map((post) => PostMapper.toResponse(post, currentUser)),
+      metadata: { count, hasNextPage, cursor: posts.at(-1)?.id },
+    };
   }
 
   update(id: number, updatePostDto: UpdatePostDto) {
@@ -240,5 +282,62 @@ export class PostService {
       throw new HttpException('NOT FOUND', HttpStatus.NOT_FOUND);
     }
     return HttpStatus.OK;
+  }
+
+  async getUserLikes(
+    user_id: number,
+    cursor?: number,
+    request_user_id?: number,
+  ) {
+    const take = 10;
+
+    const where = {
+      likes: { some: { usuario_id: user_id } },
+      ...(cursor && { id: { lt: cursor } }),
+      usuario: {
+        deletedAt: null,
+        estado: {
+          notIn: [UsuarioEstadoEnum.BLOQUEADO, UsuarioEstadoEnum.SUSPENDIDO],
+        },
+      },
+    };
+
+    // eslint-disable-next-line prefer-const
+    let [posts, count] = await this.prisma.$transaction([
+      this.prisma.post.findMany({
+        where,
+        take: take + 1,
+        include: {
+          usuario: {
+            select: { id: true, username: true, avatarURL: true, nombre: true },
+          },
+          tecnologias: true,
+          ...(request_user_id !== undefined && {
+            postGuardados: {
+              where: { usuario_id: request_user_id },
+              select: { id: true },
+            },
+          }),
+          ...(request_user_id !== undefined && {
+            likes: {
+              where: { usuario_id: request_user_id },
+              select: { id: true },
+            },
+          }),
+          _count: { select: { likes: true, comentarios: true } },
+        },
+        orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],
+      }),
+      this.prisma.post.count({ where }),
+    ]);
+    const hasNextPage = posts.length > take;
+    posts = hasNextPage ? posts.slice(0, -1) : posts;
+    const currentUser = request_user_id
+      ? new UserEntity(request_user_id)
+      : null;
+    return {
+      list: posts.map((post) => PostMapper.toResponse(post, currentUser)),
+      metadata: { count, hasNextPage, cursor: posts.at(-1)?.id },
+    };
   }
 }

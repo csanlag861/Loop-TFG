@@ -104,4 +104,135 @@ export class SeguidorService {
       },
     });
   }
+
+  async getSeguidores(
+    user_id: number,
+    cursor?: number,
+    request_user_id?: number,
+  ) {
+    const take = 10;
+
+    const where = {
+      seguido_id: user_id,
+      ...(cursor && { id: { lt: cursor } }),
+    };
+
+    // eslint-disable-next-line prefer-const
+    let [seguidores, count] = await this.prisma.$transaction([
+      this.prisma.seguidor.findMany({
+        where,
+        take: take + 1,
+        orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],
+        include: {
+          seguidor: {
+            select: {
+              id: true,
+              username: true,
+              nombre: true,
+              avatarURL: true,
+            },
+          },
+        },
+      }),
+      this.prisma.seguidor.count({ where }),
+    ]);
+
+    const hasNextPage = seguidores.length > take;
+    seguidores = hasNextPage ? seguidores.slice(0, -1) : seguidores;
+
+    // Determinar si el usuario autenticado sigue a cada seguidor
+    let followingIds: Set<number> = new Set();
+    if (request_user_id) {
+      const follows = await this.prisma.seguidor.findMany({
+        where: {
+          seguidor_id: request_user_id,
+          seguido_id: {
+            in: seguidores.map((s) => s.seguidor.id),
+          },
+        },
+        select: { seguido_id: true },
+      });
+      followingIds = new Set(follows.map((f) => f.seguido_id));
+    }
+
+    return {
+      list: seguidores.map((s) => ({
+        id: s.seguidor.id,
+        username: s.seguidor.username,
+        nombre: s.seguidor.nombre,
+        avatarURL: s.seguidor.avatarURL,
+        isFollowing: followingIds.has(s.seguidor.id),
+      })),
+      metadata: {
+        count,
+        hasNextPage,
+        cursor: seguidores.at(-1)?.id,
+      },
+    };
+  }
+
+  async getSeguidos(
+    user_id: number,
+    cursor?: number,
+    request_user_id?: number,
+  ) {
+    const take = 10;
+
+    const where = {
+      seguidor_id: user_id,
+      ...(cursor && { id: { lt: cursor } }),
+    };
+
+    // eslint-disable-next-line prefer-const
+    let [seguidos, count] = await this.prisma.$transaction([
+      this.prisma.seguidor.findMany({
+        where,
+        take: take + 1,
+        orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],
+        include: {
+          seguido: {
+            select: {
+              id: true,
+              username: true,
+              nombre: true,
+              avatarURL: true,
+            },
+          },
+        },
+      }),
+      this.prisma.seguidor.count({ where }),
+    ]);
+
+    const hasNextPage = seguidos.length > take;
+    seguidos = hasNextPage ? seguidos.slice(0, -1) : seguidos;
+
+    let followingIds: Set<number> = new Set();
+    if (request_user_id) {
+      const follows = await this.prisma.seguidor.findMany({
+        where: {
+          seguidor_id: request_user_id,
+          seguido_id: {
+            in: seguidos.map((s) => s.seguido.id),
+          },
+        },
+        select: { seguido_id: true },
+      });
+      followingIds = new Set(follows.map((f) => f.seguido_id));
+    }
+
+    return {
+      list: seguidos.map((s) => ({
+        id: s.seguido.id,
+        username: s.seguido.username,
+        nombre: s.seguido.nombre,
+        avatarURL: s.seguido.avatarURL,
+        isFollowing: followingIds.has(s.seguido.id),
+      })),
+      metadata: {
+        count,
+        hasNextPage,
+        cursor: seguidos.at(-1)?.id,
+      },
+    };
+  }
 }

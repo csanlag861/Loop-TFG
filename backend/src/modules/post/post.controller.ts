@@ -61,9 +61,24 @@ export class PostController {
     return this.postService.findByPost(id, cursor);
   }
 
+  @UseGuards(JwtAuthOptionalGuard)
   @Get(':id/posts')
-  getPostsFromUser(@Param('id', ParseIntPipe) id: number) {
-    return this.postService.getPostsFromUser(id);
+  getPostsFromUser(
+    @Param('id', ParseIntPipe) id: number,
+    @Query('cursor', new ParseIntPipe({ optional: true })) cursor?: number,
+    @User('userId') request_user_id?: number,
+  ) {
+    return this.postService.getPostsFromUser(id, cursor, request_user_id);
+  }
+
+  @UseGuards(JwtAuthOptionalGuard)
+  @Get(':id/likes')
+  getUserLikes(
+    @Param('id', ParseIntPipe) id: number,
+    @Query('cursor', new ParseIntPipe({ optional: true })) cursor?: number,
+    @User('userId') request_user_id?: number,
+  ) {
+    return this.postService.getUserLikes(id, cursor, request_user_id);
   }
 
   @UseGuards(JwtAuthGuard, PostOwnerGuard)

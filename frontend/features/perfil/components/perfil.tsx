@@ -2,14 +2,20 @@ import { fetcher } from "@/lib/fetcher";
 import { getProfile, getPostsFromUser } from "@/utils/api";
 import Image from "next/image";
 import { Separator } from "@/components/ui/separator";
-import Post from "@/features/posts/components/post/post";
 import { EditarPerfilButton } from "./editarPerfil-button";
-import { PostEditable } from "@/types/post-types";
 import { FollowButton } from "../seguidor/seguir-button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import ProfilePostList from "./perfil-post-list";
+import Link from "next/link";
 
 export const Perfil = async ({ id }: { id: string }) => {
   const data = await fetcher(getProfile({ param: parseInt(id) }));
-  const dataPosts = await fetcher(getPostsFromUser({ param: parseInt(id) }));
+  let initialPosts = undefined;
+  try {
+    initialPosts = await fetcher(getPostsFromUser({ param: parseInt(id) }));
+  } catch (error) {
+    console.error("Error cargando los posts del usuario", error);
+  }
 
   return (
     <main className="min-h-screen w-full flex flex-col items-center justify-center">
@@ -43,27 +49,61 @@ export const Perfil = async ({ id }: { id: string }) => {
           <h2 className="font-sohne-light font-light">{data?.nombre}</h2>
           <p className="font-sohne-light font-light">{data?.biografia}</p>
           <div className="flex gap-6 mt-1 font-sohne-light text-[13px]">
-            <span>
-              <strong className="font-sohne-regular">{data?.seguidoresCount ?? 0}</strong>{" "}
+            <Link
+              href={`/perfil/${id}/seguidores`}
+              className="hover:underline hover:text-primary-color transition-colors duration-200"
+            >
+              <strong className="font-sohne-regular">
+                {data?.seguidoresCount ?? 0}
+              </strong>{" "}
               seguidores
-            </span>
-            <span>
-              <strong className="font-sohne-regular">{data?.seguidosCount ?? 0}</strong>{" "}
+            </Link>
+            <Link
+              href={`/perfil/${id}/seguidos`}
+              className="hover:underline hover:text-primary-color transition-colors duration-200"
+            >
+              <strong className="font-sohne-regular">
+                {data?.seguidosCount ?? 0}
+              </strong>{" "}
               seguidos
-            </span>
+            </Link>
           </div>
         </div>
       </section>
 
       <Separator className="w-full" />
-      <section>
-        <div className="flex flex-col items-center justify-center gap-2 text-gris01 text-[14px]">
-          <ul className="flex flex-col items-center justify-center gap-8 mt-8">
-            {dataPosts.map((post: PostEditable) => (
-              <Post key={post.id} post={post} />
-            ))}
-          </ul>
-        </div>
+      <section className="w-full max-w-2xl flex flex-col items-center">
+        <Tabs defaultValue="posts" className="w-full">
+          <TabsList
+            className="grid w-full grid-cols-2 mb-8 bg-transparent"
+            variant="line"
+          >
+            <TabsTrigger
+              value="posts"
+              className="data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:bg-transparent rounded-none"
+            >
+              Publicaciones
+            </TabsTrigger>
+            <TabsTrigger
+              value="likes"
+              className="data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:bg-transparent rounded-none"
+            >
+              Likes
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="posts" className="w-full mt-0">
+            <ProfilePostList
+              userId={parseInt(id)}
+              type="posts"
+              initialData={initialPosts}
+            />
+          </TabsContent>
+
+          <TabsContent value="likes" className="w-full mt-0">
+            <ProfilePostList userId={parseInt(id)} type="likes" />
+          </TabsContent>
+        </Tabs>
       </section>
     </main>
   );

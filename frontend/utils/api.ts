@@ -22,10 +22,12 @@ export const updatePost = (param: string) =>
   `${BASE_URL}${prefix}${prefixPosts}update/${param}`;
 export const deletePost = ({ param }: { param: number | string }) =>
   `${BASE_URL}${prefix}${prefixPosts}delete/${param}`;
-export const getPostsFromUser = ({ param }: { param: number }) =>
-  `${BASE_URL}${prefix}${prefixPosts}${param}/posts`;
 export const getPostById = ({ param }: { param: number }) =>
   `${BASE_URL}${prefix}${prefixPosts}${param}`;
+export const getPostsFromUser = ({ param }: { param: number }) =>
+  `${BASE_URL}${prefix}${prefixPosts}${param}/posts`;
+export const getUserLikes = ({ param }: { param: number }) =>
+  `${BASE_URL}${prefix}${prefixPosts}${param}/likes`;
 
 export const getUserData = () => `${BASE_URL}${prefix}${prefixUser}me`;
 export const getProfile = ({ param }: { param: number }) =>
@@ -89,3 +91,7 @@ export const checkSeguir = ({ param }: { param: number }) =>
 
 export const googleLogin = () => `${BASE_URL}${prefix}${prefixAuth}google`
 export const githubLogin = () => `${BASE_URL}${prefix}${prefixAuth}github`
+export const getSeguidores = ({ param }: { param: number }) =>
+  `${BASE_URL}${prefix}${prefixUser}${param}/seguidores`;
+export const getSeguidos = ({ param }: { param: number }) =>
+  `${BASE_URL}${prefix}${prefixUser}${param}/seguidos`;
