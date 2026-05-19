@@ -9,4 +9,4 @@ export const dashboardPath = () => "/dashboard/usuarios";
 
 export const postPath = ({ id }: { id: number }) => `/posts/${id}`;
 
-export const basePath = () => "https://loop-tfg-git-dev-csanlag861-8397s-projects.vercel.app/";
+export const basePath = () => "https://loop-tfg.vercel.app/";
