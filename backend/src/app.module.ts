@@ -11,6 +11,7 @@ import { LikeModule } from './modules/like/like.module';
 import { SupabaseService } from './modules/supabase/supabase.service';
 import { ComentariosModule } from './modules/comentarios/comentarios.module';
 import { SeguidorModule } from './modules/seguidor/seguidor.module';
+import { InngestController } from './modules/inngest/inngest.controller';
 
 @Module({
   imports: [
@@ -26,7 +27,7 @@ import { SeguidorModule } from './modules/seguidor/seguidor.module';
     ComentariosModule,
     SeguidorModule,
   ],
-  controllers: [],
+  controllers: [InngestController],
   providers: [SupabaseService],
 })
 export class AppModule {}

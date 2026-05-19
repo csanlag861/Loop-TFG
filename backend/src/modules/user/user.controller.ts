@@ -62,7 +62,22 @@ export class UserController {
     @UploadedFile() file?: Express.Multer.File,
   ) {
     console.log('[Backend Controller] Received DTO:', dto);
-    console.log('[Backend Controller] Received File:', file ? `${file.originalname} (${file.size} bytes)` : 'No file');
+    console.log(
+      '[Backend Controller] Received File:',
+      file ? `${file.originalname} (${file.size} bytes)` : 'No file',
+    );
     return this.userService.updateUser(user_id, dto, file);
+  }
+
+  @Get('check-username/:username')
+  async checkUsername(@Param('username') username: string) {
+    const user = await this.userService.findUserByUsername(username);
+    return { available: !user };
+  }
+
+  @Get('check-email/:email')
+  async checkEmail(@Param('email') email: string) {
+    const user = await this.userService.findUserByEmail(email);
+    return { available: !user };
   }
 }

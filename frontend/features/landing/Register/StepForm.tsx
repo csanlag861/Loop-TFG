@@ -5,10 +5,15 @@ import { Resolver, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import InputField from "@/components/reusables/inputfield/inputField";
-import { RegisterAction } from "./actions/Register";
+import {
+  RegisterAction,
+  CheckUsernameAction,
+  CheckEmailAction,
+} from "./actions/Register";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { homePath } from "@/utils/paths";
+import { ArrowLeft } from "@geist-ui/icons";
 
 type FormData = {
   nombre: string;
@@ -51,6 +56,30 @@ const StepForm = () => {
     setLoading(true);
 
     if (!stepper.state.isLast) {
+      if (stepper.state.current.data.id === "username") {
+        const check = await CheckUsernameAction(data.username);
+        if (!check.available) {
+          form.setError("username", {
+            type: "manual",
+            message: "Este nombre de usuario ya está en uso",
+          });
+          setLoading(false);
+          return;
+        }
+      }
+
+      if (stepper.state.current.data.id === "email") {
+        const check = await CheckEmailAction(data.email);
+        if (!check.available) {
+          form.setError("email", {
+            type: "manual",
+            message: "Este email ya está en uso",
+          });
+          setLoading(false);
+          return;
+        }
+      }
+
       stepper.navigation.next();
       setLoading(false);
       return;
@@ -58,7 +87,7 @@ const StepForm = () => {
 
     try {
       const result = await RegisterAction({ status: "IDLE" }, data);
-      
+
       if (result?.status === "SUCCESS") {
         router.push(homePath());
         return;
@@ -113,24 +142,37 @@ const StepForm = () => {
         done: () => null,
       })}
 
-      <button
-        type="submit"
-        disabled={!isValid || loading}
-        className={`
-          rounded-full py-3 transition
-          ${
-            !isValid || loading
-              ? "bg-muted text-muted-foreground cursor-not-allowed"
-              : "bg-(--primary-color) text-white hover:bg-(--color-08)"
-          }
-        `}
-      >
-        {loading
-          ? "Cargando..."
-          : stepper.state.isLast
-            ? "Crear cuenta"
-            : "Continuar"}
-      </button>
+      <div className="flex items-center gap-3 mt-4">
+        {!stepper.state.isFirst && (
+          <button
+            type="button"
+            onClick={() => stepper.navigation.prev()}
+            disabled={loading}
+            className="flex items-center justify-center rounded-full p-3 border border-muted text-foreground hover:bg-muted/50 transition cursor-pointer"
+            aria-label="Volver al paso anterior"
+          >
+            <ArrowLeft size={24} />
+          </button>
+        )}
+        <button
+          type="submit"
+          disabled={!isValid || loading}
+          className={`
+            w-full rounded-full py-3 transition
+            ${
+              !isValid || loading
+                ? "bg-muted text-muted-foreground cursor-not-allowed"
+                : "bg-(--primary-color) text-white hover:bg-(--color-08)"
+            }
+          `}
+        >
+          {loading
+            ? "Cargando..."
+            : stepper.state.isLast
+              ? "Crear cuenta"
+              : "Continuar"}
+        </button>
+      </div>
     </form>
   );
 };

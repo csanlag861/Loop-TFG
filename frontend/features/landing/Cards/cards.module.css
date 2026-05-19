@@ -5,7 +5,7 @@
 
 .card {
   border: 1px solid var(--gris-03);
-  background-color: var(--gris-10);
+  background-color: transparent !important;
   color: var(--gris-01);
 
   padding: 20px 24px;

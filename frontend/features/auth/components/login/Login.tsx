@@ -6,17 +6,20 @@ import { useActionState, useEffect } from "react";
 import LogIn from "@/features/auth/actions/LogIn";
 import { toast } from "sonner";
 import Image from "next/image";
+import Link from "next/link";
 
 const Login = () => {
   const [actionState, action, isPending] = useActionState(LogIn, {
     message: "",
     fieldErrors: {},
   });
+
   useEffect(() => {
     if (actionState?.status === "ERROR2") {
       toast.error(actionState.message);
     }
   }, [actionState]);
+
   return (
     <form action={action} className={stylesLogin.form}>
       <Image src="/favicon.ico" alt="Logo de Loop" width={62} height={62} />
@@ -35,7 +38,9 @@ const Login = () => {
       )}
       <div className="flex items-center justify-center gap-3">
         <p>¿Has olvidado la contraseña?</p>
-        <p><b>Resetear contraseña</b></p>
+        <Link href="/forgot_password" replace>
+          <b className="hover:underline">Resetear contraseña</b>
+        </Link>
       </div>
       <Button text={isPending ? "Iniciando sesión..." : "Iniciar Sesión"} type="submit" disabled={isPending} />
     </form>

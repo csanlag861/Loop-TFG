@@ -34,13 +34,30 @@ const LogIn = async (
       body: JSON.stringify({ username, password }),
       credentials: "include",
     });
+
     if (!res.ok) {
       const data = await res.json();
+
+      if (res.status === 401 || data.message === "Unauthorized") {
+        return {
+          status: "ERROR",
+          message: "Credenciales incorrectas",
+          payload: formData,
+          fieldErrors: {
+            username: ["Usuario o contraseña incorrectos"],
+            password: ["Usuario o contraseña incorrectos"],
+          },
+        };
+      }
+
       return {
-        ..._actionState,
+        status: "ERROR2",
         message: data.message || "Error al iniciar sesión",
+        payload: formData,
+        fieldErrors: {},
       };
     }
+
     const data = await res.json();
     await setAuthCookies(data.accessToken, data.refreshToken);
   } catch (error: any) {

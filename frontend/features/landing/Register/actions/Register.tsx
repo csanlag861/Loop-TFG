@@ -2,7 +2,7 @@
 import { redirect } from "next/navigation";
 import { setAuthCookies } from "@/features/auth/utils/session-cookie";
 import { homePath } from "@/utils/paths";
-import { registerUrl } from "@/utils/api";
+import { checkEmail, checkUsername, registerUrl } from "@/utils/api";
 
 export type RegisterState = {
   status: "IDLE" | "SUCCESS" | "ERROR";
@@ -40,5 +40,28 @@ export const RegisterAction = async (
       status: "ERROR",
       message: "Ocurrió un error inesperado. Por favor, inténtalo de nuevo.",
     };
+  }
+};
+
+export const CheckUsernameAction = async (username: string) => {
+  try {
+    const res = await fetch(checkUsername({ param: username }), {
+      cache: "no-store",
+    });
+    if (!res.ok) return { available: false };
+    return await res.json();
+  } catch (error) {
+    return { available: false };
+  }
+};
+export const CheckEmailAction = async (email: string) => {
+  try {
+    const res = await fetch(checkEmail({ param: email }), {
+      cache: "no-store",
+    });
+    if (!res.ok) return { available: false };
+    return await res.json();
+  } catch (error) {
+    return { available: false };
   }
 };

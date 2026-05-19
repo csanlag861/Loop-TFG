@@ -1,6 +1,7 @@
 const isServer = typeof window === "undefined";
 const API_URL = process.env.API_URL || "http://looptfg-backend-o5hyfi:3000";
-const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
+const NEXT_PUBLIC_API_URL =
+  process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
 
 const BASE_URL = isServer ? API_URL : NEXT_PUBLIC_API_URL;
 
@@ -14,7 +15,7 @@ const prefixAdmin = "admin/";
 const prefixTecnologiaAdmin = "tecnologia";
 const prefixLike = "like/";
 const prefixComentarios = "comentarios/";
-const prefixAuth = "auth/"
+const prefixAuth = "auth/";
 
 export const getAllPosts = () => `${BASE_URL}${prefix}${prefixPosts}getAll`;
 export const createPost = () => `${BASE_URL}${prefix}${prefixPosts}create`;
@@ -68,9 +69,13 @@ export const deleteAdminUsuario = ({ param }: { param: number }) =>
   `${BASE_URL}${prefix}${prefixAdmin}usuarios/${param}`;
 export const restaurarAdminUsuario = ({ param }: { param: number }) =>
   `${BASE_URL}${prefix}${prefixAdmin}usuarios/${param}/restaurar`;
-export const logInUrl = () => `${BASE_URL}${prefix}auth/login`;
-export const registerUrl = () => `${BASE_URL}${prefix}auth/register`;
-export const refreshUrl = () => `${BASE_URL}${prefix}auth/refresh`;
+export const logInUrl = () => `${BASE_URL}${prefix}${prefixAuth}login`;
+export const registerUrl = () => `${BASE_URL}${prefix}${prefixAuth}register`;
+export const refreshUrl = () => `${BASE_URL}${prefix}${prefixAuth}refresh`;
+export const forgotPasswordUrl = () =>
+  `${BASE_URL}${prefix}${prefixAuth}forgot-password`;
+export const resetPasswordUrl = () =>
+  `${BASE_URL}${prefix}${prefixAuth}reset-password`;
 
 export const likePost = ({ param }: { param: number }) =>
   `${BASE_URL}${prefix}${prefixLike}${param}`;
@@ -89,9 +94,14 @@ export const toggleSeguir = ({ param }: { param: number }) =>
 export const checkSeguir = ({ param }: { param: number }) =>
   `${BASE_URL}${prefix}${prefixUser}${param}/check`;
 
-export const googleLogin = () => `${BASE_URL}${prefix}${prefixAuth}google`
-export const githubLogin = () => `${BASE_URL}${prefix}${prefixAuth}github`
+export const googleLogin = () => `${BASE_URL}${prefix}${prefixAuth}google`;
+export const githubLogin = () => `${BASE_URL}${prefix}${prefixAuth}github`;
 export const getSeguidores = ({ param }: { param: number }) =>
   `${BASE_URL}${prefix}${prefixUser}${param}/seguidores`;
 export const getSeguidos = ({ param }: { param: number }) =>
   `${BASE_URL}${prefix}${prefixUser}${param}/seguidos`;
+
+export const checkUsername = ({ param }: { param: string }) =>
+  `${BASE_URL}${prefix}${prefixUser}check-username/${param}`;
+export const checkEmail = ({ param }: { param: string }) =>
+  `${BASE_URL}${prefix}${prefixUser}check-email/${param}`;

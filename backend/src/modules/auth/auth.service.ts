@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import {
   Injectable,
   Body,
@@ -13,6 +14,11 @@ import { UserEntity } from './user';
 import { JwtService } from '@nestjs/jwt';
 import { PayloadEntity } from './payload';
 import { OAuthProfile } from './dto/oauth-profile.dto';
+import * as crypto from 'crypto';
+import { Resend } from 'resend';
+import { render } from '@react-email/render';
+import { inngest } from '@/lib/inngest/client';
+import { ResetPasswordEmail } from '@/emails/ResetPasswordEmail';
 
 @Injectable()
 export class AuthService {
@@ -77,7 +83,7 @@ export class AuthService {
     return this.jwtService.sign(payload, { expiresIn: '7d' });
   }
 
-  async refreshTokens(refreshToken: string) {
+  refreshTokens(refreshToken: string) {
     try {
       const payload = this.jwtService.verify<PayloadEntity>(refreshToken);
       const { iat, exp, ...newPayload } = payload as any;
@@ -118,5 +124,61 @@ export class AuthService {
     return this.loginOAuthUser(user);
   }
 
-  
+  async requestPasswordReset(email: string): Promise<boolean> {
+    const usuario = await this.userService.findUserByEmail(email);
+    if (!usuario) return true;
+
+    const nonce = crypto.randomBytes(32).toString('hex');
+    await this.userService.updateUser(usuario.id, {
+      passwordResetNonce: nonce,
+    });
+
+    const token = this.jwtService.sign(
+      { sub: usuario.id, nonce: nonce },
+      { expiresIn: '30m', secret: process.env.JWT_SECRET },
+    );
+
+    const resetLink = `${process.env.FRONTEND_URL}/reset_password/${token}`;
+    try {
+      await inngest.send({
+        name: 'app/password.password-reset',
+        data: { email: usuario.email, resetLink },
+      });
+    } catch (error) {
+      console.error('Inngest falló, ejecutando Fallback', error);
+      const resend = new Resend(process.env.RESEND_API_KEY);
+      const html = await render(ResetPasswordEmail({ resetLink }));
+      await resend.emails.send({
+        from: process.env.RESEND_FROM_EMAIL || 'onboarding@resend.dev',
+        to: usuario.email,
+        subject: 'Recupera tu contraseña - Loop',
+        html: html,
+      });
+    }
+    return true;
+  }
+
+  async resetPassword(token: string, newPassword: string): Promise<boolean> {
+    try {
+      const payload = this.jwtService.verify(token, {
+        secret: process.env.JWT_SECRET,
+      });
+
+      const { sub: userId, nonce } = payload;
+      const usuario = await this.userService.getUserById(userId);
+
+      if (!usuario || usuario.passwordResetNonce !== nonce) {
+        throw new Error('Token inválido o ya utilizado.');
+      }
+
+      const hashedPassword = await bcrypt.hash(newPassword, 10);
+      await this.userService.updateUser(userId, {
+        password: hashedPassword,
+        passwordResetNonce: null,
+      });
+      return true;
+    } catch (error) {
+      throw new Error('Link expirado o inválido.');
+    }
+  }
 }

@@ -26,21 +26,22 @@ enum RolNombreEnum {
 }
 
 model Usuario {
-  id            Int               @id @default(autoincrement())
-  nombre        String
-  username      String            @unique
-  email         String            @unique
-  password      String?
-  biografia     String?
-  rol_id        Int
-  rol           Rol               @relation(fields: [rol_id], references: [id])
-  estado        UsuarioEstadoEnum @default(ACTIVO)
-  createdAt     DateTime          @default(now())
-  avatarURL     String?
-  carpetas      Carpeta[]
-  posts         Post[]
-  postGuardados PostGuardado[]
-  deletedAt     DateTime?
+  id                 Int               @id @default(autoincrement())
+  nombre             String
+  username           String            @unique
+  email              String            @unique
+  password           String?
+  biografia          String?
+  rol_id             Int
+  rol                Rol               @relation(fields: [rol_id], references: [id])
+  estado             UsuarioEstadoEnum @default(ACTIVO)
+  createdAt          DateTime          @default(now())
+  avatarURL          String?
+  carpetas           Carpeta[]
+  posts              Post[]
+  postGuardados      PostGuardado[]
+  deletedAt          DateTime?
+  passwordResetNonce String?
 
   provider   String?
   providerId String?

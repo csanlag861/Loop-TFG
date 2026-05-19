@@ -79,4 +79,17 @@ export class AuthController {
       `${frontendUrl}/auth/callback?token=${accessToken}&refreshToken=${refreshToken}`,
     );
   }
+
+  @Post('forgot-password')
+  async forgotPassword(@Body('email') email: string) {
+    await this.authService.requestPasswordReset(email);
+    return { success: true };
+  }
+  @Post('reset-password')
+  async resetPassword(@Body() body: any) {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+    const { token, newPassword } = body;
+    await this.authService.resetPassword(token, newPassword);
+    return { success: true };
+  }
 }

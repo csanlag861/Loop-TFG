@@ -22,7 +22,8 @@ services:
     env_file:
       - ./backend/.env.dev
     environment:
-      DATABASE_URL: postgresql://postgres:postgres@db:5432/loop
+      DATABASE_URL: postgresql://postgres.bmumcurtyjxqdrmnzptq:M8f9kmvSw03PrQba@aws-1-eu-west-2.pooler.supabase.com:6543/postgres?pgbouncer=true
+      INNGEST_BASE_URL: http://inngest:8288
     depends_on:
       - db
 
@@ -39,6 +40,14 @@ services:
       NODE_ENV: development
       API_URL: http://backend:3000
       NEXT_PUBLIC_API_URL: http://localhost:3000
+    depends_on:
+      - backend
+
+  inngest:
+    image: inngest/inngest:latest
+    ports:
+      - "8288:8288"
+    command: inngest dev -u http://backend:3000/api/inngest --host 0.0.0.0
     depends_on:
       - backend
 
