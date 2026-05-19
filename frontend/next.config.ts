@@ -1,6 +1,6 @@
 import type { NextConfig } from "next";
 
-const API_URL = process.env.API_URL || "http://looptfg-backend-o5hyfi:3000";
+const API_URL = process.env.API_URL || "https://loop-tfg.onrender.com:3000";
 
 const nextConfig: NextConfig = {
   /* config options here */

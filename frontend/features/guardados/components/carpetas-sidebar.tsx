@@ -52,7 +52,7 @@ const CarpetasSidebar = () => {
   const { mutate: eliminar, isPending: eliminando } = useMutation({
     mutationFn: (eliminarPosts: boolean) =>
       fetcherClient(
-        `${eliminarCarpeta({ param: carpetaActiva.id })}?eliminar=${eliminarPosts}`,
+        `${eliminarCarpeta({ param: carpetaActiva?.id ?? 0 })}?eliminar=${eliminarPosts}`,
         { method: "DELETE" },
       ),
     onSuccess: () => {
@@ -94,27 +94,29 @@ const CarpetasSidebar = () => {
       </div>
 
       {/* Eliminar carpeta */}
-      <div className="flex flex-col gap-3">
-        <div>
-          <h2 className="text-white text-sm font-medium">
-            Eliminar carpeta actual
-          </h2>
-          <p className="text-[var(--gris-03)] text-xs mt-1">
-            ¿Deseas eliminar esta carpeta?
-          </p>
+      {carpetaActiva && (
+        <div className="flex flex-col gap-3">
+          <div>
+            <h2 className="text-white text-sm font-medium">
+              Eliminar carpeta actual
+            </h2>
+            <p className="text-[var(--gris-03)] text-xs mt-1">
+              ¿Deseas eliminar esta carpeta?
+            </p>
+          </div>
+          {esFavoritos ? (
+            <p className="text-[var(--gris-03)] text-xs">
+              La carpeta FAVORITOS no se puede eliminar.
+            </p>
+          ) : (
+            <Button
+              onClick={() => setDialogOpen(true)}
+              className="border! border-red-500/50! text-red-400! hover:bg-red-500/10! text-sm! bg-transparent! py-2! transition-colors! duration-150! w-full!"
+              text="Eliminar carpeta"
+            />
+          )}
         </div>
-        {esFavoritos ? (
-          <p className="text-[var(--gris-03)] text-xs">
-            La carpeta FAVORITOS no se puede eliminar.
-          </p>
-        ) : (
-          <Button
-            onClick={() => setDialogOpen(true)}
-            className="border! border-red-500/50! text-red-400! hover:bg-red-500/10! text-sm! bg-transparent! py-2! transition-colors! duration-150! w-full!"
-            text="Eliminar carpeta"
-          />
-        )}
-      </div>
+      )}
 
       {/* Dialog de confirmación */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>

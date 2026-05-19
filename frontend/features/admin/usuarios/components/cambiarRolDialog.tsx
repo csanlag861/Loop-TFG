@@ -18,6 +18,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { fetcherClient } from "@/lib/fetcher-client";
+import { updateAdminUsuarioRol } from "@/utils/api";
 
 const ROLES = ["USUARIO", "MODERADOR", "ADMIN"] as const;
 type Rol = (typeof ROLES)[number];
@@ -47,17 +49,13 @@ export function CambiarRolDialog({
 
     setLoading(true);
     try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/admin/usuarios/${usuario.id}/rol`,
+      await fetcherClient(
+        updateAdminUsuarioRol({ param: usuario.id }),
         {
           method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
           body: JSON.stringify({ rol: rolSeleccionado }),
         },
       );
-
-      if (!res.ok) throw new Error();
 
       toast.success(`Rol de @${usuario.username} actualizado correctamente`);
       onClose();

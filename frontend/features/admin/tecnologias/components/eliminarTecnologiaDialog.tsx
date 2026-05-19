@@ -12,6 +12,8 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { fetcherClient } from "@/lib/fetcher-client";
+import { deleteTecnologia } from "@/utils/api";
 
 interface Tecnologia {
   id: number;
@@ -35,15 +37,12 @@ export function EliminarTecnologiaDialog({
   async function handleEliminar() {
     setLoading(true);
     try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/tecnologia/${tecnologia.id}`,
+      await fetcherClient(
+        deleteTecnologia({ param: tecnologia.id }),
         {
           method: "DELETE",
-          credentials: "include",
         },
       );
-
-      if (!res.ok) throw new Error();
 
       toast.success(`"${tecnologia.nombre}" eliminada correctamente`);
       onClose();

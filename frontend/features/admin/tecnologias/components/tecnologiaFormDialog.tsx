@@ -13,6 +13,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { fetcherClient } from "@/lib/fetcher-client";
+import { createTecnologia, updateTecnologia } from "@/utils/api";
 
 interface Tecnologia {
   id: number;
@@ -59,13 +61,11 @@ export function TecnologiaFormDialog({
     setLoading(true);
     try {
       const url = isEditing
-        ? `${process.env.NEXT_PUBLIC_API_URL}/api/tecnologia/${tecnologia.id}`
-        : `${process.env.NEXT_PUBLIC_API_URL}/api/tecnologia`;
+        ? updateTecnologia({ param: tecnologia.id })
+        : createTecnologia();
 
-      const res = await fetch(url, {
+      await fetcherClient(url, {
         method: isEditing ? "PATCH" : "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
         body: JSON.stringify({
           nombre: form.nombre.trim(),
           ...(form.background && { background: form.background }),
@@ -73,8 +73,6 @@ export function TecnologiaFormDialog({
           ...(form.text && { text: form.text }),
         }),
       });
-
-      if (!res.ok) throw new Error();
 
       toast.success(
         isEditing

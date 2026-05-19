@@ -12,6 +12,8 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { fetcherClient } from "@/lib/fetcher-client";
+import { restaurarAdminUsuario } from "@/utils/api";
 
 interface RestaurarUsuarioDialogProps {
   open: boolean;
@@ -30,15 +32,12 @@ export function RestaurarUsuarioDialog({
   async function handleRestaurar() {
     setLoading(true);
     try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/admin/usuarios/${usuario.id}/restaurar`,
+      await fetcherClient(
+        restaurarAdminUsuario({ param: usuario.id }),
         {
           method: "PATCH",
-          credentials: "include",
         },
       );
-
-      if (!res.ok) throw new Error();
 
       toast.success(`@${usuario.username} restaurado correctamente`);
       onClose();

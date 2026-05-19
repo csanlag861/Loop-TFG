@@ -18,6 +18,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { fetcherClient } from "@/lib/fetcher-client";
+import { updateAdminUsuarioEstado } from "@/utils/api";
 
 const ESTADOS = ["ACTIVO", "SILENCIADO", "BLOQUEADO", "SUSPENDIDO"] as const;
 type Estado = (typeof ESTADOS)[number];
@@ -47,17 +49,13 @@ export function CambiarEstadoDialog({
 
     setLoading(true);
     try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/admin/usuarios/${usuario.id}/estado`,
+      await fetcherClient(
+        updateAdminUsuarioEstado({ param: usuario.id }),
         {
           method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          credentials: "include",
           body: JSON.stringify({ estado: estadoSeleccionado }),
         },
       );
-
-      if (!res.ok) throw new Error();
 
       toast.success(`Estado de @${usuario.username} actualizado correctamente`);
       onClose();

@@ -27,7 +27,7 @@ interface PostGuardado {
 
 type Props = {
   carpetas: Carpeta[];
-  carpetaActiva: Carpeta;
+  carpetaActiva?: Carpeta;
   setCarpetaActiva: (carpeta: Carpeta) => void;
 };
 
@@ -39,9 +39,18 @@ const CarpetasTabs = ({ carpetas, carpetaActiva, setCarpetaActiva }: Props) => {
 
   // Fetch posts in active folder
   const { data: carpetaConPosts, isLoading } = useQuery({
-    queryKey: ["carpeta", carpetaActiva.id],
-    queryFn: () => fetcherClient(obtenerCarpeta({ param: carpetaActiva.id })),
+    queryKey: ["carpeta", carpetaActiva?.id],
+    queryFn: () => carpetaActiva ? fetcherClient(obtenerCarpeta({ param: carpetaActiva.id })) : Promise.resolve(null),
+    enabled: !!carpetaActiva?.id,
   });
+
+  if (!carpetaActiva) {
+    return (
+      <div className="flex-1 flex flex-col justify-center items-center p-8 text-center bg-transparent border border-dashed border-[var(--gris-07)] rounded-xl min-h-[300px]">
+        <p className="text-[var(--gris-03)] text-sm">No se encontraron carpetas.</p>
+      </div>
+    );
+  }
 
   return (
     <div className="flex-1 relative">

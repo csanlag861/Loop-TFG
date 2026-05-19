@@ -18,13 +18,17 @@ const GuardadosWrapper = ({
     initialData: carpetasIniciales,
   });
 
-  const [carpetaActivaId, setCarpetaActivaId] = useState<number>(carpetasIniciales[0].id);
+  const [carpetaActivaId, setCarpetaActivaId] = useState<number | null>(
+    carpetasIniciales && carpetasIniciales.length > 0 ? carpetasIniciales[0].id : null
+  );
 
-  const carpetaActiva = carpetas.find((c: Carpeta) => c.id === carpetaActivaId) ?? carpetas[0];
+  const carpetaActiva = carpetas && carpetas.length > 0
+    ? (carpetas.find((c: Carpeta) => c.id === carpetaActivaId) ?? carpetas[0])
+    : undefined;
 
   return (
     <CarpetasTabs
-      carpetas={carpetas}
+      carpetas={carpetas || []}
       carpetaActiva={carpetaActiva}
       setCarpetaActiva={(carpeta) => setCarpetaActivaId(carpeta.id)}
     />

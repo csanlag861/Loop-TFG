@@ -12,6 +12,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { fetcherClient } from "@/lib/fetcher-client";
+import { deleteAdminUsuario } from "@/utils/api";
 
 interface EliminarUsuarioDialogProps {
   open: boolean;
@@ -30,15 +32,12 @@ export function EliminarUsuarioDialog({
   async function handleEliminar() {
     setLoading(true);
     try {
-      const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/admin/usuarios/${usuario.id}`,
+      await fetcherClient(
+        deleteAdminUsuario({ param: usuario.id }),
         {
           method: "DELETE",
-          credentials: "include",
         },
       );
-
-      if (!res.ok) throw new Error();
 
       toast.success(`Usuario @${usuario.username} eliminado correctamente`);
       onClose();
