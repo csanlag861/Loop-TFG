@@ -10,7 +10,10 @@ export default async function LandingPage() {
   if (token) redirect(homePath());
   return (
     <main className={stylesPage.main}>
-      <h1>Loop</h1>
+      <header className={stylesPage.header}>
+        <h1>Loop</h1>
+        <span className={stylesPage.badge}>COMUNIDAD IT</span>
+      </header>
 
       <div className={stylesPage.text}>
         <h2>La comunidad de Desarrollo</h2>

@@ -97,7 +97,7 @@ const Form = () => {
           </button>
         </DialogTrigger>
 
-        <DialogContent className="w-md h-168 flex flex-col items-center justify-center">
+        <DialogContent className="w-[92vw] max-w-[450px] h-auto max-h-[92dvh] overflow-y-auto flex flex-col items-center justify-center p-6 bg-[#121212] border-[var(--gris-07)] text-white">
           <DialogTitle>
             <div className="flex flex-col items-center gap-6 mb-6">
               <Image
@@ -125,7 +125,7 @@ const Form = () => {
           <DialogTrigger asChild>
             <button>Inicia Sesion</button>
           </DialogTrigger>
-          <DialogContent className="w-md h-168 flex flex-col items-center justify-center">
+          <DialogContent className="w-[92vw] max-w-[450px] h-auto max-h-[92dvh] overflow-y-auto flex flex-col items-center justify-center p-6 bg-[#121212] border-[var(--gris-07)] text-white">
             <DialogTitle>Inicia Sesión</DialogTitle>
             <Login />
           </DialogContent>

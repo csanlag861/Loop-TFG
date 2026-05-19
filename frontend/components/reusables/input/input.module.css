@@ -1,42 +1,56 @@
-.contenedor{
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    position: relative;
+.contenedor {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  position: relative;
+  width: 100%;
+  max-width: 384px;
 
-    label{
-        font-size: 14px;
-        font-family: "Sohne-Light", system-ui, sans-serif;
-        color: var(--gris-01);
+  label {
+    font-size: 14px;
+    font-family: "Sohne-Light", system-ui, sans-serif;
+    color: var(--gris-01);
+  }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="password"] {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    height: 48px;
+    border: 1px solid var(--gris-03);
+    border-radius: 999px;
+    padding: 0 44px 0 16px;
+    font-size: 14px;
+    font-family: "Sohne-Light", system-ui, sans-serif;
+    color: var(--gris-01);
+    background-color: transparent;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+    &:focus {
+      outline: none;
+      border-color: rgba(83, 92, 250, 0.6) !important;
+      box-shadow: 0 0 14px rgba(83, 92, 250, 0.25) !important;
     }
 
-    input[type="text"], input[type="email"], input[type="password"]{
-        display: inline-block;
-        width: 384px;
-        height: 48px;
-        border: 1px solid var(--gris-03);
-        border-radius: 999px;
-        padding: 0 16px;
-        font-size: 14px;
-        font-family: "Sohne-Light", system-ui, sans-serif;
-        color: var(--gris-01);
-
-        &:focus {
-            outline: none;
-            border: 1px solid var(--gris-03);
-        }
-
-        &::placeholder {
-            color: var(--gris-04);
-            opacity: 1;
-        }
+    &::placeholder {
+      color: var(--gris-04);
+      opacity: 1;
     }
+  }
 
-    svg{
-        cursor: pointer;
-        position: relative;
-        left: 340px;
-        bottom: 39px;
-        color: var(--gris-03);
+  svg {
+    cursor: pointer;
+    position: absolute;
+    right: 16px;
+    bottom: 16px;
+    color: var(--gris-03);
+    transition: color 0.2s ease, transform 0.2s ease;
+
+    &:hover {
+      color: var(--gris-01);
+      transform: scale(1.1);
     }
+  }
 }

@@ -11,3 +11,10 @@
         width: 100%;
     }
 }
+
+@media (max-width: 767px) {
+    .section {
+        margin-top: 24px;
+        margin-left: 0;
+    }
+}

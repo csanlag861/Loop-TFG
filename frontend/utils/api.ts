@@ -1,6 +1,6 @@
 const isServer = typeof window === "undefined";
 const API_URL = process.env.API_URL || "http://looptfg-backend-o5hyfi:3000";
-const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL;
+const NEXT_PUBLIC_API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
 
 const BASE_URL = isServer ? API_URL : NEXT_PUBLIC_API_URL;
 

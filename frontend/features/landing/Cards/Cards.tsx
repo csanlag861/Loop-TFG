@@ -1,12 +1,11 @@
 import stylesCards from "./cards.module.css";
-
 import SpotlightCard from "@/components/ui/SpotlightCard";
 import { Users, Bookmark } from "@geist-ui/icons";
 
 const Cards = () => {
   return (
     <div
-      className={`${stylesCards.grid} grid grid-cols-[256px_256px] grid-rows-2 gap-4`}
+      className={`${stylesCards.grid} grid grid-cols-1 sm:grid-cols-2 md:grid-cols-[256px_256px] gap-4`}
     >
       <SpotlightCard
         className={stylesCards.card}

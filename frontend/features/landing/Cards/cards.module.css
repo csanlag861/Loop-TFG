@@ -1,39 +1,62 @@
 .grid {
+  display: grid;
+  gap: 16px;
+}
+
+.card {
+  border: 1px solid var(--gris-03);
+  background-color: var(--gris-10);
+  color: var(--gris-01);
+
+  padding: 20px 24px;
+
+  width: 256px;
+  height: 224px;
+
+  transition:
+    border-color 0.3s ease,
+    background-color 0.3s ease,
+    transform 0.3s ease;
+
+  &:hover {
+    border: 1px solid var(--color-03);
+    background-color: var(--color-10);
+    transform: translateY(-2px);
+  }
+
+  .cardText {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    h4 {
+      font-family: "Sohne-Regular";
+      font-size: 16px;
+      font-weight: 600;
+    }
+    p {
+      font-family: "Sohne-Light";
+      font-size: 12px;
+      color: var(--gris-03);
+      line-height: 1.5;
+    }
+
+    svg {
+      color: var(--gris-01);
+    }
+  }
+}
+
+@media (max-width: 767px) {
+  .grid {
+    grid-template-cols: 1fr !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    gap: 12px !important;
+  }
   .card {
-    border: 1px solid var(--gris-03);
-    background-color: var(--gris-10);
-    color: var(--gris-01);
-
-    padding: 20px 24px;
-
-    width: 256px;
-    height: 224px;
-
-    transition:
-      border-color 0.3s ease,
-      background-color 0.3s ease;
-
-    &:hover {
-      border: 1px solid var(--color-03);
-      background-color: var(--color-10);
-    }
-
-    .cardText {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      h4 {
-        font-family: "Sohne-Regular";
-      }
-      p {
-        font-family: "Sohne-Light";
-        font-size: 12px;
-        color: var(--gris-03);
-      }
-
-      svg {
-        color: var(--gris-01);
-      }
-    }
+    width: 100% !important;
+    height: auto !important;
+    min-height: 160px;
+    padding: 16px 20px !important;
   }
 }

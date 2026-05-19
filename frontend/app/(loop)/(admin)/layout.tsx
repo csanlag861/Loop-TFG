@@ -18,7 +18,7 @@ export default async function AdminLayout({
   return (
     <div className="flex flex-col flex-1">
       <AdminHeader />
-      <main className="flex-1 px-8 py-6">{children}</main>
+      <main className="flex-1 px-3 py-4 md:px-8 md:py-6">{children}</main>
     </div>
   );
 }

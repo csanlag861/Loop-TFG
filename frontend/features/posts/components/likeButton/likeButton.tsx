@@ -84,9 +84,9 @@ export const LikeButton = ({
       disabled={mutation.isPending}
     >
       {liked ? (
-        <HeartFill size={16} className="text-(--primary-color)" />
+        <HeartFill key="filled" size={16} className="text-red-500 animate-heart-pop" />
       ) : (
-        <Heart size={16} />
+        <Heart key="empty" size={16} className="hover:scale-110 transition-transform duration-200" />
       )}{" "}
       {count}
     </button>

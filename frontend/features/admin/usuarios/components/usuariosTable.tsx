@@ -54,8 +54,8 @@ export function UsuariosTable({
             <TableHead style={{ color: "var(--gris-05)" }}>
               Nombre de Usuario
             </TableHead>
-            <TableHead style={{ color: "var(--gris-05)" }}>Email</TableHead>
-            <TableHead style={{ color: "var(--gris-05)" }}>
+            <TableHead className="hidden md:table-cell" style={{ color: "var(--gris-05)" }}>Email</TableHead>
+            <TableHead className="hidden md:table-cell" style={{ color: "var(--gris-05)" }}>
               Fecha de creación
             </TableHead>
             <TableHead style={{ color: "var(--gris-05)" }} />
@@ -74,10 +74,10 @@ export function UsuariosTable({
               <TableCell style={{ color: "var(--gris-01)" }}>
                 {usuario.username}
               </TableCell>
-              <TableCell style={{ color: "var(--gris-02)" }}>
+              <TableCell className="hidden md:table-cell" style={{ color: "var(--gris-02)" }}>
                 {usuario.email}
               </TableCell>
-              <TableCell style={{ color: "var(--gris-02)" }}>
+              <TableCell className="hidden md:table-cell" style={{ color: "var(--gris-02)" }}>
                 {new Date(usuario.createdAt).toLocaleDateString("es-ES")}
               </TableCell>
               <TableCell className="text-right">

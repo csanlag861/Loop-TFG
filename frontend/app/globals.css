@@ -276,3 +276,35 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+@keyframes heartPop {
+  0% { transform: scale(1); }
+  35% { transform: scale(1.35); }
+  65% { transform: scale(0.85); }
+  100% { transform: scale(1); }
+}
+
+.animate-heart-pop {
+  animation: heartPop 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.animate-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.03) 25%,
+    rgba(255, 255, 255, 0.08) 50%,
+    rgba(255, 255, 255, 0.03) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite linear;
+}
+

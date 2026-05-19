@@ -13,14 +13,14 @@ export function AdminHeader() {
   const pathname = usePathname();
 
   return (
-    <header className="px-8 pt-8 pb-0">
+    <header className="px-4 md:px-8 pt-6 md:pt-8 pb-0">
       <h1
-        className="text-3xl font-bold mb-6"
+        className="text-xl md:text-3xl font-bold mb-4 md:mb-6"
         style={{ color: 'var(--primary-color)' }}
       >
         Administración
       </h1>
-      <nav className="flex gap-6 border-b" style={{ borderColor: 'var(--gris-08)' }}>
+      <nav className="flex gap-4 md:gap-6 border-b overflow-x-auto" style={{ borderColor: 'var(--gris-08)' }}>
         {tabs.map((tab) => {
           const isActive = pathname.startsWith(tab.href);
           return (

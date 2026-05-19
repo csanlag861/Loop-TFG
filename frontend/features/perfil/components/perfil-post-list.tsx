@@ -45,7 +45,7 @@ export const ProfilePostList = ({
     }
   }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
 
-  if (status === "pending" && !initialData) {
+  if ((status as string) === "pending" && !initialData) {
     return (
       <div className="flex justify-center mt-8 text-gris01 text-[14px]">
         Cargando...

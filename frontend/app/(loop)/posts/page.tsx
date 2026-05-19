@@ -14,7 +14,9 @@ export default async function PostsPage({ searchParams }: PostsPageParams) {
   return (
     <section className={`flex flex-col justify-center ${stylesPage.section}`}>
       <h1>Home</h1>
-      <InputText />
+      <div className="hidden md:block">
+        <InputText />
+      </div>
       <Suspense
         fallback={
           <div className="flex flex-col gap-4 justify-center items-center mt-8">
