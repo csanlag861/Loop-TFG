@@ -18,8 +18,8 @@ export const Perfil = async ({ id }: { id: string }) => {
   }
 
   return (
-    <main className="min-h-screen w-full flex flex-col items-center justify-center">
-      <section className="h-72 md:h-96 w-full flex flex-col items-center justify-center gap-4 relative rounded-3xl overflow-hidden border border-[var(--gris-07)] bg-gradient-to-b from-[#0e0e1f] via-[#050508] to-[#000000] p-6 shadow-2xl mt-4 mb-6">
+    <main className="w-full flex flex-col items-center justify-start max-w-2xl mx-auto px-2 md:px-0">
+      <section className="h-auto md:h-96 w-full flex flex-col items-center justify-center gap-4 py-8 md:py-6 relative rounded-3xl overflow-hidden border border-[var(--gris-07)] bg-gradient-to-b from-[#0e0e1f] via-[#050508] to-[#000000] p-6 shadow-2xl mt-4 mb-6 shrink-0">
         {/* Glow spots in the background (Mesh Gradient effect) */}
         <div className="absolute inset-0 opacity-50 pointer-events-none z-0">
           <div className="absolute -top-40 -left-40 w-96 h-96 rounded-full bg-purple-600/20 blur-[100px]" />
@@ -33,7 +33,7 @@ export const Perfil = async ({ id }: { id: string }) => {
         )}
 
         {!data.isOwner && (
-          <div className="absolute bottom-4 right-4 z-10">
+          <div className="absolute bottom-4 right-4 hidden md:block z-10">
             <FollowButton
               targetUserId={data.id}
               initialIsFollowing={data.isFollowing}
@@ -41,7 +41,7 @@ export const Perfil = async ({ id }: { id: string }) => {
           </div>
         )}
 
-        <div className="w-36 h-36 rounded-full p-[3px] bg-gradient-to-tr from-purple-500 via-indigo-500 to-blue-500 shadow-[0_0_20px_rgba(139,92,246,0.3)] relative z-10 flex items-center justify-center">
+        <div className="w-28 h-28 md:w-36 md:h-36 rounded-full p-[3px] bg-gradient-to-tr from-purple-500 via-indigo-500 to-blue-500 shadow-[0_0_20px_rgba(139,92,246,0.3)] relative z-10 flex items-center justify-center shrink-0">
           <div className="w-full h-full rounded-full overflow-hidden bg-[#000000]">
             <Image
               src={data.avatarURL}
@@ -76,6 +76,16 @@ export const Perfil = async ({ id }: { id: string }) => {
               seguidos
             </Link>
           </div>
+          
+          {/* BOTÓN DE SEGUIR EN MÓVIL (CENTRADO ABAJO DE LAS ESTADÍSTICAS) */}
+          {!data.isOwner && (
+            <div className="mt-4 md:hidden flex justify-center w-full relative z-10">
+              <FollowButton
+                targetUserId={data.id}
+                initialIsFollowing={data.isFollowing}
+              />
+            </div>
+          )}
         </div>
       </section>
 

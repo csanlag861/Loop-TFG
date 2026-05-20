@@ -24,7 +24,7 @@ export default async function SeguidosPage({ params }: SeguidosPageProps) {
   }
 
   return (
-    <main className="min-h-screen w-full flex flex-col items-center">
+    <main className="w-full flex flex-col items-center px-4 md:px-0">
       <section className="w-full max-w-2xl flex items-center gap-4 py-4">
         <Link
           href={`/perfil/${id}`}

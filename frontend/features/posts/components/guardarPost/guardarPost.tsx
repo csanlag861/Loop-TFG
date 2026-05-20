@@ -49,15 +49,15 @@ const SavePostDropdown = ({
           className={`
             group relative p-1.5 rounded-md transition-all duration-200
             hover:bg-white/5 
-            ${guardado ? "text-blue-400" : "text-[var(--color-03)]"}
+            ${guardado ? "text-primary-color" : "text-[var(--color-03)]"}
           `}
         >
-          <span className="absolute inset-0 rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 blur-sm bg-blue-500/10" />
+          <span className="absolute inset-0 rounded-md opacity-0 group-hover:opacity-100 transition-opacity duration-200 blur-sm bg-primary-color/10" />
 
           {guardado ? (
             <Bookmark
               size={16}
-              className="relative z-10 transition-transform duration-200 group-hover:scale-110 fill-blue-400 text-blue-400"
+              className="relative z-10 transition-transform duration-200 group-hover:scale-110 fill-primary-color text-primary-color"
             />
           ) : (
             <Bookmark

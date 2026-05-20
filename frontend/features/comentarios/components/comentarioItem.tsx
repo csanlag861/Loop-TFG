@@ -8,7 +8,7 @@ export default function CommentItem({ comment }: any) {
         alt=""
         width={32}
         height={32}
-        className="rounded-full"
+        className="object-cover w-8 h-8 rounded-full shrink-0"
       />
 
       <div>

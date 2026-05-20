@@ -7,14 +7,15 @@ import { ProfileData } from "./editarPerfil-sheet";
 
 type EditarPerfilButtonProps = {
   profileData: ProfileData;
+  className?: string;
 };
 
-export const EditarPerfilButton = ({ profileData }: EditarPerfilButtonProps) => {
+export const EditarPerfilButton = ({ profileData, className }: EditarPerfilButtonProps) => {
   const [open, setOpen] = useState(false);
 
   return (
     <>
-      <Button className="absolute top-10 right-10" text="Editar Perfil" onClick={() => setOpen(true)} />
+      <Button className={className} text="Editar Perfil" onClick={() => setOpen(true)} />
       <EditarPerfilSheet
         open={open}
         onOpenChange={setOpen}
