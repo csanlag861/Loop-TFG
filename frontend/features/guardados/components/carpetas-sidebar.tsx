@@ -71,7 +71,7 @@ const CarpetasSidebar = () => {
       {/* Crear carpeta */}
       <div className="flex flex-col gap-3">
         <div>
-          <h2 className="text-white text-sm font-medium">Crear Carpeta</h2>
+          <h2 className="text-[var(--gris-01)] text-sm font-medium">Crear Carpeta</h2>
           <p className="text-[var(--gris-03)] text-xs mt-1">
             Organiza tus guardados.
           </p>
@@ -82,7 +82,7 @@ const CarpetasSidebar = () => {
             value={nombre}
             onChange={(e) => setNombre(e.target.value)}
             placeholder="ej: React..."
-            className="bg-transparent border rounded-md px-3 py-2 text-sm text-gris01 placeholder:text-[var(--gris-03)] focus:outline-none focus:border-[var(--primary-color)] transition-colors"
+            className="bg-transparent border border-[var(--gris-07)] rounded-md px-3 py-2 text-sm text-[var(--gris-01)] placeholder:text-[var(--gris-03)] focus:outline-none focus:border-[var(--primary-color)] transition-colors"
           />
         </div>
         <Button
@@ -97,7 +97,7 @@ const CarpetasSidebar = () => {
       {carpetaActiva && (
         <div className="flex flex-col gap-3">
           <div>
-            <h2 className="text-white text-sm font-medium">
+            <h2 className="text-[var(--gris-01)] text-sm font-medium">
               Eliminar carpeta actual
             </h2>
             <p className="text-[var(--gris-03)] text-xs mt-1">
@@ -120,9 +120,9 @@ const CarpetasSidebar = () => {
 
       {/* Dialog de confirmación */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="bg-[#1a1a1a] border border-[var(--gris-07)] text-white rounded-xl">
+        <DialogContent className="bg-background border border-[var(--gris-07)] text-[var(--gris-01)] rounded-xl">
           <DialogHeader>
-            <DialogTitle className="text-white text-lg">
+            <DialogTitle className="text-[var(--gris-01)] text-lg">
               ¿Estás seguro?
             </DialogTitle>
             <DialogDescription className="text-[var(--gris-03)] text-sm">
@@ -135,21 +135,21 @@ const CarpetasSidebar = () => {
           <div className="flex gap-3 justify-end mt-2">
             <button
               onClick={() => setDialogOpen(false)}
-              className="px-4 py-2 text-sm text-white border border-[var(--gris-07)] rounded-md hover:bg-white/5 transition-colors"
+              className="px-4 py-2 text-sm text-[var(--gris-01)] border border-[var(--gris-07)] rounded-md hover:bg-[var(--gris-08)] transition-colors cursor-pointer"
             >
               Cancelar
             </button>
             <button
               onClick={() => eliminar(true)}
               disabled={eliminando}
-              className="px-4 py-2 text-sm text-red-400 bg-red-500/20 border border-red-500/30 rounded-md hover:bg-red-500/30 transition-colors disabled:opacity-40"
+              className="px-4 py-2 text-sm text-red-400 bg-red-500/20 border border-red-500/30 rounded-md hover:bg-red-500/30 transition-colors disabled:opacity-40 cursor-pointer"
             >
               Eliminar todo el contenido
             </button>
             <button
               onClick={() => eliminar(false)}
               disabled={eliminando}
-              className="px-4 py-2 text-sm text-red-400 bg-red-500/20 border border-red-500/30 rounded-md hover:bg-red-500/30 transition-colors disabled:opacity-40"
+              className="px-4 py-2 text-sm text-red-400 bg-red-500/20 border border-red-500/30 rounded-md hover:bg-red-500/30 transition-colors disabled:opacity-40 cursor-pointer"
             >
               Mover a favoritos
             </button>

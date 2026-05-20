@@ -19,7 +19,7 @@ const PostList = ({ initialData }: { initialData: any }) => {
 
   const [isCreatorOpen, setIsCreatorOpen] = useState(false);
 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isPending, isFetching } =
     useInfiniteQuery({
       queryKey: ["posts", search, username, tech],
       queryFn: ({ pageParam }) => getPosts(pageParam, search, username, tech),
@@ -35,6 +35,7 @@ const PostList = ({ initialData }: { initialData: any }) => {
     });
 
   const posts = data?.pages.flatMap((page: any) => page.list) ?? [];
+  const showSkeleton = isPending || (isFetching && !isFetchingNextPage);
 
   const { ref, inView } = useInView();
 
@@ -47,9 +48,17 @@ const PostList = ({ initialData }: { initialData: any }) => {
   return (
     <>
       <ul className={`${styleList.posts} mt-8`}>
-        {posts.map((post: PostEditable) => (
-          <Post key={post.id} post={post} />
-        ))}
+        {showSkeleton ? (
+          <div className="flex flex-col gap-4 w-full items-center justify-center">
+            {Array.from({ length: 3 }).map((_, i) => (
+              <PostSkeleton key={i} />
+            ))}
+          </div>
+        ) : (
+          posts.map((post: PostEditable) => (
+            <Post key={post.id} post={post} />
+          ))
+        )}
 
         {isFetchingNextPage && (
           <div className="flex flex-col gap-4 w-full items-center justify-center">
@@ -59,7 +68,12 @@ const PostList = ({ initialData }: { initialData: any }) => {
         )}
 
         <div ref={ref}>
-          {!hasNextPage && posts.length > 0 && <p className="text-[var(--gris-03)] text-sm text-center my-4">No hay más posts.</p>}
+          {!hasNextPage && !showSkeleton && posts.length > 0 && (
+            <p className="text-[var(--gris-03)] text-sm text-center my-4">No hay más posts.</p>
+          )}
+          {!showSkeleton && posts.length === 0 && (
+            <p className="text-[var(--gris-03)] text-sm text-center my-4">No se encontraron publicaciones.</p>
+          )}
         </div>
       </ul>
 

@@ -46,16 +46,16 @@ export default function CreatePostDialog({ open, onOpenChange }: Props) {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-[#1a1a1a] border border-[var(--gris-07)] text-white rounded-xl max-w-[90%] md:max-w-md mx-auto overflow-visible p-0">
+      <DialogContent className="bg-background border border-[var(--gris-07)] text-[var(--gris-01)] rounded-xl max-w-[90%] md:max-w-md mx-auto overflow-visible p-0">
         <div ref={containerRef} />
         
         <DialogHeader className="px-5 py-4 border-b border-[var(--gris-07)]">
-          <DialogTitle className="text-white text-base font-medium">Crear Publicación</DialogTitle>
+          <DialogTitle className="text-[var(--gris-01)] text-base font-medium">Crear Publicación</DialogTitle>
           <DialogDescription className="text-[var(--gris-03)] text-xs mt-1">
             Comparte tus aprendizajes y conocimientos con la comunidad.
           </DialogDescription>
         </DialogHeader>
-
+ 
         <form action={action} className="p-5 flex flex-col gap-4">
           <div className="flex flex-col gap-2">
             <label htmlFor="contenido" className="text-[var(--gris-03)] text-xs font-medium">
@@ -65,7 +65,7 @@ export default function CreatePostDialog({ open, onOpenChange }: Props) {
               id="contenido"
               name="contenido"
               placeholder="¿Qué has aprendido hoy?"
-              className="h-24 bg-transparent border border-[var(--gris-07)] text-white placeholder:text-[var(--gris-04)] focus:border-[var(--primary-color)] resize-none"
+              className="h-24 bg-transparent border border-[var(--gris-07)] text-[var(--gris-01)] placeholder:text-[var(--gris-04)] focus:border-[var(--primary-color)] resize-none"
               disabled={isPending}
               required
             />
@@ -75,7 +75,7 @@ export default function CreatePostDialog({ open, onOpenChange }: Props) {
               </p>
             )}
           </div>
-
+ 
           <div className="flex flex-col gap-2">
             <label className="text-[var(--gris-03)] text-xs font-medium">Tecnologías</label>
             <input type="hidden" name="tecnologias" value={JSON.stringify(ids)} />
@@ -85,13 +85,13 @@ export default function CreatePostDialog({ open, onOpenChange }: Props) {
               container={containerRef}
             />
           </div>
-
+ 
           <div className="flex justify-end gap-3 mt-4 pt-4 border-t border-[var(--gris-07)]">
             <Button
               type="button"
               variant="ghost"
               onClick={() => onOpenChange(false)}
-              className="text-[var(--gris-03)] hover:text-white cursor-pointer"
+              className="text-[var(--gris-03)] hover:bg-[var(--gris-08)] hover:text-[var(--gris-01)] cursor-pointer"
               disabled={isPending}
             >
               Cancelar

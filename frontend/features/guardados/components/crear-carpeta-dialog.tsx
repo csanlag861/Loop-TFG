@@ -57,10 +57,10 @@ export default function CrearCarpetaDialog({ open, onClose, onSuccess }: Props) 
 
   return (
     <Dialog open={open} onOpenChange={(isOpen) => !isOpen && onClose()}>
-      <DialogContent className="bg-[#1a1a1a] border border-[var(--gris-07)] text-white rounded-xl max-w-[90%] md:max-w-md mx-auto">
+      <DialogContent className="bg-background border border-[var(--gris-07)] text-[var(--gris-01)] rounded-xl max-w-[90%] md:max-w-md mx-auto">
         <form onSubmit={handleSubmit}>
           <DialogHeader>
-            <DialogTitle className="text-white text-lg">Crear Carpeta</DialogTitle>
+            <DialogTitle className="text-[var(--gris-01)] text-lg">Crear Carpeta</DialogTitle>
             <DialogDescription className="text-[var(--gris-03)] text-sm mt-1">
               Ingresa el nombre de la nueva carpeta para organizar tus publicaciones guardadas.
             </DialogDescription>
@@ -74,7 +74,7 @@ export default function CrearCarpetaDialog({ open, onClose, onSuccess }: Props) 
               value={nombre}
               onChange={(e) => setNombre(e.target.value)}
               placeholder="Ej. Frontend, Node.js, Recetas..."
-              className="w-full! bg-transparent border-0 border-b border-[var(--gris-07)] text-white focus-visible:border-[var(--primary-color)] placeholder:text-[var(--gris-04)] focus:outline-none py-2 rounded-none transition-colors"
+              className="w-full! bg-transparent border-0 border-b border-[var(--gris-07)] text-[var(--gris-01)] focus-visible:border-[var(--primary-color)] placeholder:text-[var(--gris-04)] focus:outline-none py-2 rounded-none transition-colors"
               autoFocus
               disabled={creando}
             />
@@ -85,7 +85,7 @@ export default function CrearCarpetaDialog({ open, onClose, onSuccess }: Props) 
               type="button"
               variant="ghost"
               onClick={onClose}
-              className="text-[var(--gris-03)] hover:text-white cursor-pointer"
+              className="text-[var(--gris-03)] hover:bg-[var(--gris-08)] hover:text-[var(--gris-01)] cursor-pointer"
               disabled={creando}
             >
               Cancelar

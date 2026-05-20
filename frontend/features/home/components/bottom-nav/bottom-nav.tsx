@@ -125,7 +125,7 @@ export function BottomNav({ isAuthenticated, userId, isAdmin }: BottomNavProps) 
                   <DropdownMenuSeparator />
                   <DropdownMenuItem
                     onSelect={() => setIsEditProfileOpen(true)}
-                    className="group flex items-center gap-3 w-full rounded-lg px-3 py-2 transition-all duration-200 text-white! hover:bg-white/5 focus:outline-0 cursor-pointer"
+                    className="group flex items-center gap-3 w-full rounded-lg px-3 py-2 transition-all duration-200 text-[var(--gris-01)]! hover:bg-[var(--gris-08)] focus:bg-[var(--gris-08)] focus:outline-0 cursor-pointer"
                   >
                     <User size={20} />
                     <span className="text-sm font-medium">Editar perfil</span>
