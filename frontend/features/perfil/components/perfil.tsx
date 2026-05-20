@@ -19,19 +19,19 @@ export const Perfil = async ({ id }: { id: string }) => {
 
   return (
     <main className="w-full flex flex-col items-center justify-start max-w-2xl mx-auto px-2 md:px-0">
-      <section className="h-auto md:h-96 w-full flex flex-col items-center justify-center gap-4 py-8 md:py-6 relative rounded-3xl overflow-hidden border border-[var(--gris-07)] bg-gradient-to-b from-[#0e0e1f] via-[#050508] to-[#000000] p-6 shadow-2xl mt-4 mb-6 shrink-0">
+      <section className="h-auto md:h-96 w-full flex flex-col items-center justify-center gap-4 py-8 md:py-6 relative rounded-3xl overflow-hidden border border-[var(--gris-07)] bg-gradient-to-b from-[var(--gris-10)] via-[var(--bg-02)] to-[var(--bg-01)] dark:from-[#0e0e1f] dark:via-[#050508] dark:to-[#000000] p-6 shadow-2xl mt-4 mb-6 shrink-0">
         {/* Glow spots in the background (Mesh Gradient effect) */}
-        <div className="absolute inset-0 opacity-50 pointer-events-none z-0">
+        <div className="absolute inset-0 opacity-20 dark:opacity-50 pointer-events-none z-0">
           <div className="absolute -top-40 -left-40 w-96 h-96 rounded-full bg-purple-600/20 blur-[100px]" />
           <div className="absolute -bottom-40 -right-40 w-96 h-96 rounded-full bg-blue-600/20 blur-[100px]" />
         </div>
-
+ 
         {data.isOwner && (
           <div className="absolute top-4 right-4 hidden md:block z-10">
             <EditarPerfilButton profileData={data} />
           </div>
         )}
-
+ 
         {!data.isOwner && (
           <div className="absolute bottom-4 right-4 hidden md:block z-10">
             <FollowButton
@@ -40,9 +40,9 @@ export const Perfil = async ({ id }: { id: string }) => {
             />
           </div>
         )}
-
+ 
         <div className="w-28 h-28 md:w-36 md:h-36 rounded-full p-[3px] bg-gradient-to-tr from-purple-500 via-indigo-500 to-blue-500 shadow-[0_0_20px_rgba(139,92,246,0.3)] relative z-10 flex items-center justify-center shrink-0">
-          <div className="w-full h-full rounded-full overflow-hidden bg-[#000000]">
+          <div className="w-full h-full rounded-full overflow-hidden bg-[var(--bg-02)]">
             <Image
               src={data.avatarURL}
               alt="Avatar del usuario"
@@ -53,7 +53,7 @@ export const Perfil = async ({ id }: { id: string }) => {
           </div>
         </div>
         <div className="flex flex-col items-center justify-center gap-2 text-gris01 text-[14px] relative z-10">
-          <h1 className="text-white font-bold tracking-tight text-xl md:text-2xl">@{data?.username}</h1>
+          <h1 className="text-[var(--gris-01)] dark:text-white font-bold tracking-tight text-xl md:text-2xl">@{data?.username}</h1>
           <h2 className="font-sohne-light font-light">{data?.nombre}</h2>
           <p className="font-sohne-light font-light">{data?.biografia}</p>
           <div className="flex gap-6 mt-1 font-sohne-light text-[13px]">

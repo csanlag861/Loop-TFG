@@ -103,6 +103,14 @@ export class UserService {
         include: { rol: true },
       });
 
+      // Create default "FAVORITOS" folder for every new user
+      await this.prisma.carpeta.create({
+        data: {
+          usuario_id: createUser.id,
+          nombre: 'FAVORITOS',
+        },
+      });
+
       const payload: PayloadEntity = {
         username: createUser.username,
         id: createUser.id.toString(),
@@ -318,7 +326,7 @@ export class UserService {
     const baseUsername = profile.email.split('@')[0];
     const uniqueSuffix = Math.floor(1000 + Math.random() * 9000);
 
-    return (await this.prisma.usuario.create({
+    const newOAuthUser = await this.prisma.usuario.create({
       data: {
         email: profile.email,
         nombre: profile.firstName || 'Usuario',
@@ -335,6 +343,16 @@ export class UserService {
         password: null,
       },
       include: { rol: true },
-    })) as unknown as UserEntity;
+    });
+
+    // Create default "FAVORITOS" folder for every new OAuth user
+    await this.prisma.carpeta.create({
+      data: {
+        usuario_id: newOAuthUser.id,
+        nombre: 'FAVORITOS',
+      },
+    });
+
+    return newOAuthUser as unknown as UserEntity;
   }
 }

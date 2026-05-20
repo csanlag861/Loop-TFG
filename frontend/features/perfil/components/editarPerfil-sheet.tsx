@@ -14,6 +14,7 @@ import { useActionState, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { updateProfileAction } from "../actions/updateProfile-action";
+import { useQueryClient } from "@tanstack/react-query";
 
 export type ProfileData = {
   id: number;
@@ -35,6 +36,7 @@ export const EditarPerfilSheet = ({
   profileData,
 }: EditarPerfilSheetProps) => {
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const [state, formAction, isPending] = useActionState(updateProfileAction, {
     status: "IDLE" as const,
@@ -49,7 +51,9 @@ export const EditarPerfilSheet = ({
     if (state.status === "SUCCESS") {
       toast.success(state.message);
       onOpenChange(false); // cerramos el sheet
-      router.refresh(); // refrescamos los datos del perfil
+      // Invalidate profile cache so Avatar and BottomNav refresh reactively
+      void queryClient.invalidateQueries({ queryKey: ["profile-me"] });
+      router.refresh(); // refrescamos los datos del perfil (Server Components)
     }
   }, [state.timestamp, state.status, state.message]);
 
