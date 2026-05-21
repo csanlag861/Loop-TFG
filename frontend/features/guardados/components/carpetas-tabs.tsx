@@ -47,8 +47,35 @@ const CarpetasTabs = ({ carpetas, carpetaActiva, setCarpetaActiva, isAuthenticat
 
   if (!carpetaActiva) {
     return (
-      <div className="flex-1 flex flex-col justify-center items-center p-8 text-center bg-transparent border border-dashed border-[var(--gris-07)] rounded-xl min-h-[300px]">
+      <div className="flex-1 relative flex flex-col justify-center items-center p-8 text-center bg-transparent border border-dashed border-[var(--gris-07)] rounded-xl min-h-[300px]">
         <p className="text-[var(--gris-03)] text-sm">No se encontraron carpetas.</p>
+        
+        {/* MOBILE FAB BUTTON */}
+        {isAuthenticated && (
+          <button
+            onClick={() => setDialogOpen(true)}
+            className="
+              fixed bottom-20 right-6 z-40 
+              bg-[var(--primary-color)] hover:bg-[var(--primary-hover)] 
+              text-white w-14 h-14 rounded-full shadow-2xl 
+              flex items-center justify-center 
+              md:hidden border-0 cursor-pointer 
+              active:scale-95 transition-all duration-150
+            "
+            aria-label="Crear nueva carpeta"
+          >
+            <Plus size={22} />
+          </button>
+        )}
+
+        <CrearCarpetaDialog
+          open={dialogOpen}
+          onClose={() => setDialogOpen(false)}
+          onSuccess={(nuevaCarpeta) => {
+            setCarpetaActiva(nuevaCarpeta);
+            router.push(`/guardados?carpeta=${nuevaCarpeta.id}`);
+          }}
+        />
       </div>
     );
   }
