@@ -30,5 +30,9 @@ export async function fetcherClient(url: string, options?: RequestInit) {
     throw new Error("Error al hacer fetching");
   }
 
+  if (res.status === 204) {
+    return null;
+  }
+
   return res.json();
 }

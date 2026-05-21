@@ -9,8 +9,10 @@ export type Carpeta = { id: number; nombre: string; createdAt: string };
 
 const GuardadosWrapper = ({
   carpetasIniciales,
+  isAuthenticated,
 }: {
   carpetasIniciales: Carpeta[];
+  isAuthenticated: boolean;
 }) => {
   const { data: carpetas = carpetasIniciales } = useQuery({
     queryKey: ["carpetas"],
@@ -31,6 +33,7 @@ const GuardadosWrapper = ({
       carpetas={carpetas || []}
       carpetaActiva={carpetaActiva}
       setCarpetaActiva={(carpeta) => setCarpetaActivaId(carpeta.id)}
+      isAuthenticated={isAuthenticated}
     />
   );
 };

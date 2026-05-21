@@ -10,7 +10,7 @@ import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class CarpetaService {
-  DEFAULT: string = 'Favoritos';
+  DEFAULT: string = 'FAVORITOS';
   CONFLICT_EXCEPTION: string = 'P2002';
 
   constructor(private readonly prisma: PrismaService) {}

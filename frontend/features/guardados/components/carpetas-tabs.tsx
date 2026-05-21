@@ -29,9 +29,10 @@ type Props = {
   carpetas: Carpeta[];
   carpetaActiva?: Carpeta;
   setCarpetaActiva: (carpeta: Carpeta) => void;
+  isAuthenticated: boolean;
 };
 
-const CarpetasTabs = ({ carpetas, carpetaActiva, setCarpetaActiva }: Props) => {
+const CarpetasTabs = ({ carpetas, carpetaActiva, setCarpetaActiva, isAuthenticated }: Props) => {
   const router = useRouter();
   
   // State for mobile folder creation dialog
@@ -134,20 +135,22 @@ const CarpetasTabs = ({ carpetas, carpetaActiva, setCarpetaActiva }: Props) => {
         MOBILE FAB BUTTON (Requirement 2 & 3: Floating '+' button)
         Only visible on mobile screens. Uses Geist UI Plus icon.
       */}
-      <button
-        onClick={() => setDialogOpen(true)}
-        className="
-          fixed bottom-20 right-6 z-40 
-          bg-[var(--primary-color)] hover:bg-[var(--primary-hover)] 
-          text-white w-14 h-14 rounded-full shadow-2xl 
-          flex items-center justify-center 
-          md:hidden border-0 cursor-pointer 
-          active:scale-95 transition-all duration-150
-        "
-        aria-label="Crear nueva carpeta"
-      >
-        <Plus size={22} />
-      </button>
+      {isAuthenticated && (
+        <button
+          onClick={() => setDialogOpen(true)}
+          className="
+            fixed bottom-20 right-6 z-40 
+            bg-[var(--primary-color)] hover:bg-[var(--primary-hover)] 
+            text-white w-14 h-14 rounded-full shadow-2xl 
+            flex items-center justify-center 
+            md:hidden border-0 cursor-pointer 
+            active:scale-95 transition-all duration-150
+          "
+          aria-label="Crear nueva carpeta"
+        >
+          <Plus size={22} />
+        </button>
+      )}
 
       {/* Create Folder Modal/Dialog (Separated Component) */}
       <CrearCarpetaDialog
