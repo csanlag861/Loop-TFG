@@ -99,7 +99,7 @@ const CarpetasTabs = ({ carpetas, carpetaActiva, setCarpetaActiva, isAuthenticat
                     router.push(`/guardados?carpeta=${c.id}`);
                   }}
                   className="
-                      whitespace-nowrap flex-shrink-0
+                      whitespace-nowrap flex-1 min-w-[140px]
                       bg-transparent text-[var(--gris-03)] text-sm rounded-none
                       data-[state=active]:bg-transparent data-[state=active]:text-[var(--gris-01)]
                       data-[state=active]:border-b-2 data-[state=active]:border-[var(--primary-color)]
