@@ -3,8 +3,8 @@
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 import Button from "@/components/reusables/button/Button";
-import { useEffect } from "react";
-import { useActionState } from "react";
+import { useEffect, startTransition, useActionState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
@@ -14,6 +14,7 @@ import { DialogTitle } from "@radix-ui/react-dialog";
 
 export default function CommentModal({ open, onOpenChange, post }: any) {
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const [state, formAction, isPending] = useActionState(
     createComentarioAction,
@@ -44,7 +45,20 @@ export default function CommentModal({ open, onOpenChange, post }: any) {
         </div>
 
         {/* FORM */}
-        <form action={formAction} className="flex flex-col gap-3">
+        <form 
+          onSubmit={(e) => {
+            e.preventDefault();
+            const formData = new FormData(e.currentTarget);
+            
+            // Actualización optimista
+            queryClient.setQueryData(["commentCount", post.id], (old: number | undefined) => (old ?? 0) + 1);
+            
+            startTransition(() => {
+              formAction(formData);
+            });
+          }}
+          className="flex flex-col gap-3"
+        >
           <input type="hidden" name="post_id" value={post.id} />
 
           <Textarea

@@ -88,27 +88,29 @@ const CarpetasTabs = ({ carpetas, carpetaActiva, setCarpetaActiva, isAuthenticat
       */}
       <div className="hidden md:block w-full max-w-full">
         <Tabs defaultValue={carpetas[0]?.id.toString()} value={carpetaActiva.id.toString()} className="w-full max-w-full">
-          <TabsList variant="line" className="flex bg-transparent border-b border-[var(--gris-07)] w-full max-w-full justify-start rounded-none gap-2 px-0 mb-6 overflow-x-auto overflow-y-hidden flex-nowrap whitespace-nowrap hide-scrollbar">
-            {carpetas.map((c) => (
-              <TabsTrigger
-                key={c.id}
-                value={c.id.toString()}
-                onClick={() => {
-                  setCarpetaActiva(c);
-                  router.push(`/guardados?carpeta=${c.id}`);
-                }}
-                className="
-                    whitespace-nowrap flex-shrink-0
-                    bg-transparent text-[var(--gris-03)] text-sm rounded-none
-                    data-[state=active]:bg-transparent data-[state=active]:text-[var(--gris-01)]
-                    data-[state=active]:border-b-2 data-[state=active]:border-[var(--primary-color)]
-                    data-[state=active]:shadow-none hover:text-[var(--gris-01)] transition-colors
-                  "
-              >
-                {c.nombre}
-              </TabsTrigger>
-            ))}
-          </TabsList>
+          <div className="w-full overflow-x-auto overflow-y-hidden hide-scrollbar border-b border-[var(--gris-07)] mb-6">
+            <TabsList variant="line" className="flex bg-transparent w-max min-w-full justify-start rounded-none gap-2 px-0 border-none flex-nowrap whitespace-nowrap">
+              {carpetas.map((c) => (
+                <TabsTrigger
+                  key={c.id}
+                  value={c.id.toString()}
+                  onClick={() => {
+                    setCarpetaActiva(c);
+                    router.push(`/guardados?carpeta=${c.id}`);
+                  }}
+                  className="
+                      whitespace-nowrap flex-shrink-0
+                      bg-transparent text-[var(--gris-03)] text-sm rounded-none
+                      data-[state=active]:bg-transparent data-[state=active]:text-[var(--gris-01)]
+                      data-[state=active]:border-b-2 data-[state=active]:border-[var(--primary-color)]
+                      data-[state=active]:shadow-none hover:text-[var(--gris-01)] transition-colors
+                    "
+                >
+                  {c.nombre}
+                </TabsTrigger>
+              ))}
+            </TabsList>
+          </div>
         </Tabs>
       </div>
 
