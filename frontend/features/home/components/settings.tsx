@@ -1,6 +1,6 @@
 "use client";
 
-import { Minimize2, LogOut } from "@geist-ui/icons";
+import { Minimize2, Maximize2, LogOut } from "@geist-ui/icons";
 import { ThemeSwitcher } from "@/components/theme/theme-switcher";
 import {
   DropdownMenu,
@@ -41,10 +41,10 @@ const SettingsSidebar = ({ onToggle, isOpen, isAuthenticated }: Props) => {
           <DropdownMenuItem asChild>
             <button
               onClick={onToggle}
-              className="group flex items-center gap-3 w-full rounded-lg px-3 py-2 transition-all duration-200 text-03! hover:bg-(--gris-08) focus:outline-0"
+              className="group flex items-center gap-3 w-full rounded-lg px-3 py-2 transition-all duration-200 text-primary-color! dark:text-03! hover:bg-(--gris-08) focus:outline-0"
             >
-              <Minimize2 size={24} className="" />
-              <span className="text-sm font-medium">Contraer</span>
+              {isOpen ? <Minimize2 size={24} /> : <Maximize2 size={24} />}
+              <span className="text-sm font-medium">{isOpen ? "Contraer" : "Expandir"}</span>
             </button>
           </DropdownMenuItem>
           <DropdownMenuSeparator />

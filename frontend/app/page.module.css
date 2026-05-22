@@ -1,7 +1,7 @@
 .main {
   width: 100%;
   min-height: 100dvh;
-  background-color: #0b0b0f;
+  background-color: var(--bg-01);
   background-image: 
     radial-gradient(circle at 10% 20%, rgba(139, 92, 246, 0.1) 0%, transparent 40%),
     radial-gradient(circle at 90% 80%, rgba(99, 102, 241, 0.1) 0%, transparent 40%),
@@ -21,13 +21,13 @@
   justify-content: space-between;
   align-items: center;
   padding-bottom: 24px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid var(--gris-07);
   margin-bottom: 64px;
 
   h1 {
     font-family: "SohneBreit-Bold";
     font-size: 28px;
-    background: linear-gradient(135deg, #ffffff 0%, #a78bfa 100%);
+    background: linear-gradient(135deg, var(--gris-01) 0%, #a78bfa 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     font-weight: 800;
@@ -64,7 +64,7 @@
     line-height: 1.15;
     letter-spacing: -0.02em;
     margin-bottom: 16px;
-    background: linear-gradient(to right, #ffffff 20%, #a78bfa 60%, #818cf8 100%);
+    background: linear-gradient(to right, var(--gris-01) 20%, #a78bfa 60%, #818cf8 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
   }

@@ -7,6 +7,7 @@ import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
+import { BackButton } from "@/components/reusables/back-button/back-button";
 
 export default async function PostDetailPage({
   params,
@@ -29,16 +30,12 @@ export default async function PostDetailPage({
   return (
     <div className="w-full flex flex-col items-center px-4 md:px-0">
       <div className="w-full max-w-[544px]">
-        {/* CABECERA MÓVIL (BOTÓN VOLVER ATRÁS) */}
-        <div className="flex items-center gap-2 py-4 md:hidden border-b border-[var(--gris-07)] mb-4">
-          <Link
-            href="/posts"
-            className="flex items-center gap-2 text-gris01 hover:text-primary-color transition-colors duration-200 text-[14px]"
-          >
-            <ArrowLeft size={20} />
-            <span className="font-sohne-regular">Volver al Inicio</span>
-          </Link>
-        </div>
+        {/* CABECERA (BOTÓN VOLVER ATRÁS) */}
+        <BackButton 
+          href="/posts" 
+          label="Volver atrás" 
+          className="border-b border-[var(--gris-07)] mb-4" 
+        />
 
         {/* DETALLE DEL POST */}
         <Post post={post} variant="detail" />

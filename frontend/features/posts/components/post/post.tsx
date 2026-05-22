@@ -51,7 +51,7 @@ const Post = ({
               />
             </div>
           </Link>
-          <div className="flex items-baseline gap-2">
+          <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
             <h2>{post.usuario.nombre}</h2>
             <h3>{post.usuario.username}</h3>
             <p>
