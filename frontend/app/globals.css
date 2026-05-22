@@ -347,6 +347,7 @@ body {
    ========================================= */
 .custom-scrollbar::-webkit-scrollbar {
   height: 4px;
+  width: 4px;
 }
 .custom-scrollbar::-webkit-scrollbar-track {
   background: transparent;
@@ -356,6 +357,7 @@ body {
   border-radius: 4px;
   transition: background-color 0.2s ease-in-out;
   border: none;
+  background-clip: border-box;
 }
 .dark .custom-scrollbar::-webkit-scrollbar-thumb {
   background-color: var(--color-09);
