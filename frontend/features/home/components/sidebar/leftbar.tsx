@@ -63,7 +63,7 @@ const Sidebar = ({
           <SidebarItem
             key="dashboard"
             isOpen={isOpen}
-            isActive={pathname === dashboardPath()}
+            isActive={pathname.startsWith("/dashboard")}
             navItem={{
               title: "Dashboard",
               href: dashboardPath(),

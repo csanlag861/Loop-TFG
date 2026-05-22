@@ -12,6 +12,7 @@ import { PostEditable, TecnologiaPost } from "@/types/post-types";
 import { LikeButton } from "@/features/posts/components/likeButton/likeButton";
 import { useState } from "react";
 import CommentModal from "@/features/comentarios/components/comentarioModal";
+import { CommentButton } from "@/features/comentarios/components/commentButton";
 
 const Post = ({
   post,
@@ -81,14 +82,11 @@ const Post = ({
       </div>
       <p>{post.contenido}</p>
       <div className={stylePost.acciones} style={{ position: "relative", zIndex: 1 }}>
-        <div className="flex items-center gap-1">
-          <MessageCircle
-            size={16}
-            className="cursor-pointer"
-            onClick={() => setIsComentarioOpen(true)}
-          />
-          <span>{post.comentariosCount ?? 0}</span>
-        </div>
+        <CommentButton
+          postId={post.id}
+          initialCount={post.comentariosCount ?? 0}
+          onClick={() => setIsComentarioOpen(true)}
+        />
         <LikeButton
           post_id={post.id}
           initialLiked={post.isLiked ?? false}

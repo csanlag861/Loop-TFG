@@ -53,7 +53,8 @@ const SavePostDropdown = ({
           {guardado ? (
             <Bookmark
               size={16}
-              className="relative z-10 transition-transform duration-200 group-hover:scale-110 fill-primary-color text-primary-color"
+              className="relative z-10 transition-transform duration-200 group-hover:scale-110 text-primary-color"
+              style={{ fill: "currentColor" }}
             />
           ) : (
             <Bookmark
