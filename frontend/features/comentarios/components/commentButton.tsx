@@ -1,7 +1,8 @@
 "use client";
 
 import { MessageCircle } from "@geist-ui/icons";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useEffect } from "react";
 
 export const CommentButton = ({
   postId,
@@ -12,11 +13,20 @@ export const CommentButton = ({
   initialCount: number;
   onClick: () => void;
 }) => {
+  const queryClient = useQueryClient();
+
   const { data: count } = useQuery({
     queryKey: ["commentCount", postId],
+    queryFn: () => initialCount,
     initialData: initialCount,
     staleTime: Infinity,
   });
+
+  useEffect(() => {
+    queryClient.setQueryData(["commentCount", postId], (old: number | undefined) => 
+      Math.max(old ?? 0, initialCount)
+    );
+  }, [initialCount, postId, queryClient]);
 
   return (
     <div className="flex items-center gap-1">

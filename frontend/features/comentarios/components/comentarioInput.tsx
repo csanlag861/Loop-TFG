@@ -32,13 +32,14 @@ export default function CommentForm({ postId }: { postId: number }) {
     }
   }, [state, queryClient, postId]);
 
-  const handleSubmit = (formData: FormData) => {
-    queryClient.setQueryData(["commentCount", postId], (old: number | undefined) => (old ?? 0) + 1);
-    action(formData);
-  };
-
   return (
-    <form action={handleSubmit} className="w-full p-4 border-b">
+    <form 
+      action={action} 
+      onSubmit={() => {
+        queryClient.setQueryData(["commentCount", postId], (old: number | undefined) => (old ?? 0) + 1);
+      }}
+      className="w-full p-4 border-b"
+    >
       <Textarea name="contenido" placeholder="Escribe un comentario..." />
       <input type="hidden" name="post_id" value={postId} />
 

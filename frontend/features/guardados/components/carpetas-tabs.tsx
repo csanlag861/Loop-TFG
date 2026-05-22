@@ -99,9 +99,9 @@ const CarpetasTabs = ({ carpetas, carpetaActiva, setCarpetaActiva, isAuthenticat
                 }}
                 className="
                     bg-transparent text-[var(--gris-03)] text-sm rounded-none
-                    data-[state=active]:bg-transparent data-[state=active]:text-white
-                    data-[state=active]:border-b-2 data-[state=active]:border-purple-400
-                    data-[state=active]:shadow-none hover:text-white transition-colors
+                    data-[state=active]:bg-transparent data-[state=active]:text-[var(--gris-01)]
+                    data-[state=active]:border-b-2 data-[state=active]:border-[var(--primary-color)]
+                    data-[state=active]:shadow-none hover:text-[var(--gris-01)] transition-colors
                   "
               >
                 {c.nombre}
@@ -129,12 +129,12 @@ const CarpetasTabs = ({ carpetas, carpetaActiva, setCarpetaActiva, isAuthenticat
             }
           }}
         >
-          <SelectTrigger className="w-full bg-[var(--gris-09)] border-[var(--gris-07)] text-white font-medium focus:ring-0 focus:ring-offset-0 focus:border-[var(--primary-color)] transition-colors h-11">
+          <SelectTrigger className="w-full bg-[var(--gris-09)] border-[var(--gris-07)] text-[var(--gris-01)] font-medium focus:ring-0 focus:ring-offset-0 focus:border-[var(--primary-color)] transition-colors h-11">
             <SelectValue placeholder="Seleccionar carpeta" />
           </SelectTrigger>
-          <SelectContent className="bg-[#121212] border-[var(--gris-07)] text-white">
+          <SelectContent className="bg-[var(--bg-02)] border-[var(--gris-07)] text-[var(--gris-01)]">
             {carpetas.map((c) => (
-              <SelectItem key={c.id} value={c.id.toString()} className="hover:bg-white/5 focus:bg-white/5 cursor-pointer text-white">
+              <SelectItem key={c.id} value={c.id.toString()} className="hover:bg-[var(--gris-08)] focus:bg-[var(--gris-08)] cursor-pointer text-[var(--gris-01)]">
                 {c.nombre}
               </SelectItem>
             ))}
@@ -154,7 +154,7 @@ const CarpetasTabs = ({ carpetas, carpetaActiva, setCarpetaActiva, isAuthenticat
           <EmptyRightBar />
         )}
         {carpetaConPosts?.postGuardados?.map((pg: PostGuardado) => (
-          <Post key={pg.id} post={pg.post} />
+          <Post key={pg.id} post={{ ...pg.post, isGuardado: true }} />
         ))}
       </div>
 
