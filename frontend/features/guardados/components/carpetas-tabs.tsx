@@ -88,7 +88,7 @@ const CarpetasTabs = ({ carpetas, carpetaActiva, setCarpetaActiva, isAuthenticat
       */}
       <div className="hidden md:block w-full max-w-full">
         <Tabs defaultValue={carpetas[0]?.id.toString()} value={carpetaActiva.id.toString()} className="w-full max-w-full">
-          <div className="w-full overflow-x-auto overflow-y-hidden hide-scrollbar border-b border-[var(--gris-07)] mb-6">
+          <div className="w-full overflow-x-auto overflow-y-hidden custom-scrollbar pb-2 border-b border-[var(--gris-07)] mb-6">
             <TabsList variant="line" className="flex bg-transparent w-max min-w-full justify-start rounded-none gap-2 px-0 border-none flex-nowrap whitespace-nowrap">
               {carpetas.map((c) => (
                 <TabsTrigger
