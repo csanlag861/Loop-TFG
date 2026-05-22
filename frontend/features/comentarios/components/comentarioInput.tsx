@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useEffect } from "react";
+import { useActionState, useEffect, startTransition } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import Button from "@/components/reusables/button/Button";
 import { useQueryClient } from "@tanstack/react-query";
@@ -32,12 +32,20 @@ export default function CommentForm({ postId }: { postId: number }) {
     }
   }, [state, queryClient, postId]);
 
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    
+    queryClient.setQueryData(["commentCount", postId], (old: number | undefined) => (old ?? 0) + 1);
+    
+    startTransition(() => {
+      action(formData);
+    });
+  };
+
   return (
     <form 
-      action={action} 
-      onSubmit={() => {
-        queryClient.setQueryData(["commentCount", postId], (old: number | undefined) => (old ?? 0) + 1);
-      }}
+      onSubmit={handleSubmit}
       className="w-full p-4 border-b"
     >
       <Textarea name="contenido" placeholder="Escribe un comentario..." />

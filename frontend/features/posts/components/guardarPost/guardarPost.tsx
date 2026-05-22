@@ -11,7 +11,7 @@ import {
 import { useGetCarpetas } from "@/features/posts/hooks/getCarpetas";
 import { useSavePost } from "@/features/posts/hooks/guardarPost";
 import { toast } from "sonner";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Carpeta } from "@/features/guardados/components/guardados-wrapper";
 
 
@@ -24,6 +24,10 @@ const SavePostDropdown = ({
 }) => {
   const [open, setOpen] = useState<boolean>(false);
   const [guardado, setGuardado] = useState<boolean>(isGuardado);
+
+  useEffect(() => {
+    setGuardado(isGuardado);
+  }, [isGuardado]);
   const { data: carpetas, isLoading } = useGetCarpetas(open);
   const { mutate: savePost } = useSavePost();
 
@@ -54,7 +58,7 @@ const SavePostDropdown = ({
             <Bookmark
               size={16}
               className="relative z-10 transition-transform duration-200 group-hover:scale-110 text-primary-color"
-              style={{ fill: "currentColor" }}
+              fill="currentColor"
             />
           ) : (
             <Bookmark

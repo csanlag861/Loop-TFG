@@ -86,9 +86,9 @@ const CarpetasTabs = ({ carpetas, carpetaActiva, setCarpetaActiva, isAuthenticat
         DESKTOP LAYOUT (Rule 1: Preserved perfectly)
         Tabs list is hidden on mobile and visible on md screens.
       */}
-      <div className="hidden md:block w-full">
-        <Tabs defaultValue={carpetas[0]?.id.toString()} value={carpetaActiva.id.toString()}>
-          <TabsList variant="line" className="bg-transparent border-b border-[var(--gris-07)] w-full justify-start rounded-none gap-2 px-0 mb-6 overflow-x-auto flex-nowrap whitespace-nowrap hide-scrollbar">
+      <div className="hidden md:block w-full max-w-full">
+        <Tabs defaultValue={carpetas[0]?.id.toString()} value={carpetaActiva.id.toString()} className="w-full max-w-full">
+          <TabsList variant="line" className="flex bg-transparent border-b border-[var(--gris-07)] w-full max-w-full justify-start rounded-none gap-2 px-0 mb-6 overflow-x-auto overflow-y-hidden flex-nowrap whitespace-nowrap hide-scrollbar">
             {carpetas.map((c) => (
               <TabsTrigger
                 key={c.id}
@@ -98,6 +98,7 @@ const CarpetasTabs = ({ carpetas, carpetaActiva, setCarpetaActiva, isAuthenticat
                   router.push(`/guardados?carpeta=${c.id}`);
                 }}
                 className="
+                    whitespace-nowrap flex-shrink-0
                     bg-transparent text-[var(--gris-03)] text-sm rounded-none
                     data-[state=active]:bg-transparent data-[state=active]:text-[var(--gris-01)]
                     data-[state=active]:border-b-2 data-[state=active]:border-[var(--primary-color)]
