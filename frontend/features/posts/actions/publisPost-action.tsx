@@ -10,7 +10,8 @@ import { GetCookies } from "@/lib/get-token";
 const postSchema = z.object({
   contenido: z
     .string()
-    .max(260, "El contenido del post no puede tener más de 260 caracteres"),
+    .min(1, "El contenido no puede estar vacío")
+    .max(280, "El contenido del post no puede tener más de 280 caracteres"),
 });
 
 const PublishPostAction = async (
@@ -21,9 +22,17 @@ const PublishPostAction = async (
   try {
     const { contenido } = postSchema.parse(Object.fromEntries(formData));
 
-    const tecnologias: number[] = JSON.parse(
-      (formData.get("tecnologias") as string) ?? "[]",
-    );
+    let tecnologias: number[] = [];
+    try {
+      tecnologias = JSON.parse((formData.get("tecnologias") as string) ?? "[]");
+    } catch (e) {
+      return {
+        status: "ERROR",
+        message: "Formato de tecnologías inválido",
+        payload: formData,
+        fieldErrors: {},
+      };
+    }
 
     const res = await fetch(`${createPost()}`, {
       method: "POST",

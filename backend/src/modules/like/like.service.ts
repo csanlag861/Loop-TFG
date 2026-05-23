@@ -34,6 +34,9 @@ export class LikeService {
         },
       });
     } catch (error) {
+      if (error.code === 'P2025') {
+        throw new ConflictException('No has dado like a este post');
+      }
       throw new ConflictException('No has dado like a este post');
     }
   }

@@ -10,7 +10,8 @@ import { redirect } from "next/navigation";
 const postSchema = z.object({
   contenido: z
     .string()
-    .max(260, "El contenido del POST no puede tener más de 260 carácteres."),
+    .min(1, "El contenido del POST no puede estar vacío.")
+    .max(280, "El contenido del POST no puede tener más de 280 carácteres."),
   postId: z.string(),
   tecnologiaIds: z.string(),
 });

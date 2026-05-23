@@ -204,47 +204,57 @@ export class UserService {
    * @returns Devuelve los datos del usuario.
    */
   async getProfileData(user_id: number, requestUser_id?: number) {
-    const user = await this.prisma.usuario.findUnique({
-      where: { id: user_id, deletedAt: null },
-      select: {
-        avatarURL: true,
-        nombre: true,
-        username: true,
-        id: true,
-        biografia: true,
-        rol: { select: { nombre: true, slug: true } },
-      },
-    });
+    try {
+      const user = await this.prisma.usuario.findUnique({
+        where: { id: user_id, deletedAt: null },
+        select: {
+          avatarURL: true,
+          nombre: true,
+          username: true,
+          id: true,
+          biografia: true,
+          rol: { select: { nombre: true, slug: true } },
+        },
+      });
 
-    if (!user) {
-      throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
-    }
+      if (!user) {
+        throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
+      }
 
-    const [isFollowing, seguidoresCount, seguidosCount] = await Promise.all([
-      requestUser_id
-        ? this.prisma.seguidor
-            .findUnique({
-              where: {
-                seguidor_id_seguido_id: {
-                  seguidor_id: requestUser_id,
-                  seguido_id: user.id,
+      const [isFollowing, seguidoresCount, seguidosCount] = await Promise.all([
+        requestUser_id
+          ? this.prisma.seguidor
+              .findUnique({
+                where: {
+                  seguidor_id_seguido_id: {
+                    seguidor_id: requestUser_id,
+                    seguido_id: user.id,
+                  },
                 },
-              },
-            })
-            .then(Boolean)
-        : Promise.resolve(false),
-      this.prisma.seguidor.count({ where: { seguido_id: user.id } }),
-      this.prisma.seguidor.count({ where: { seguidor_id: user.id } }),
-    ]);
+              })
+              .then(Boolean)
+          : Promise.resolve(false),
+        this.prisma.seguidor.count({ where: { seguido_id: user.id } }),
+        this.prisma.seguidor.count({ where: { seguidor_id: user.id } }),
+      ]);
 
-    return {
-      ...user,
-      isOwner: requestUser_id ? requestUser_id === user.id : false,
-      isAdmin: user.rol.nombre === RolNombreEnum.ADMIN,
-      isFollowing,
-      seguidoresCount,
-      seguidosCount,
-    };
+      return {
+        ...user,
+        isOwner: requestUser_id ? requestUser_id === user.id : false,
+        isAdmin: user.rol.nombre === RolNombreEnum.ADMIN,
+        isFollowing,
+        seguidoresCount,
+        seguidosCount,
+      };
+    } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      throw new HttpException(
+        'Error interno al obtener los datos del usuario',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   async updateUser(
@@ -252,60 +262,72 @@ export class UserService {
     dto: UpdateUserDto,
     file?: Express.Multer.File,
   ) {
-    const user = await this.prisma.usuario.findUnique({
-      where: { id: user_id },
-    });
+    try {
+      const user = await this.prisma.usuario.findUnique({
+        where: { id: user_id },
+      });
 
-    if (!user) {
-      throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
-    }
-
-    if (dto.username) {
-      const usernameExists = await this.findUserByUsername(dto.username);
-      if (usernameExists && usernameExists.id !== user_id) {
-        throw new HttpException('Username ya en uso', HttpStatus.CONFLICT);
+      if (!user) {
+        throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
       }
-    }
 
-    let avatarURL = user.avatarURL;
-    if (file) {
-      console.log(
-        '[Backend Service] File detected, starting upload to Supabase...',
-      );
-      const upload = await this.supabaseService.uploadAvatar(file, user_id);
-      console.log(
-        '[Backend Service] Upload successful, new URL:',
-        upload.publicURL,
-      );
-      avatarURL = upload.publicURL as string;
-
-      if (user.avatarURL && !user.avatarURL.includes(DEFAULT_AVATAR_URL)) {
-        const oldAvatar = user.avatarURL.split('/').pop();
-        if (oldAvatar) {
-          await this.supabaseService.deleteAvatar(oldAvatar);
+      if (dto.username) {
+        const usernameExists = await this.findUserByUsername(dto.username);
+        if (usernameExists && usernameExists.id !== user_id) {
+          throw new HttpException('Username ya en uso', HttpStatus.CONFLICT);
         }
       }
+
+      let avatarURL = user.avatarURL;
+      if (file) {
+        console.log(
+          '[Backend Service] File detected, starting upload to Supabase...',
+        );
+        const upload = await this.supabaseService.uploadAvatar(file, user_id);
+        console.log(
+          '[Backend Service] Upload successful, new URL:',
+          upload.publicURL,
+        );
+        avatarURL = upload.publicURL as string;
+
+        if (user.avatarURL && !user.avatarURL.includes(DEFAULT_AVATAR_URL)) {
+          const oldAvatar = user.avatarURL.split('/').pop();
+          if (oldAvatar) {
+            await this.supabaseService.deleteAvatar(oldAvatar);
+          }
+        }
+      }
+
+      const updatedData = {
+        ...dto,
+        avatarURL,
+        ...(dto.password && {
+          password: await this.hashPassword(dto.password),
+        }),
+      };
+
+      const updated = await this.prisma.usuario.update({
+        where: { id: user_id },
+        data: updatedData,
+        select: {
+          id: true,
+          nombre: true,
+          username: true,
+          biografia: true,
+          avatarURL: true,
+        },
+      });
+
+      return updated;
+    } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      throw new HttpException(
+        'Error interno al actualizar los datos del usuario',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
-
-    const updatedData = {
-      ...dto,
-      avatarURL,
-      ...(dto.password && { password: await this.hashPassword(dto.password) }),
-    };
-
-    const updated = await this.prisma.usuario.update({
-      where: { id: user_id },
-      data: updatedData,
-      select: {
-        id: true,
-        nombre: true,
-        username: true,
-        biografia: true,
-        avatarURL: true,
-      },
-    });
-
-    return updated;
   }
 
   async findOrCreateOAuthUser(profile: OAuthProfile): Promise<UserEntity> {

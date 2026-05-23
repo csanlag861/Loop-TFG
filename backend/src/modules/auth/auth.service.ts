@@ -98,6 +98,9 @@ export class AuthService {
         refreshToken: newRefreshToken,
       };
     } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
       throw new HttpException(
         'Refresh token inválido o expirado',
         HttpStatus.UNAUTHORIZED,
@@ -119,43 +122,62 @@ export class AuthService {
   }
 
   async handleOAuthLogin(profile: OAuthProfile) {
-    const user = await this.userService.findOrCreateOAuthUser(profile);
-
-    return this.loginOAuthUser(user);
+    try {
+      const user = await this.userService.findOrCreateOAuthUser(profile);
+      return this.loginOAuthUser(user);
+    } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      throw new HttpException(
+        'Error interno al iniciar sesión con OAuth',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   async requestPasswordReset(email: string): Promise<boolean> {
-    const usuario = await this.userService.findUserByEmail(email);
-    if (!usuario) return true;
-
-    const nonce = crypto.randomBytes(32).toString('hex');
-    await this.userService.updateUser(usuario.id, {
-      passwordResetNonce: nonce,
-    });
-
-    const token = this.jwtService.sign(
-      { sub: usuario.id, nonce: nonce },
-      { expiresIn: '30m', secret: process.env.JWT_SECRET },
-    );
-
-    const resetLink = `${process.env.FRONTEND_URL}/reset_password/${token}`;
     try {
-      await inngest.send({
-        name: 'app/password.password-reset',
-        data: { email: usuario.email, resetLink },
+      const usuario = await this.userService.findUserByEmail(email);
+      if (!usuario) return true;
+
+      const nonce = crypto.randomBytes(32).toString('hex');
+      await this.userService.updateUser(usuario.id, {
+        passwordResetNonce: nonce,
       });
+
+      const token = this.jwtService.sign(
+        { sub: usuario.id, nonce: nonce },
+        { expiresIn: '30m', secret: process.env.JWT_SECRET },
+      );
+
+      const resetLink = `${process.env.FRONTEND_URL}/reset_password/${token}`;
+      try {
+        await inngest.send({
+          name: 'app/password.password-reset',
+          data: { email: usuario.email, resetLink },
+        });
+      } catch (error) {
+        console.error('Inngest falló, ejecutando Fallback', error);
+        const resend = new Resend(process.env.RESEND_API_KEY);
+        const html = await render(ResetPasswordEmail({ resetLink }));
+        await resend.emails.send({
+          from: process.env.RESEND_FROM_EMAIL || 'onboarding@resend.dev',
+          to: usuario.email,
+          subject: 'Recupera tu contraseña - Loop',
+          html: html,
+        });
+      }
+      return true;
     } catch (error) {
-      console.error('Inngest falló, ejecutando Fallback', error);
-      const resend = new Resend(process.env.RESEND_API_KEY);
-      const html = await render(ResetPasswordEmail({ resetLink }));
-      await resend.emails.send({
-        from: process.env.RESEND_FROM_EMAIL || 'onboarding@resend.dev',
-        to: usuario.email,
-        subject: 'Recupera tu contraseña - Loop',
-        html: html,
-      });
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      throw new HttpException(
+        'Error interno al solicitar el reseteo de contraseña',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
-    return true;
   }
 
   async resetPassword(token: string, newPassword: string): Promise<boolean> {

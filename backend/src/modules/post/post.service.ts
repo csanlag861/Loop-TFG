@@ -17,19 +17,32 @@ import { UsuarioEstadoEnum } from '@prisma/client';
 export class PostService {
   constructor(private prisma: PrismaService) {}
   create(createPostDto: CreatePostDto, userId: number) {
-    return this.prisma.post.create({
-      data: {
-        contenido: createPostDto.contenido,
-        usuario: {
-          connect: { id: userId },
-        },
-        ...(createPostDto.tecnologias.length > 0 && {
-          tecnologias: {
-            connect: createPostDto.tecnologias.map((id) => ({ id })),
+    try {
+      return this.prisma.post.create({
+        data: {
+          contenido: createPostDto.contenido,
+          usuario: {
+            connect: { id: userId },
           },
-        }),
-      },
-    });
+          ...(createPostDto.tecnologias?.length > 0 && {
+            tecnologias: {
+              connect: createPostDto.tecnologias.map((id) => ({ id })),
+            },
+          }),
+        },
+      });
+    } catch (error: any) {
+      if (error.code === 'P2025') {
+        throw new HttpException(
+          'Datos de relación inválidos',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+      throw new HttpException(
+        'Error interno al crear el post',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   async findAll(
@@ -39,82 +52,94 @@ export class PostService {
     username?: string,
     tech?: string,
   ): Promise<ResponsePostlistDto> {
-    const take = 10;
+    try {
+      const take = 10;
 
-    const where = {
-      usuario: {
-        deletedAt: null,
-        estado: {
-          notIn: [UsuarioEstadoEnum.BLOQUEADO, UsuarioEstadoEnum.SUSPENDIDO],
+      const where = {
+        usuario: {
+          deletedAt: null,
+          estado: {
+            notIn: [UsuarioEstadoEnum.BLOQUEADO, UsuarioEstadoEnum.SUSPENDIDO],
+          },
+          ...(username && {
+            username: { contains: username, mode: 'insensitive' as const },
+          }),
         },
-        ...(username && {
-          username: { contains: username, mode: 'insensitive' as const },
+        ...(cursor && { id: { lt: cursor } }),
+        ...(search && {
+          contenido: { contains: search, mode: 'insensitive' as const },
         }),
-      },
-      ...(cursor && { id: { lt: cursor } }),
-      ...(search && {
-        contenido: { contains: search, mode: 'insensitive' as const },
-      }),
-      ...(tech && {
-        tecnologias: {
-          some: { nombre: { contains: tech, mode: 'insensitive' as const } },
-        },
-      }),
-    };
+        ...(tech && {
+          tecnologias: {
+            some: { nombre: { contains: tech, mode: 'insensitive' as const } },
+          },
+        }),
+      };
 
-    // eslint-disable-next-line prefer-const
-    let [posts, count] = await this.prisma.$transaction([
-      this.prisma.post.findMany({
-        where,
-        take: take + 1,
-        include: {
-          usuario: {
-            select: {
-              id: true,
-              username: true,
-              avatarURL: true,
-              nombre: true,
+      // eslint-disable-next-line prefer-const
+      let [posts, count] = await this.prisma.$transaction([
+        this.prisma.post.findMany({
+          where,
+          take: take + 1,
+          include: {
+            usuario: {
+              select: {
+                id: true,
+                username: true,
+                avatarURL: true,
+                nombre: true,
+              },
+            },
+            tecnologias: true,
+            ...(user_id !== undefined && {
+              postGuardados: {
+                where: { usuario_id: user_id },
+                select: { id: true },
+              },
+            }),
+            ...(user_id !== undefined && {
+              likes: {
+                where: { usuario_id: user_id },
+                select: { id: true },
+              },
+            }),
+            _count: {
+              select: {
+                likes: true,
+                comentarios: true,
+              },
             },
           },
-          tecnologias: true,
-          ...(user_id !== undefined && {
-            postGuardados: {
-              where: { usuario_id: user_id },
-              select: { id: true },
-            },
-          }),
-          ...(user_id !== undefined && {
-            likes: {
-              where: { usuario_id: user_id },
-              select: { id: true },
-            },
-          }),
-          _count: {
-            select: {
-              likes: true,
-              comentarios: true,
-            },
-          },
+          orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],
+        }),
+        this.prisma.post.count({
+          where,
+        }),
+      ]);
+
+      const hasNextPage = posts.length > take;
+      posts = hasNextPage ? posts.slice(0, -1) : posts;
+
+      const currentUser = user_id ? new UserEntity(user_id) : null;
+      return {
+        list: posts.map((post) => PostMapper.toResponse(post, currentUser)),
+        metadata: {
+          count,
+          hasNextPage,
+          cursor: posts.at(-1)?.id,
         },
-        orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],
-      }),
-      this.prisma.post.count({
-        where,
-      }),
-    ]);
-
-    const hasNextPage = posts.length > take;
-    posts = hasNextPage ? posts.slice(0, -1) : posts;
-
-    const currentUser = user_id ? new UserEntity(user_id) : null;
-    return {
-      list: posts.map((post) => PostMapper.toResponse(post, currentUser)),
-      metadata: {
-        count,
-        hasNextPage,
-        cursor: posts.at(-1)?.id,
-      },
-    };
+      };
+    } catch (error: any) {
+      if (error.code === 'P2025') {
+        throw new NotFoundException(
+          `Posts del usuario ${user_id} no encontrados`,
+        );
+      }
+      throw new HttpException(
+        'Error interno al obtener los posts',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   async findOne(id: number, user_id?: number) {
@@ -155,50 +180,71 @@ export class PostService {
       const currentUser = user_id ? new UserEntity(user_id) : null;
 
       return PostMapper.toResponse(post, currentUser);
-    } catch (error) {
-      throw new NotFoundException(`Post con ID ${id} no encontrado`);
+    } catch (error: any) {
+      if (error.code === 'P2025') {
+        throw new NotFoundException(`Post con ID ${id} no encontrado`);
+      }
+      throw new HttpException(
+        'Error interno al obtener el post',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 
   async findByPost(post_id: number, cursor?: number) {
-    const take = 10;
+    try {
+      const take = 10;
 
-    let comentarios = await this.prisma.comentario.findMany({
-      where: {
-        post_id,
-        parent_id: null,
-        ...(cursor && { id: { lt: cursor } }),
-        usuario: {
-          deletedAt: null,
-          estado: {
-            notIn: [UsuarioEstadoEnum.BLOQUEADO, UsuarioEstadoEnum.SUSPENDIDO],
+      let comentarios = await this.prisma.comentario.findMany({
+        where: {
+          post_id,
+          parent_id: null,
+          ...(cursor && { id: { lt: cursor } }),
+          usuario: {
+            deletedAt: null,
+            estado: {
+              notIn: [
+                UsuarioEstadoEnum.BLOQUEADO,
+                UsuarioEstadoEnum.SUSPENDIDO,
+              ],
+            },
           },
         },
-      },
-      take: take + 1,
-      orderBy: [{ id: 'desc' }],
-      include: {
-        usuario: {
-          select: {
-            id: true,
-            username: true,
-            avatarURL: true,
-            nombre: true,
+        take: take + 1,
+        orderBy: [{ id: 'desc' }],
+        include: {
+          usuario: {
+            select: {
+              id: true,
+              username: true,
+              avatarURL: true,
+              nombre: true,
+            },
           },
         },
-      },
-    });
+      });
 
-    const hasNextPage = comentarios.length > take;
-    comentarios = hasNextPage ? comentarios.slice(0, -1) : comentarios;
+      const hasNextPage = comentarios.length > take;
+      comentarios = hasNextPage ? comentarios.slice(0, -1) : comentarios;
 
-    return {
-      list: comentarios,
-      metadata: {
-        hasNextPage,
-        cursor: comentarios.at(-1)?.id,
-      },
-    };
+      return {
+        list: comentarios,
+        metadata: {
+          hasNextPage,
+          cursor: comentarios.at(-1)?.id,
+        },
+      };
+    } catch (error: any) {
+      if (error.code === 'P2025') {
+        throw new NotFoundException(
+          `Comentarios del post con ID ${post_id} no encontrados`,
+        );
+      }
+      throw new HttpException(
+        'Error interno al obtener los posts',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   async getPostsFromUser(
@@ -206,71 +252,96 @@ export class PostService {
     cursor?: number,
     request_user_id?: number,
   ) {
-    const take = 10;
+    try {
+      const take = 10;
 
-    const where = {
-      usuario_id: user_id, // Filtrar por el autor
-      ...(cursor && { id: { lt: cursor } }),
-      usuario: {
-        deletedAt: null,
-        estado: {
-          notIn: [UsuarioEstadoEnum.BLOQUEADO, UsuarioEstadoEnum.SUSPENDIDO],
-        },
-      },
-    };
-
-    // eslint-disable-next-line prefer-const
-    let [posts, count] = await this.prisma.$transaction([
-      this.prisma.post.findMany({
-        where,
-        take: take + 1,
-        include: {
-          usuario: {
-            select: { id: true, username: true, avatarURL: true, nombre: true },
+      const where = {
+        usuario_id: user_id, // Filtrar por el autor
+        ...(cursor && { id: { lt: cursor } }),
+        usuario: {
+          deletedAt: null,
+          estado: {
+            notIn: [UsuarioEstadoEnum.BLOQUEADO, UsuarioEstadoEnum.SUSPENDIDO],
           },
-          tecnologias: true,
-          ...(request_user_id !== undefined && {
-            postGuardados: {
-              where: { usuario_id: request_user_id },
-              select: { id: true },
-            },
-          }),
-          ...(request_user_id !== undefined && {
-            likes: {
-              where: { usuario_id: request_user_id },
-              select: { id: true },
-            },
-          }),
-          _count: { select: { likes: true, comentarios: true } },
         },
-        orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],
-      }),
-      this.prisma.post.count({ where }),
-    ]);
+      };
 
-    const hasNextPage = posts.length > take;
-    posts = hasNextPage ? posts.slice(0, -1) : posts;
+      // eslint-disable-next-line prefer-const
+      let [posts, count] = await this.prisma.$transaction([
+        this.prisma.post.findMany({
+          where,
+          take: take + 1,
+          include: {
+            usuario: {
+              select: {
+                id: true,
+                username: true,
+                avatarURL: true,
+                nombre: true,
+              },
+            },
+            tecnologias: true,
+            ...(request_user_id !== undefined && {
+              postGuardados: {
+                where: { usuario_id: request_user_id },
+                select: { id: true },
+              },
+            }),
+            ...(request_user_id !== undefined && {
+              likes: {
+                where: { usuario_id: request_user_id },
+                select: { id: true },
+              },
+            }),
+            _count: { select: { likes: true, comentarios: true } },
+          },
+          orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],
+        }),
+        this.prisma.post.count({ where }),
+      ]);
 
-    const currentUser = request_user_id
-      ? new UserEntity(request_user_id)
-      : null;
+      const hasNextPage = posts.length > take;
+      posts = hasNextPage ? posts.slice(0, -1) : posts;
 
-    return {
-      list: posts.map((post) => PostMapper.toResponse(post, currentUser)),
-      metadata: { count, hasNextPage, cursor: posts.at(-1)?.id },
-    };
+      const currentUser = request_user_id
+        ? new UserEntity(request_user_id)
+        : null;
+
+      return {
+        list: posts.map((post) => PostMapper.toResponse(post, currentUser)),
+        metadata: { count, hasNextPage, cursor: posts.at(-1)?.id },
+      };
+    } catch (error: any) {
+      if (error.code === 'P2025') {
+        throw new NotFoundException(`Usuario con ID ${user_id} no encontrado`);
+      }
+      throw new HttpException(
+        'Error interno al obtener el post',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   update(id: number, updatePostDto: UpdatePostDto) {
-    return this.prisma.post.update({
-      where: { id: id },
-      data: {
-        contenido: updatePostDto.contenido,
-        tecnologias: {
-          set: updatePostDto.tecnologias?.map((id) => ({ id })),
+    try {
+      return this.prisma.post.update({
+        where: { id: id },
+        data: {
+          contenido: updatePostDto.contenido,
+          tecnologias: {
+            set: updatePostDto.tecnologias?.map((id) => ({ id })),
+          },
         },
-      },
-    });
+      });
+    } catch (error: any) {
+      if (error.code === 'P2025') {
+        throw new NotFoundException(`Post con ID ${id} no encontrado`);
+      }
+      throw new HttpException(
+        'Error interno al actualizar el post',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   async remove(id: number) {
@@ -278,8 +349,14 @@ export class PostService {
       await this.prisma.post.delete({
         where: { id },
       });
-    } catch (error) {
-      throw new HttpException('NOT FOUND', HttpStatus.NOT_FOUND);
+    } catch (error: any) {
+      if (error.code === 'P2025') {
+        throw new NotFoundException(`Post con ID ${id} no encontrado`);
+      }
+      throw new HttpException(
+        'Error interno al eliminar el post',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
     return HttpStatus.OK;
   }
@@ -289,55 +366,70 @@ export class PostService {
     cursor?: number,
     request_user_id?: number,
   ) {
-    const take = 10;
+    try {
+      const take = 10;
 
-    const where = {
-      likes: { some: { usuario_id: user_id } },
-      ...(cursor && { id: { lt: cursor } }),
-      usuario: {
-        deletedAt: null,
-        estado: {
-          notIn: [UsuarioEstadoEnum.BLOQUEADO, UsuarioEstadoEnum.SUSPENDIDO],
-        },
-      },
-    };
-
-    // eslint-disable-next-line prefer-const
-    let [posts, count] = await this.prisma.$transaction([
-      this.prisma.post.findMany({
-        where,
-        take: take + 1,
-        include: {
-          usuario: {
-            select: { id: true, username: true, avatarURL: true, nombre: true },
+      const where = {
+        likes: { some: { usuario_id: user_id } },
+        ...(cursor && { id: { lt: cursor } }),
+        usuario: {
+          deletedAt: null,
+          estado: {
+            notIn: [UsuarioEstadoEnum.BLOQUEADO, UsuarioEstadoEnum.SUSPENDIDO],
           },
-          tecnologias: true,
-          ...(request_user_id !== undefined && {
-            postGuardados: {
-              where: { usuario_id: request_user_id },
-              select: { id: true },
-            },
-          }),
-          ...(request_user_id !== undefined && {
-            likes: {
-              where: { usuario_id: request_user_id },
-              select: { id: true },
-            },
-          }),
-          _count: { select: { likes: true, comentarios: true } },
         },
-        orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],
-      }),
-      this.prisma.post.count({ where }),
-    ]);
-    const hasNextPage = posts.length > take;
-    posts = hasNextPage ? posts.slice(0, -1) : posts;
-    const currentUser = request_user_id
-      ? new UserEntity(request_user_id)
-      : null;
-    return {
-      list: posts.map((post) => PostMapper.toResponse(post, currentUser)),
-      metadata: { count, hasNextPage, cursor: posts.at(-1)?.id },
-    };
+      };
+
+      // eslint-disable-next-line prefer-const
+      let [posts, count] = await this.prisma.$transaction([
+        this.prisma.post.findMany({
+          where,
+          take: take + 1,
+          include: {
+            usuario: {
+              select: {
+                id: true,
+                username: true,
+                avatarURL: true,
+                nombre: true,
+              },
+            },
+            tecnologias: true,
+            ...(request_user_id !== undefined && {
+              postGuardados: {
+                where: { usuario_id: request_user_id },
+                select: { id: true },
+              },
+            }),
+            ...(request_user_id !== undefined && {
+              likes: {
+                where: { usuario_id: request_user_id },
+                select: { id: true },
+              },
+            }),
+            _count: { select: { likes: true, comentarios: true } },
+          },
+          orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],
+        }),
+        this.prisma.post.count({ where }),
+      ]);
+      const hasNextPage = posts.length > take;
+      posts = hasNextPage ? posts.slice(0, -1) : posts;
+      const currentUser = request_user_id
+        ? new UserEntity(request_user_id)
+        : null;
+      return {
+        list: posts.map((post) => PostMapper.toResponse(post, currentUser)),
+        metadata: { count, hasNextPage, cursor: posts.at(-1)?.id },
+      };
+    } catch (error: any) {
+      if (error.code === 'P2025') {
+        throw new NotFoundException(`Usuario con ID ${user_id} no encontrado`);
+      }
+      throw new HttpException(
+        'Error interno al obtener los likes',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 }
