@@ -273,9 +273,6 @@ h3: 18
     font-family: "Sohne-Regular", system-ui, sans-serif;
     scrollbar-width: thin;
   }
-  .dark body {
-    scrollbar-color: var(--gris-06) transparent;
-  }
   button:not(:disabled) {
     cursor: pointer;
   }
