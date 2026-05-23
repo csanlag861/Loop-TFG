@@ -2,6 +2,7 @@
 
 import { GetCookies } from "@/lib/get-token";
 import { deletePost } from "@/utils/api";
+import { redirect } from "next/navigation";
 
 type ActionState = {
   status?: "IDLE" | "SUCCESS" | "ERROR";
@@ -28,6 +29,9 @@ export const deletePostAction = async (id: number): Promise<ActionState> => {
     console.log("response delete", res);
 
     if (!res.ok) {
+      if (res.status >= 500) {
+        redirect(`/error?source=server&code=${res.status}`);
+      }
       const data = await res.json();
       return {
         message: data.message || "Error al eliminar el post",

@@ -24,6 +24,9 @@ export const RegisterAction = async (
     });
 
     if (!res.ok) {
+      if (res.status >= 500) {
+        redirect(`/error?source=server&code=${res.status}`);
+      }
       const errorData = await res.json();
       return {
         status: "ERROR",

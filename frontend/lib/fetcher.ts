@@ -17,6 +17,9 @@ export async function fetcher(url: string) {
   }
 
   if (!res.ok) {
+    if (res.status >= 500) {
+      redirect(`/error?source=server&code=${res.status}`);
+    }
     console.error("Error al hacer fetching", res);
     throw new Error("Error al hacer fetching");
   }

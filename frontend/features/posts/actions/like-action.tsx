@@ -2,6 +2,7 @@
 import { revalidateTag } from "next/cache";
 import { likePost } from "@/utils/api";
 import { GetCookies } from "@/lib/get-token";
+import { redirect } from "next/navigation";
 
 export async function likePostAction(post_id: number) {
   try {
@@ -15,6 +16,9 @@ export async function likePostAction(post_id: number) {
     });
 
     if (!res.ok) {
+      if (res.status >= 500) {
+        redirect(`/error?source=server&code=${res.status}`);
+      }
       const errorData = await res
         .json()
         .catch(() => ({ message: "Error desconocido" }));

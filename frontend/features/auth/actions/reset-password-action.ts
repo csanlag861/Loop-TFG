@@ -26,6 +26,9 @@ export const resetPasswordAction = async (
     });
 
     if (!res.ok) {
+      if (res.status >= 500) {
+        redirect(`/error?source=server&code=${res.status}`);
+      }
       const data = await res.json();
       return {
         ..._actionState,

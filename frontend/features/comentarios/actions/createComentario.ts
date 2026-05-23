@@ -4,6 +4,7 @@ import { z } from "zod";
 import { ActionState } from "@/features/posts/types/ActionState";
 import { GetCookies } from "@/lib/get-token";
 import { createComentario } from "@/utils/api";
+import { redirect } from "next/navigation";
 
 const comentarioSchema = z.object({
   contenido: z
@@ -35,6 +36,9 @@ const createComentarioAction = async (
     });
 
     if (!res.ok) {
+      if (res.status >= 500) {
+        redirect(`/error?source=server&code=${res.status}`);
+      }
       const data = await res.json();
 
       return {

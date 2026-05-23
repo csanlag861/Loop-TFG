@@ -1,5 +1,6 @@
 "use server";
 import { forgotPasswordUrl } from "@/utils/api";
+import { redirect } from "next/navigation";
 
 import { ActionState } from "../types/ActionState";
 import { z } from "zod";
@@ -22,6 +23,9 @@ export const forgotPasswordAction = async (
     });
 
     if (!res.ok) {
+      if (res.status >= 500) {
+        redirect(`/error?source=server&code=${res.status}`);
+      }
       const data = await res.json();
       return {
         ..._actionState,

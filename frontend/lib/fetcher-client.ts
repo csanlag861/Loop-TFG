@@ -27,6 +27,10 @@ export async function fetcherClient(url: string, options?: RequestInit) {
   }
 
   if (!res.ok) {
+    if (res.status >= 500) {
+      window.location.href = `/error?source=server&code=${res.status}`;
+      return;
+    }
     throw new Error("Error al hacer fetching");
   }
 

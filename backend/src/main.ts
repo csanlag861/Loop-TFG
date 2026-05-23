@@ -1,8 +1,9 @@
-import { NestFactory } from '@nestjs/core';
+import { HttpAdapterHost, NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { envs } from './config';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import cookieParser from 'cookie-parser';
+import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 
 async function bootstrap() {
   const logger = new Logger('App - Auth');
@@ -29,7 +30,9 @@ async function bootstrap() {
     }),
   );
 
-  await app.listen(envs.PORT, "0.0.0.0");  
+  const httpAdapter = app.get(HttpAdapterHost);
+  app.useGlobalFilters(new AllExceptionsFilter(httpAdapter));
+  await app.listen(envs.PORT, '0.0.0.0');
   logger.log('App running on PORT:');
 }
 

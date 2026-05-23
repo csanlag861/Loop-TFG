@@ -5,6 +5,7 @@ import { homePath } from "@/utils/paths";
 import { revalidatePath } from "next/cache";
 import { GetCookies } from "@/lib/get-token";
 import { updatePost } from "@/utils/api";
+import { redirect } from "next/navigation";
 
 const postSchema = z.object({
   contenido: z
@@ -40,6 +41,9 @@ export const EditPostAction = async (
     console.log(res);
 
     if (!res.ok) {
+      if (res.status >= 500) {
+        redirect(`/error?source=server&code=${res.status}`);
+      }
       const data = await res.json();
       return {
         message: data.message || "Error al editar el post",
