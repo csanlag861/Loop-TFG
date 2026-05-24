@@ -103,19 +103,12 @@ export class UserService {
         include: { rol: true },
       });
 
-      // Create default "FAVORITOS" folder for every new user
       await this.prisma.carpeta.create({
         data: {
           usuario_id: createUser.id,
           nombre: 'FAVORITOS',
         },
       });
-
-      const payload: PayloadEntity = {
-        username: createUser.username,
-        id: createUser.id.toString(),
-        rol: createUser.rol.nombre,
-      };
 
       return this.authService.login(createUser as any);
     } catch (error) {

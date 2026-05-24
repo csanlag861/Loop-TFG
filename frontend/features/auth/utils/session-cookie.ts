@@ -9,7 +9,6 @@ export const setAuthCookies = async (
 ) => {
   const cookieStore = await cookies();
 
-  // Access Token (15 minutos)
   cookieStore.set({
     name: SESSION_COOKIE_NAME,
     value: accessToken,
@@ -17,10 +16,9 @@ export const setAuthCookies = async (
     sameSite: "lax",
     secure: process.env.NODE_ENV === "production",
     path: "/",
-    maxAge: 60 * 15, 
+    maxAge: 60 * 15,
   });
 
-  // Refresh Token (7 días)
   cookieStore.set({
     name: REFRESH_COOKIE_NAME,
     value: refreshToken,

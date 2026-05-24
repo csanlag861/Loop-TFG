@@ -35,7 +35,7 @@ const PostList = ({ initialData, isAuthenticated }: { initialData: any; isAuthen
     });
 
   const posts = data?.pages.flatMap((page: any) => page.list) ?? [];
-  const showSkeleton = isPending || (isFetching && !isFetchingNextPage);
+  const showSkeleton = isPending;
 
   const { ref, inView } = useInView();
 
