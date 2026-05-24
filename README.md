@@ -5,6 +5,19 @@
 
 ---
 
+## 📚 Índice de Documentación
+
+> Accede a toda la documentación técnica y funcional del proyecto desde la Wiki del repositorio.
+
+- 🏠 [Home](../../wiki)
+- 📖 [1. Presentación del Proyecto](../../wiki/1.-Presentación-del-Proyecto)
+- ⚙️ [2. Funcionalidades](../../wiki/2.-Funcionalidades)
+- 🏗️ [3. Arquitectura](../../wiki/3.-Arquitectura)
+- 🗄️ [4. Modelo-Entidad‐Relación](../../wiki/4.-Modelo-Entidad‐Relación)
+- 📑 [5. Documentación Técnica](../../wiki/5.-Documentación-Técnica)
+
+---
+
 ## 📖 Sobre el Proyecto
 
 **Loop** es una plataforma creada como Trabajo de Fin de Grado (TFG) con el objetivo de reunir a desarrolladores y profesionales del sector IT en un mismo espacio.
