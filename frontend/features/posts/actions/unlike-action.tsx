@@ -21,11 +21,14 @@ export async function unlikePostAction(post_id: number) {
       if (res.status >= 500) {
         redirect(`/error?source=server&code=${res.status}`);
       }
+      if (res.status === 401) {
+        return { error: "Unauthorized" };
+      }
       const errorData = await res
         .json()
         .catch(() => ({ message: "Error desconocido" }));
       console.error(`❌ Error al quitar like (${res.status}):`, errorData);
-      throw new Error(errorData.message || `Error ${res.status}`);
+      return { error: errorData.message || `Error ${res.status}` };
     }
 
     const data = await res.json();
@@ -35,6 +38,6 @@ export async function unlikePostAction(post_id: number) {
     return { success: true, data };
   } catch (error) {
     console.error("❌ Error en unlikePostAction:", error);
-    throw error;
+    return { error: "An unexpected error occurred" };
   }
 }

@@ -19,19 +19,23 @@ export async function likePostAction(post_id: number) {
       if (res.status >= 500) {
         redirect(`/error?source=server&code=${res.status}`);
       }
+      if (res.status === 401) {
+        return { error: "Unauthorized" };
+      }
       const errorData = await res
         .json()
         .catch(() => ({ message: "Error desconocido" }));
       console.error(`❌ Error al dar like (${res.status}):`, errorData);
-      throw new Error(errorData.message || `Error ${res.status}`);
+      return { error: errorData.message || `Error ${res.status}` };
     }
 
     const data = await res.json();
     console.log(`✅ Like creado:`, data);
 
     revalidateTag("posts", "max");
+    return { success: true, data };
   } catch (error) {
     console.error("❌ Error en likePostAction:", error);
-    throw error;
+    return { error: "An unexpected error occurred" };
   }
 }

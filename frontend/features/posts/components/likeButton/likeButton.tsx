@@ -34,11 +34,18 @@ export const LikeButton = ({
       console.log(
         `📡 Iniciando acción: ${isCurrentlyLiked ? "UNLIKE" : "LIKE"} en post ${post_id}`,
       );
+      let result;
       if (isCurrentlyLiked) {
-        return await unlikePostAction(post_id);
+        result = await unlikePostAction(post_id);
       } else {
-        return await likePostAction(post_id);
+        result = await likePostAction(post_id);
       }
+      
+      if (result && "error" in result) {
+        throw new Error(result.error as string);
+      }
+      
+      return result;
     },
     onMutate: async (isCurrentlyLiked: boolean) => {
       await queryClient.cancelQueries({ queryKey: ["posts"] });

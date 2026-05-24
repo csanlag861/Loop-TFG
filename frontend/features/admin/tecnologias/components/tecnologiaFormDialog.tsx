@@ -97,7 +97,7 @@ export function TecnologiaFormDialog({
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="bg-(--bg-01) border-(--gris-07) max-w-md">
+      <DialogContent className="bg-(--bg-01) border-(--gris-07) max-w-lg sm:max-w-[500px]">
         <DialogHeader>
           <DialogTitle className="text-gris01">
             {isEditing ? "Editar tecnología" : "Nueva tecnología"}
@@ -119,7 +119,7 @@ export function TecnologiaFormDialog({
           {/* Colores */}
           <div className="flex flex-col gap-3">
             <Label className="text-gris-02 text-sm">Colores del badge</Label>
-            <div className="grid grid-cols-3 gap-3">
+            <div className="grid grid-cols-3 gap-4">
               <div className="flex flex-col gap-1.5">
                 <span className="text-xs text-gris-05">Background</span>
                 <div className="flex items-center gap-2">
@@ -133,7 +133,7 @@ export function TecnologiaFormDialog({
                     value={form.background}
                     onChange={(e) => handleChange("background", e.target.value)}
                     placeholder="#000000"
-                    className="bg-gris-08 border-gris-07 text-gris-01 text-xs h-8"
+                    className="bg-gris-08 border-gris-07 text-gris-01 text-xs h-8 min-w-0 px-2"
                   />
                 </div>
               </div>
@@ -150,7 +150,7 @@ export function TecnologiaFormDialog({
                     value={form.border}
                     onChange={(e) => handleChange("border", e.target.value)}
                     placeholder="#000000"
-                    className="bg-gris-08 border-gris-07 text-gris-01 text-xs h-8"
+                    className="bg-gris-08 border-gris-07 text-gris-01 text-xs h-8 min-w-0 px-2"
                   />
                 </div>
               </div>
@@ -167,7 +167,7 @@ export function TecnologiaFormDialog({
                     value={form.text}
                     onChange={(e) => handleChange("text", e.target.value)}
                     placeholder="#000000"
-                    className="bg-gris-08 border-gris-07 text-gris-01 text-xs h-8"
+                    className="bg-gris-08 border-gris-07 text-gris-01 text-xs h-8 min-w-0 px-2"
                   />
                 </div>
               </div>
@@ -179,7 +179,7 @@ export function TecnologiaFormDialog({
             <Label className="text-gris-02 text-sm">Preview</Label>
             <div className="flex items-center justify-center py-4 rounded-lg bg-gris-08 border border-gris-07">
               <span
-                className="px-3 py-1 rounded-full text-xs font-medium"
+                className="px-3 py-1 rounded-full text-xs font-medium truncate max-w-[90%]"
                 style={
                   hasColors
                     ? {
