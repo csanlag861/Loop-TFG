@@ -19,17 +19,19 @@ const Post = ({
   variant = "feed",
 }: {
   post: PostEditable;
-  variant?: "feed" | "detail";
+  variant?: "feed" | "detail" | "modal";
 }) => {
   if (!post) return null;
 
   const [isComentarioOpen, setIsComentarioOpen] = useState(false);
   const isDetail = variant === "detail";
+  const isModal = variant === "modal";
   return (
     <div
       className={`
         ${stylePost.post}
-        ${isDetail ? "p-6 text-lg" : "p-4"}`}
+        ${isDetail ? "p-6 text-lg" : "p-4"}
+        ${isModal ? stylePost.modalVariant : ""}`}
       style={{ position: "relative" }}
     >
       {!isDetail && (

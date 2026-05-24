@@ -38,10 +38,11 @@ export default function CommentModal({ open, onOpenChange, post }: any) {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-xl">
+      <DialogContent className="max-w-xl p-0 overflow-hidden sm:rounded-2xl">
         {/* POST */}
-        <div className="border-b pb-4 mb-4">
-          <Post post={post} />
+        <div className="pt-10 px-6 border-b pb-4 bg-background">
+          <DialogTitle className="sr-only">Responder a {post.usuario.nombre}</DialogTitle>
+          <Post post={post} variant="modal" />
         </div>
 
         {/* FORM */}
@@ -57,7 +58,7 @@ export default function CommentModal({ open, onOpenChange, post }: any) {
               formAction(formData);
             });
           }}
-          className="flex flex-col gap-3"
+          className="flex flex-col gap-3 px-6 pb-6 pt-2"
         >
           <input type="hidden" name="post_id" value={post.id} />
 
@@ -65,16 +66,16 @@ export default function CommentModal({ open, onOpenChange, post }: any) {
             name="contenido"
             placeholder="Escribe tu respuesta..."
             maxLength={280}
+            className="border-none focus-visible:ring-0 focus-visible:ring-offset-0 px-0 resize-none min-h-[80px]"
           />
 
-          <div className="flex justify-end">
+          <div className="flex justify-end mt-2">
             <Button text="Enviar comentario" type="submit" disabled={isPending}>
               {isPending ? "Enviando..." : "Responder"}
             </Button>
           </div>
         </form>
       </DialogContent>
-      <DialogTitle />
     </Dialog>
   );
 }
