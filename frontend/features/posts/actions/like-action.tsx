@@ -7,6 +7,11 @@ import { redirect } from "next/navigation";
 export async function likePostAction(post_id: number) {
   try {
     const cookies = await GetCookies();
+    
+    if (!cookies) {
+      return { error: "Debes iniciar sesión para dar like" };
+    }
+
     console.log("LIKE URL:", likePost({ param: post_id }));
     const res = await fetch(likePost({ param: post_id }), {
       method: "POST",

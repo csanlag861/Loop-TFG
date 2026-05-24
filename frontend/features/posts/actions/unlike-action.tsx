@@ -8,6 +8,10 @@ export async function unlikePostAction(post_id: number) {
   try {
     const cookies = await GetCookies();
 
+    if (!cookies) {
+      return { error: "Debes iniciar sesión para quitar el like" };
+    }
+
     console.log(`📡 DELETE ${unlikePost({ param: post_id })}`);
 
     const res = await fetch(unlikePost({ param: post_id }), {
