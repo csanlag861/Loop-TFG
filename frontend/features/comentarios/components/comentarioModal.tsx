@@ -33,8 +33,12 @@ export default function CommentModal({ open, onOpenChange, post }: any) {
 
     if (state.status === "ERROR") {
       toast.error(state.message);
+      // Revertir la actualización optimista si falla
+      queryClient.setQueryData(["commentCount", post.id], (old: number | undefined) => 
+        Math.max((old ?? 1) - 1, 0)
+      );
     }
-  }, [state]);
+  }, [state, post.id, queryClient]);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

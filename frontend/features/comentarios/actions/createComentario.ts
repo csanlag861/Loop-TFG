@@ -20,6 +20,15 @@ const createComentarioAction = async (
 ): Promise<ActionState> => {
   const token = await GetCookies();
 
+  if (!token) {
+    return {
+      status: "ERROR",
+      message: "Debes iniciar sesión para comentar",
+      payload: formData,
+      fieldErrors: {},
+    };
+  }
+
   try {
     const parsed = comentarioSchema.parse(Object.fromEntries(formData));
 
